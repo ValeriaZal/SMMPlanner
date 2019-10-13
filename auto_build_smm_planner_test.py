@@ -7,11 +7,11 @@ import urllib.error
 import zipfile
 
 github_link = "https://github.com/ValeriaZal/SMMPlanner"
-location_src = os.path.normpath("../Src_x64")
+location_code_src = os.path.normpath("../Src_x64")
 location_release_src = os.path.normpath("../Release_Src_x64")
 location_release = os.path.normpath("../Output")
 location_exe = location_release
-location_workpath = os.path.normpath("../Release_x64/build")
+location_workpath = os.path.normpath("../supplement")
 location_spec = location_release
 folder_name = "SMM_Planner"
 
@@ -43,7 +43,7 @@ def download_and_unzip(key, value):
             os.remove(zip_path)
 
 
-def install_app():
+def install_app(location_src):
     # pyinstaller
     commandArgs = [" --noconsole",
                    " --distpath " + location_release,
@@ -54,16 +54,16 @@ def install_app():
     if len(sys.argv) >= 4:
         commandArgs.append(" --icon " + sys.argv[3])
 
-    script_path = os.path.join(script_root, "", location_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
-    script_fill_path = os.path.normpath(script_path + "/app.py")
-    commandArgs.append(" " + script_fill_path)
+    main_path = os.path.join(script_root, "", location_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
+    main_fill_path = os.path.normpath(main_path + "/app.py")
+    commandArgs.append(" " + main_fill_path)
 
     p = subprocess.Popen(["pyinstaller", commandArgs])
     p.wait()
 
     print("Copying qml files")
     dst_folder = os.path.normpath(location_release + "/" + folder_name)
-    for root, dirs, files in os.walk(script_path):
+    for root, dirs, files in os.walk(main_path):
         for file_ in files:
             if file_.endswith("qml"):
                 shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
@@ -88,13 +88,13 @@ if __name__ == "__main__":
 
     if build_from == "src":
         github_src_full_link = github_link + "/archive/" + branch_or_version + ".zip"
-        download_and_unzip(github_src_full_link, location_src)
-        install_app()
+        download_and_unzip(github_src_full_link, location_code_src)
+        install_app(location_code_src)
     elif build_from == "release":
         github_release_src_link = github_link + "/archive/" + branch_or_version + ".zip"
         location_release_src += "/" + branch_or_version + "/"
         download_and_unzip(github_release_src_link, location_release_src)
-        install_app()
+        install_app(location_release_src)
     elif build_from == "exe":
         github_release_src_link = github_link + "/releases/download/" \
                                   + branch_or_version + "/SMM_Planner_" + branch_or_version + ".zip"
