@@ -4,7 +4,7 @@
 
 ## Запуск скрипта:
 ```
-python auto_build_smm_planner_test.py [src/release] [branch(for src)/version(for release)]
+python auto_build_smm_planner_test.py [src/release/exe] [branch(for src)/version(for release/exe)]
 ```
 Примечание: если запустить скрипт со следующими параметрами:
 ```
