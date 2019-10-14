@@ -19,6 +19,7 @@
 
 ## 2. Running script:
 
+### 1. Автоматическая сборка SMM Planner из исходников:
 ```
 python scripts/auto_build_smm_planner_test.py [src/release/exe] [branch(for src)/version(for release/exe)]
 ```
@@ -43,3 +44,14 @@ python scripts/auto_build_smm_planner_test.py
 - [branch(for src)/version(for release and exe)]:
   - branch - название ветки (используется, если выбран ключ src)
   - version - тег версии, поставляемая или исполняемая конфигурация которой закачиваются (если выбран release или exe)
+
+### 2. Автоматическая сборка установщика:
+
+Важно: в директории `../Output/SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner_test.py`)
+
+Запуск скрипта проводить из командной строки, запущенной от имени администратора
+```
+python scripts/auto_build_installer.py
+```
+
+После работы скрипта в директории `../Output` будет располагаться файл `SMM_Planner_Installer_test.exe`.
