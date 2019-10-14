@@ -54,7 +54,7 @@ def install_app(location_src):
     if len(sys.argv) >= 4:
         commandArgs.append(" --icon " + sys.argv[3])
 
-    main_path = os.path.join(script_root, "", location_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
+    main_path = os.path.join(script_root, "", location_src) # location_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
     main_fill_path = os.path.normpath(main_path + "/app.py")
     commandArgs.append(" " + main_fill_path)
 
@@ -89,12 +89,12 @@ if __name__ == "__main__":
     if build_from == "src":
         github_src_full_link = github_link + "/archive/" + branch_or_version + ".zip"
         download_and_unzip(github_src_full_link, location_code_src)
-        install_app(location_code_src)
+        install_app(location_code_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
     elif build_from == "release":
         github_release_src_link = github_link + "/archive/" + branch_or_version + ".zip"
         location_release_src += "/" + branch_or_version + "/"
         download_and_unzip(github_release_src_link, location_release_src)
-        install_app(location_release_src)
+        install_app(location_release_src + "SMMPlanner-" + branch_or_version[1:] + "/SMMP_test_config/project_src")
     elif build_from == "exe":
         github_release_src_link = github_link + "/releases/download/" \
                                   + branch_or_version + "/SMM_Planner_" + branch_or_version + ".zip"
