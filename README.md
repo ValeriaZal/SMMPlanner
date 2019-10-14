@@ -27,6 +27,12 @@ python scripts/auto_build_smm_planner_test.py
 ```
 то по умолчанию будут собираться исходники (src) с ветки [config_test](https://github.com/ValeriaZal/SMMPlanner/tree/config_test).
 
+После работы скрипта в:
+* `../Output/SMM_Planner` находится исполняемая конфигурация (файл SMM_Planner_v*.exe отвечает за запуск программы)
+* `../supplement` располагаются файлы для отладки
+* `../Src_x64` находятся исходные файлы (директория создается при выборе режима `src`)
+* `../Release_Src_x64` располагаются исходные файлы релизной версии (директория создается при выборе режима `release`)
+
 ### Args:
 - auto_build_smm_planner_test.py - имя скрипта
 - [src/release/exe]:
