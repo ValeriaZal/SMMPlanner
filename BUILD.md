@@ -28,15 +28,15 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 ```
 
 ### 2. Сборка из исходников:
-    1. Перейти в каталог `SMMPlanner\src`;
-    2. Открыть cmd и ввести следующую команду: `pyinstaller SMM_Planner.py`
+1. Перейти в каталог `SMMPlanner\src`;
+2. Открыть cmd и ввести следующую команду: `pyinstaller SMM_Planner.py`
        Указав доп. параметры можно изменить каталоги сборки. Подробнее: https://pyinstaller.readthedocs.io/en/stable/usage.html;
-    3. При вызове `pyinstaller` без доп. параметров в каталоге `dist` будут располагаться файлы исполняемой кофигурации, а в каталоге `build` - файлы для отладки;
-    4. В каталоге `dist\SMM_Planner` лежит SMM_Planner.exe.
+3. При вызове `pyinstaller` без доп. параметров в каталоге `dist` будут располагаться файлы исполняемой кофигурации, а в каталоге `build` - файлы для отладки;
+4. В каталоге `dist\SMM_Planner` лежит SMM_Planner.exe.
     
 ### [TODO] 3. Сборка инсталлятора
-    1. Открыть в QtCreator installer/SMMPlanner_installer.pro
-    2. Собрать проект //in progress
+1. Открыть в QtCreator installer/SMMPlanner_installer.pro
+2. Собрать проект //in progress
 
     
 ## 3. Auto build instruction
@@ -47,13 +47,17 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 
 ### 1. Автоматическая сборка SMM Planner'a:
 ```
-python auto_build_smm_planner.py [src/release/exe] [branch(for src)/version(for release/exe)]
+python scripts/auto_build_smm_planner.py [src/release/exe] [branch(for src)/version(for release/exe)]
 ```
 Примечание: если запустить скрипт со следующими параметрами:
 ```
-python auto_build_smm_planner.py
+python scripts/auto_build_smm_planner.py
 ```
 то по умолчанию будут собираться исходники с ветки [master](https://github.com/ValeriaZal/SMMPlanner/tree/master).
+
+После работы скрипта:
+* в директории `../Output/SMM_Planner` будет находиться исполняемая конфигурация
+* в директории `../`
 
 ### [TODO] 2. Автоматическая сборка инсталлятора:
 ```
