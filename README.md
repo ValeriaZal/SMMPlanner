@@ -34,6 +34,7 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 
 
 ## Source Code Directory Layout
+* [installer](installer) - содержит проект с исходниками для установщика
 * [Output](Output) - содержит пример исполняемой конфигурации
 * [scripts](scripts) - содержит скрипты для автоматической сборки компонентов
 * [src](src) - содержит исходники
