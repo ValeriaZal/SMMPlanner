@@ -1,0 +1,2 @@
+SMM_Planner: v0.1
+SMM_Planner_Installer: v0.1
