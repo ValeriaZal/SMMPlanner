@@ -50,11 +50,11 @@ def install_app(location_src):
                    " --workpath " + location_workpath,
                    " --name " + folder_name,
                    " --specpath " + location_spec,
-                   " --log-level=TRACE"]
+                   " --log-level=DEBUG"]
     if len(sys.argv) >= 4:
         commandArgs.append(" --icon " + sys.argv[3])
 
-    main_path = os.path.join(script_root, "", location_src) # location_src + "/SMMPlanner-config_test/SMMP_test_config/project_src")
+    main_path = os.path.join(script_root, "", location_src)
     main_fill_path = os.path.normpath(main_path + "/app.py")
     commandArgs.append(" " + main_fill_path)
 
