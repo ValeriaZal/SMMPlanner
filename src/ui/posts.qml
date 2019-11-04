@@ -4,7 +4,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.3
 
-ApplicationWindow
+
+Rectangle
 {
 	id: postsWindow
 	width: 1440

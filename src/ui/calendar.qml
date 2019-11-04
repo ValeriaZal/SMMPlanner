@@ -9,12 +9,12 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
 
-ApplicationWindow
+Item
 {
 	id: calendarWindow
 	width: 1440
 	height: 900
-	color: "#f3f3f4"
+	//color: "#f3f3f4"
 
 	Calendar
 	{

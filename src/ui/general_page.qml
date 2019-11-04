@@ -3,6 +3,9 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
+
+import QtQuick.Layouts 1.1
+
 ApplicationWindow
 {
 	id: applicationWindow
@@ -12,6 +15,56 @@ ApplicationWindow
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
+/*
+	Loader {
+		id: calendarLoader
+		anchors.top: topWindowContainer.bottom
+		anchors.bottom: bottomWindowContainer.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+
+		property string path: "calendar.qml"
+
+		source: path
+	}
+
+	Loader {
+		id: postLoader
+		anchors.top: topWindowContainer.bottom
+		anchors.bottom: bottomWindowContainer.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+
+		property string path: "posts.qml"
+
+		source: path
+	}
+
+	Loader {
+		id: templateLoader
+
+		anchors.top: topWindowContainer.bottom
+		anchors.bottom: bottomWindowContainer.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+
+		property string path: "templates.qml"
+
+		source: path
+	}
+*/
+	Loader {
+		id: loader
+
+		anchors.top: topWindowContainer.bottom
+		anchors.bottom: bottomWindowContainer.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+
+		property string path: ""
+
+		source: path
+	}
 
 
 	Rectangle {
@@ -24,10 +77,10 @@ ApplicationWindow
 		anchors.bottom: parent.bottom
 
 		Text {
-			id: element1
+			id: versionText
 			x: 1317
 			width: 123
-			text: qsTr("Version 0.1")
+			text: qsTr("Version 0.2")
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
@@ -73,7 +126,7 @@ ApplicationWindow
 			}
 
 			Button {
-				id: logoSMMPlannerText
+				id: logOutButton
 				text: qsTr("Log Out")
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
@@ -83,8 +136,6 @@ ApplicationWindow
 				font.pixelSize: 18
 			}
 		}
-
-
 
 
 		RowLayout {
@@ -106,6 +157,12 @@ ApplicationWindow
 				Layout.fillWidth: false
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 				checkable: true
+
+				onClicked: {
+					loader.path = "calendar.qml"
+					componentCache.trim();
+					loader.setSource(loader.path);
+				}
 			}
 
 			RowLayout {
@@ -125,6 +182,12 @@ ApplicationWindow
 					Layout.fillWidth: false
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 					checkable: true
+
+					onClicked: {
+						loader.path = "posts.qml"
+						componentCache.trim();
+						loader.setSource(loader.path);
+					}
 				}
 
 				RoundButton {
@@ -134,7 +197,6 @@ ApplicationWindow
 					width: height
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 					checkable: true
-
 				}
 
 				RowLayout {
@@ -154,6 +216,12 @@ ApplicationWindow
 						Layout.fillWidth: false
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 						checkable: true
+
+						onClicked: {
+							loader.path = "templates.qml"
+							componentCache.trim();
+							loader.setSource(loader.path);
+						}
 					}
 
 					RoundButton {
@@ -169,15 +237,6 @@ ApplicationWindow
 		}
 	}
 
-	Loader {
-		id: loader
-		anchors.top: topWindowContainer.bottom
-		anchors.bottom: bottomWindowContainer.top
-		anchors.left: parent.left
-		anchors.right: parent.right
-
-		// source: "general_page.qml"
-	}
 }
 
 
