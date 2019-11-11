@@ -20,7 +20,7 @@ Item
 	{
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.fill: parent
-		anchors.top: monthText.bottom
+        //anchors.top: monthText.bottom
 
 		style: CalendarStyle
 		{
@@ -37,9 +37,9 @@ Item
 
 				Label {
 					text: styleData.date.getDate()
-					anchors.top: parent
+                    /*anchors.top: parent
 					anchors.left: parent
-					anchors.right: parent
+                    anchors.right: parent*/
 					color: styleData.visibleMonth && styleData.valid ? "#000000" : "light grey"
 				}
 

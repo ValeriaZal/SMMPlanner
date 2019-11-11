@@ -15,6 +15,8 @@ ApplicationWindow
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
+
+    property var access_token: ""
 /*
 	Loader {
 		id: calendarLoader
@@ -134,6 +136,18 @@ ApplicationWindow
 				Layout.topMargin: 6
 				Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 				font.pixelSize: 18
+
+                onClicked: {
+                    console.log("Log Out clicked")
+                    applicationWindow.close()
+                    /*applicationWindow.hide()
+                    var component = Qt.createComponent("login_page.qml");
+                    win = component.createObject(logOutButton);
+                    win.show();*/
+                    /*loader.path = "login_browser.qml"
+                    componentCache.trim();
+                    loader.setSource(loader.path);*/
+                }
 			}
 		}
 
@@ -159,6 +173,7 @@ ApplicationWindow
 				checkable: true
 
 				onClicked: {
+                    console.log("Calendar clicked")
 					loader.path = "calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -184,6 +199,7 @@ ApplicationWindow
 					checkable: true
 
 					onClicked: {
+                        console.log("Posts clicked")
 						loader.path = "posts.qml"
 						componentCache.trim();
 						loader.setSource(loader.path);
@@ -218,6 +234,7 @@ ApplicationWindow
 						checkable: true
 
 						onClicked: {
+                            console.log("Templates clicked")
 							loader.path = "templates.qml"
 							componentCache.trim();
 							loader.setSource(loader.path);

@@ -1,3 +1,0 @@
-{
-    "files": ["ui/general_page.qml","ui/new_post.qml","app.py","ui/login_page.qml","ui/calendar.qml","ui/templates.qml","ui/posts.qml","ui/new_template.qml","ui/app.qml"]
-}

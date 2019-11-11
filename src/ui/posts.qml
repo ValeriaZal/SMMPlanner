@@ -38,26 +38,26 @@ Rectangle
 		x: 624
 		width: 571
 		height: 71
-		anchors.horizontalCenter: parent.horizontalCenter
-		anchors.top: parent.top
+        /*anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top*/
 
 		Button {
 			id: communityPostsButton
 			text: qsTr("Community Posts")
-			Layout.fillHeight: true
+            Layout.fillHeight: true
 			Layout.fillWidth: true
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-			anchors.bottom: parent.bottom
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            /*anchors.bottom: parent.bottom
 			anchors.top: parent.top
-			anchors.left: parent.left
+            anchors.left: parent.left*/
 		}
 
 		Button {
 			id: scheduledPostsButton
 			text: qsTr("Scheduled Posts")
-			Layout.fillWidth: true
+            Layout.fillWidth: true
 			Layout.fillHeight: true
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 		}
 	}
 
