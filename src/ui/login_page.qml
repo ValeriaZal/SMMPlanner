@@ -89,7 +89,7 @@ ApplicationWindow {
             //property variant res_token;
 
             // Cookies is not permitted for login info
-            profile: WebEngineProfile {}
+            //profile: WebEngineProfile {}
 
             // Create initial url
             function get_first_url(app_idt, scopet, APIvt) {
@@ -114,7 +114,8 @@ ApplicationWindow {
                 var res_auth = url_string.indexOf("https://oauth.vk.com/authorize?client_id=");
                 var res_access = url_string.indexOf("https://oauth.vk.com/blank.html#access_token=");
                 var res_vk = url_string.indexOf("https://login.vk.com");
-                if ((res_auth === -1) && (res_access === -1) && (res_vk === -1)) {
+                var res_log = url_string.indexOf("login?act=authcheck");
+                if ((res_auth === -1) && (res_access === -1) && (res_vk === -1) && (res_log === -1)) {
                     console.log("vk_lost(", url_string, ")")
                     console.log("result: true")
                     return true;
@@ -141,9 +142,9 @@ ApplicationWindow {
                 }
 
                 // Case: user is hacker
-                if (vk_lost(loadRequest.url.toString())) {
+                /*if (vk_lost(loadRequest.url.toString())) {
                     webViewContent.url = get_first_url("7123948", "groups,wall", "5.101")
-                }
+                }*/
 
                 // Case: lost Internet connection
                 if (loadRequest.status === WebEngineLoadRequest.LoadFailedStatus) {

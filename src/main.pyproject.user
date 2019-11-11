@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.10.0, 2019-11-10T23:47:10. -->
+<!-- Written by QtCreator 4.10.0, 2019-11-12T00:43:08. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -137,11 +137,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_post.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">new_post</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_post.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:\Users\User\AppData\Local\Programs\Python\Python37\python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_post.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -202,11 +202,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/general_page.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">general_page</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/general_page.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/general_page.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -267,11 +267,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/login_page.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">login_page</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/login_page.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/login_page.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -332,11 +332,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/calendar.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">calendar</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/calendar.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/calendar.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -397,18 +397,18 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/main.py</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:\Users\User\AppData\Local\Programs\Python\Python37\python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
-    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
-    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebugger">true</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">false</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.5">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -462,11 +462,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/templates.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">templates</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/templates.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/templates.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -527,11 +527,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/posts.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">posts</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/posts.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/posts.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -592,11 +592,11 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_template.qml</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run </value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">new_template</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_template.qml</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">C:/Users/User/AppData/Local/Programs/Python/Python37/python.exe</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:/Files/Documents/Studying/4_year/SMMPlanner/WebViewResearch/src/ui/new_template.qml</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script"></value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
