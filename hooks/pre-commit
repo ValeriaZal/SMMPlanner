@@ -1,0 +1,15 @@
+#!/bin/sh
+
+file="version"
+
+string=$(head -n 1 "$file")
+IFS="."
+declare array=($(echo $string | tr "$IFS" " "))
+IFS=" "
+declare ver=($(echo $array | tr "$IFS" " "))
+((ver[1]++))
+IFS="."
+bar=$(IFS="$IFS" ; echo "${ver[*]}")
+
+echo "${bar[*]}" > "$file"
+
