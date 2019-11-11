@@ -89,7 +89,7 @@ ApplicationWindow {
             //property variant res_token;
 
             // Cookies is not permitted for login info
-            //profile: WebEngineProfile {}
+            profile: WebEngineProfile {}
 
             // Create initial url
             function get_first_url(app_idt, scopet, APIvt) {
