@@ -46,6 +46,7 @@ CMakeLists.txt.user*
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyproject.*
 
 # C extensions
 *.so
