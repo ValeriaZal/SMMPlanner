@@ -31,7 +31,7 @@ ApplicationWindow
 			font.pixelSize: 25
 		}
 
-		TextEdit {
+		TextField {
 			id: namePostTextEdit
 			width: 80
 			height: 20
@@ -43,22 +43,45 @@ ApplicationWindow
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 			font.pixelSize: 25
+
+			background: Rectangle {
+				implicitWidth: namePostTextEdit.width
+				implicitHeight: namePostTextEdit.height
+				color: control.enabled ? "transparent" : "#353637"
+				border.color: control.enabled ? "#21be2b" : "transparent"
+			}
 		}
 	}
 
-	TextArea {
-		id: textArea
-		height: 269
-		text: qsTr("")
-		textFormat: Text.RichText
-		verticalAlignment: Text.AlignTop
-		placeholderText: "Что у Вас нового?"
+	ScrollView {
+		id: textAreaScrollView
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
 		anchors.leftMargin: 6
+		anchors.bottom: imageRowLayout.top
+		anchors.bottomMargin: 6
 		anchors.top: templatesRowLayout.bottom
 		anchors.topMargin: 6
+		clip: true
+
+		TextArea {
+			id: textArea
+			clip: true
+			text: qsTr("")
+			anchors.fill: parent
+			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+			textFormat: Text.RichText
+			verticalAlignment: Text.AlignTop
+			placeholderText: "Что у Вас нового?"
+		}
+
+		background: Rectangle {
+			implicitWidth: textAreaScrollView.width
+			implicitHeight: textAreaScrollView.height
+			color: control.enabled ? "transparent" : "#353637"
+			border.color: control.enabled ? "#21be2b" : "transparent"
+		}
 	}
 
 	RowLayout {
@@ -102,8 +125,9 @@ ApplicationWindow
 
 		ComboBox {
 			id: templateComboBox
+			textRole: "Шаблон поста"
 			Layout.fillWidth: true
-			displayText: qsTr("Шаблон поста")
+			displayText: qsTr("")
 			font.bold: true
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

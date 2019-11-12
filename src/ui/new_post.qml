@@ -50,6 +50,7 @@ ApplicationWindow
 		id: textArea
 		height: 269
 		text: qsTr("")
+		clip: false
 		textFormat: Text.RichText
 		verticalAlignment: Text.AlignTop
 		placeholderText: "Что у Вас нового?"
@@ -113,8 +114,9 @@ ApplicationWindow
 
 		ComboBox {
 			id: templateComboBox
+			textRole: "Шаблон поста"
 			Layout.fillWidth: true
-			displayText: qsTr("Шаблон поста")
+			displayText: qsTr("")
 			font.bold: true
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

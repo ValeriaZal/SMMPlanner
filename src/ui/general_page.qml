@@ -3,7 +3,6 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
-
 import QtQuick.Layouts 1.1
 
 ApplicationWindow
@@ -16,45 +15,9 @@ ApplicationWindow
 	height: 900
 	color: "#f3f3f4"
 
-    property var access_token: ""
-/*
-	Loader {
-		id: calendarLoader
-		anchors.top: topWindowContainer.bottom
-		anchors.bottom: bottomWindowContainer.top
-		anchors.left: parent.left
-		anchors.right: parent.right
+	property variant win;  // you can hold this as a reference..
+	property var access_token: ""
 
-		property string path: "calendar.qml"
-
-		source: path
-	}
-
-	Loader {
-		id: postLoader
-		anchors.top: topWindowContainer.bottom
-		anchors.bottom: bottomWindowContainer.top
-		anchors.left: parent.left
-		anchors.right: parent.right
-
-		property string path: "posts.qml"
-
-		source: path
-	}
-
-	Loader {
-		id: templateLoader
-
-		anchors.top: topWindowContainer.bottom
-		anchors.bottom: bottomWindowContainer.top
-		anchors.left: parent.left
-		anchors.right: parent.right
-
-		property string path: "templates.qml"
-
-		source: path
-	}
-*/
 	Loader {
 		id: loader
 
@@ -67,7 +30,6 @@ ApplicationWindow
 
 		source: path
 	}
-
 
 	Rectangle {
 		id: bottomWindowContainer
@@ -82,7 +44,7 @@ ApplicationWindow
 			id: versionText
 			x: 1317
 			width: 123
-			text: qsTr("Version 0.2")
+			text: qsTr("Version 0.2") // load from version file
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
@@ -137,17 +99,17 @@ ApplicationWindow
 				Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 				font.pixelSize: 18
 
-                onClicked: {
-                    console.log("Log Out clicked")
-                    applicationWindow.close()
-                    /*applicationWindow.hide()
-                    var component = Qt.createComponent("login_page.qml");
-                    win = component.createObject(logOutButton);
-                    win.show();*/
-                    /*loader.path = "login_browser.qml"
-                    componentCache.trim();
-                    loader.setSource(loader.path);*/
-                }
+				onClicked: {
+					console.log("logOutButton clicked")
+					applicationWindow.close()
+					/*applicationWindow.hide()
+					var component = Qt.createComponent("login_page.qml");
+					win = component.createObject(logOutButton);
+					win.show();*/
+					/*loader.path = "login_browser.qml"
+					componentCache.trim();
+					loader.setSource(loader.path);*/
+				}
 			}
 		}
 
@@ -170,10 +132,9 @@ ApplicationWindow
 				Layout.fillHeight: true
 				Layout.fillWidth: false
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-				checkable: true
 
 				onClicked: {
-                    console.log("Calendar clicked")
+					console.log("calendarButton clicked")
 					loader.path = "calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -196,10 +157,9 @@ ApplicationWindow
 					Layout.fillHeight: true
 					Layout.fillWidth: false
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-					checkable: true
 
 					onClicked: {
-                        console.log("Posts clicked")
+						console.log("postButton clicked")
 						loader.path = "posts.qml"
 						componentCache.trim();
 						loader.setSource(loader.path);
@@ -212,7 +172,13 @@ ApplicationWindow
 					height: 16
 					width: height
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-					checkable: true
+
+					onClicked: {
+						console.log("newPostButton clicked")
+						var component = Qt.createComponent("new_post.qml");
+						win = component.createObject(applicationWindow);
+						win.show();
+					}
 				}
 
 				RowLayout {
@@ -231,10 +197,9 @@ ApplicationWindow
 						Layout.fillHeight: true
 						Layout.fillWidth: false
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-						checkable: true
 
 						onClicked: {
-                            console.log("Templates clicked")
+							console.log("templateButton clicked")
 							loader.path = "templates.qml"
 							componentCache.trim();
 							loader.setSource(loader.path);
@@ -247,19 +212,16 @@ ApplicationWindow
 						text: qsTr("+")
 						height: 24
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-						checkable: true
+
+						onClicked: {
+							console.log("newTemplateButton clicked")
+							var component = Qt.createComponent("new_template.qml");
+							win = component.createObject(applicationWindow);
+							win.show();
+						}
 					}
 				}
 			}
 		}
 	}
-
 }
-
-
-/*##^##
-Designer {
-	D{i:2;anchors_width:200;anchors_x:347}D{i:5;anchors_x:83;anchors_y:93}D{i:6;anchors_x:121;anchors_y:161}
-D{i:4;anchors_width:200;anchors_x:347;anchors_y:422}D{i:3;anchors_x:83;anchors_y:93}
-}
-##^##*/
