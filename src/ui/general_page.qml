@@ -168,10 +168,14 @@ ApplicationWindow
 
 				RoundButton {
 					id: newPostButton
-					text: qsTr("+")
-					height: 16
-					width: height
+					width: 12
+					height: 32
+					text: "+"
+					Layout.preferredHeight: 32
+					Layout.preferredWidth: 32
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+					Layout.fillHeight: false
+					Layout.fillWidth: false
 
 					onClicked: {
 						console.log("newPostButton clicked")
@@ -209,8 +213,8 @@ ApplicationWindow
 					RoundButton {
 						id: newTemplateButton
 						width: 24
-						text: qsTr("+")
 						height: 24
+						text: "+"
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 						onClicked: {
@@ -219,6 +223,20 @@ ApplicationWindow
 							win = component.createObject(applicationWindow);
 							win.show();
 						}
+						/*
+						background: Rectangle {
+							id: newTemplateButtonBackground
+							width: newTemplateButton.width
+							height: newTemplateButton.height
+							color: "transparent"
+						}
+
+						Image {
+							anchors.fill: parent
+							source: "../icons/plus.png"
+							fillMode: Image.Stretch
+						}
+						*/
 					}
 				}
 			}

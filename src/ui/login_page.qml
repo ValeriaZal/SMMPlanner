@@ -8,7 +8,7 @@ import QtQuick.Layouts 1.1
 
 ApplicationWindow {
     id: loginWindow
-    title: qsTr("SMMPlanner_test")
+    title: qsTr("SMMPlanner: Log in")
     width: 1440
     height: 900
     color: "#f3f3f4"

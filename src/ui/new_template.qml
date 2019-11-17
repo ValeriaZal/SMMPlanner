@@ -1,8 +1,9 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-
 import QtQuick.Window 2.13
+
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 
 ApplicationWindow
 {
@@ -10,6 +11,7 @@ ApplicationWindow
 	width: 600
 	height: 600
 	color: "#f3f3f4"
+	title: qsTr("SMMPlanner: New template")
 
 	RowLayout {
 		id: nameRowLayout
@@ -28,7 +30,7 @@ ApplicationWindow
 			verticalAlignment: Text.AlignVCenter
 			Layout.fillHeight: true
 			Layout.fillWidth: false
-			font.pixelSize: 25
+			font.pixelSize: 18
 		}
 
 		TextField {
@@ -47,8 +49,6 @@ ApplicationWindow
 			background: Rectangle {
 				implicitWidth: namePostTextEdit.width
 				implicitHeight: namePostTextEdit.height
-				color: control.enabled ? "transparent" : "#353637"
-				border.color: control.enabled ? "#21be2b" : "transparent"
 			}
 		}
 	}
@@ -69,18 +69,19 @@ ApplicationWindow
 			id: textArea
 			clip: true
 			text: qsTr("")
+			anchors.rightMargin: -446
+			anchors.bottomMargin: -370
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
 			verticalAlignment: Text.AlignTop
 			placeholderText: "Что у Вас нового?"
+
 		}
 
 		background: Rectangle {
 			implicitWidth: textAreaScrollView.width
 			implicitHeight: textAreaScrollView.height
-			color: control.enabled ? "transparent" : "#353637"
-			border.color: control.enabled ? "#21be2b" : "transparent"
 		}
 	}
 
@@ -94,11 +95,27 @@ ApplicationWindow
 		anchors.topMargin: 6
 		anchors.top: textArea.bottom
 
-		RoundButton {
-			id: roundButton
-			text: "img"
-			Layout.fillHeight: false
+		Button {
+			id: imageButton
+			Layout.preferredHeight: 60
+			Layout.preferredWidth: 60
+			Layout.fillHeight: true
 			Layout.fillWidth: false
+
+			background: Rectangle {
+				id: imageButtonBackground
+				width: imageButton.width
+				height: imageButton.height
+				color: "transparent"
+			}
+
+			Image {
+				sourceSize.height: 60
+				sourceSize.width: 60
+				anchors.fill: parent
+				source: "../icons/camera128.png"
+				fillMode: Image.Stretch
+			}
 		}
 
 		ItemDelegate {
@@ -122,6 +139,32 @@ ApplicationWindow
 		anchors.rightMargin: 6
 		anchors.left: parent.left
 		anchors.right: parent.right
+
+		Button {
+			id: templateColorButton
+			Layout.preferredHeight: 60
+			Layout.preferredWidth: 60
+			Layout.fillHeight: true
+			Layout.fillWidth: false
+
+			background: Rectangle {
+				id: templateColorButtonBackground
+				width: templateColorButton.width
+				height: templateColorButton.height
+				color: "transparent"
+			}
+
+			Image {
+				anchors.fill: parent
+				source: "../icons/color-wheel128.png"
+				fillMode: Image.Stretch
+			}
+
+			onClicked: {
+				colorDialog.open()
+			}
+
+		}
 
 		ComboBox {
 			id: templateComboBox
@@ -148,17 +191,17 @@ ApplicationWindow
 			{
 				ListElement
 				{
-					name: "music"
+					name: "#music"
 					checked: false
 				}
 				ListElement
 				{
-					name: "info"
+					name: "#info"
 					checked: false
 				}
 				ListElement
 				{
-					name: "tag"
+					name: "#magic"
 					checked: false
 				}
 			}
@@ -179,6 +222,7 @@ ApplicationWindow
 				}
 			}
 		}
+
 	}
 
 	ColumnLayout {
@@ -200,5 +244,25 @@ ApplicationWindow
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 		}
 	}
+
+	ColorDialog {
+		id: colorDialog
+		title: "Выберите цвет шаблона поста"
+		onAccepted: {
+			console.log("Chosen color: " + colorDialog.color)
+			templateColorButtonBackground.color = colorDialog.color
+		}
+		onRejected: {
+			console.log("Canceled color")
+		}
+	}
+
 }
 
+
+
+/*##^##
+Designer {
+	D{i:6;anchors_height:16;anchors_width:582}
+}
+##^##*/

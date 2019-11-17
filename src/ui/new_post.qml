@@ -4,12 +4,17 @@ import QtQuick.Controls 2.13
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.3
 
+//import QtQuick.Controls 1.3
+import QtQuick.Dialogs 1.3
+import Qt.labs.calendar 1.0
+
 ApplicationWindow
 {
 	id: newPostWindow
 	width: 600
 	height: 600
 	color: "#f3f3f4"
+	title: qsTr("SMMPlanner: New post")
 
 	RowLayout {
 		id: nameRowLayout
@@ -53,7 +58,7 @@ ApplicationWindow
 		clip: false
 		textFormat: Text.RichText
 		verticalAlignment: Text.AlignTop
-		placeholderText: "Что у Вас нового?"
+		//placeholderText: "Что у Вас нового?"
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
@@ -77,16 +82,51 @@ ApplicationWindow
 			width: 100
 			height: 100
 
-			RoundButton {
+			Button {
 				id: imageRoundButton
-				text: "img"
+				Layout.preferredHeight: 32
+				Layout.preferredWidth: 32
+				//text: "img"
 				Layout.fillHeight: false
 				Layout.fillWidth: false
+
+				background: Rectangle {
+					id: imageRoundButtonBackground
+					width: imageRoundButton.width
+					height: imageRoundButton.height
+					color: "transparent"
+				}
+
+				Image {
+					sourceSize.height: 60
+					sourceSize.width: 60
+					anchors.fill: parent
+					source: "../icons/camera128.png"
+					fillMode: Image.Stretch
+				}
 			}
 
-			RoundButton {
+			Button {
 				id: dateRoundButton
-				text: "date"
+				Layout.preferredHeight: 32
+				Layout.preferredWidth: 32
+				Layout.fillHeight: false
+				Layout.fillWidth: false
+				//text: "date"
+
+				background: Rectangle {
+					id: newTemplateButtonBackground
+					width: newTemplateButton.width
+					height: newTemplateButton.height
+					color: "transparent"
+				}
+
+				Image {
+					anchors.fill: parent
+					source: "../icons/date.png"
+					fillMode: Image.Stretch
+				}
+
 			}
 		}
 
@@ -114,10 +154,10 @@ ApplicationWindow
 
 		ComboBox {
 			id: templateComboBox
-			textRole: "Шаблон поста"
+			editable: true
+			textRole: ""
 			Layout.fillWidth: true
-			displayText: qsTr("")
-			font.bold: true
+			displayText: qsTr("Templates")
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -127,27 +167,27 @@ ApplicationWindow
 		ComboBox
 		{
 			id: tagComboBox
+			flat: false
 			editable: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 			displayText: qsTr("Tags")
-			font.bold: true
 			Layout.fillHeight: true
 
 			model: ListModel
 			{
 				ListElement
 				{
-					name: "music"
+					name: "#music"
 					checked: false
 				}
 				ListElement
 				{
-					name: "info"
+					name: "#info"
 					checked: false
 				}
 				ListElement
 				{
-					name: "tag"
+					name: "#tag"
 					checked: false
 				}
 			}
@@ -167,6 +207,7 @@ ApplicationWindow
 					onCheckedChanged: model.checked = checked
 				}
 			}
+
 		}
 	}
 
@@ -197,13 +238,23 @@ ApplicationWindow
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 		}
 	}
+/*
+	Dialog {
+		id: dateDialog
+		visible: true
+		title: "Choose a date"
+		standardButtons: StandardButton.Ok | StandardButton.Cancel
+
+		onAccepted: console.log("Saving the date " +
+			calendar.selectedDate.toLocaleDateString())
+
+		Calendar {
+			id: calendar
+			//onDoubleClicked: dateDialog.click(StandardButton.Save)
+		}
+	}
+	*/
 }
 
 
-/*##^##
-Designer {
-	D{i:1;anchors_width:100;anchors_x:199;anchors_y:95}D{i:4;anchors_width:562;anchors_x:15;anchors_y:82}
-D{i:5;anchors_height:140;anchors_x:33;anchors_y:364}D{i:10;anchors_width:100;anchors_x:199;anchors_y:95}
-D{i:19;anchors_height:140;anchors_width:100;anchors_x:410;anchors_y:415}
-}
-##^##*/
+
