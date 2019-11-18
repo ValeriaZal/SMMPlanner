@@ -223,20 +223,6 @@ ApplicationWindow
 							win = component.createObject(applicationWindow);
 							win.show();
 						}
-						/*
-						background: Rectangle {
-							id: newTemplateButtonBackground
-							width: newTemplateButton.width
-							height: newTemplateButton.height
-							color: "transparent"
-						}
-
-						Image {
-							anchors.fill: parent
-							source: "../icons/plus.png"
-							fillMode: Image.Stretch
-						}
-						*/
 					}
 				}
 			}

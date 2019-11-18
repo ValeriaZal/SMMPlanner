@@ -25,7 +25,7 @@ Rectangle
 			text: "+"
 			onClicked: {
 				console.log("newTemplateButton clicked")
-				var component = Qt.createComponent("new_template.qml");
+				var component = Qt.createComponent("edit_template.qml");
 				win = component.createObject(applicationWindow);
 				win.show();
 			}

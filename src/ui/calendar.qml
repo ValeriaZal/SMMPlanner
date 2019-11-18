@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import Qt.labs.calendar 1.0
 import QtQuick.Window 2.13
-import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.13
 
@@ -59,13 +58,13 @@ Item
 						parent: listViewBackground
 						anchors.fill: parent
 
-
 						delegate: Item {
 							x: 0
 							width: listView.width
 							height: 25
 
 							Button {
+								id: postButton
 								anchors.rightMargin: 6
 								anchors.leftMargin: 6
 								anchors.bottomMargin: 6
@@ -73,18 +72,20 @@ Item
 
 								width: listView.width
 
-								text: model.name
-
 								style: ButtonStyle {
 										background: Rectangle {
 											color: model.color // tag color
 											radius: 3
-											opacity: 0.75
+											opacity: postButton.pressed ? 0.75 : 0.5
 										}
-									}
+
+										label: Text {
+											text: model.name
+										}
+								}
 
 								onClicked: {
-									console.log("Post " + model.name + " clicked")
+									console.log("Post " + model.name + " clicked", "\tsum color = ", model.color.r + model.color.g + model.color.b)
 								}
 							}
 
