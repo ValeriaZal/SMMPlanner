@@ -142,9 +142,9 @@ ApplicationWindow {
                 }
 
                 // Case: user is hacker
-                /*if (vk_lost(loadRequest.url.toString())) {
+                if (vk_lost(loadRequest.url.toString())) {
                     webViewContent.url = get_first_url("7123948", "groups,wall", "5.101")
-                }*/
+                }
 
                 // Case: lost Internet connection
                 if (loadRequest.status === WebEngineLoadRequest.LoadFailedStatus) {
