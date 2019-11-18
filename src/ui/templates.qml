@@ -50,36 +50,6 @@ Rectangle
 		anchors.horizontalCenter: parent.horizontalCenter
 		color: "transparent"
 
-		Component {
-			id: contactDelegate
-
-			Item {
-				width: listViewRectangle.width;
-				height: 40
-
-				Row {
-					spacing: 20
-
-					Rectangle {
-						width: 40
-						height: 40
-						color: colorCode
-						radius: 5
-					}
-
-					Text {
-						text: name
-						anchors.verticalCenter: parent.verticalCenter
-						font.bold: true
-					}
-				}
-				MouseArea {
-					anchors.fill: parent
-					onClicked: list.currentIndex = index
-				}
-			}
-		}
-
 		ListView {
 			id: list
 			snapMode: ListView.SnapToItem
@@ -107,7 +77,35 @@ Rectangle
 							   colorCode: "green"
 						   }
 					   }
-			   delegate: contactDelegate
+			   delegate: Component {
+				   id: listItemDelegate
+
+				   Item {
+					   width: listViewRectangle.width;
+					   height: 40
+
+					   Row {
+						   spacing: 20
+
+						   Rectangle {
+							   width: 40
+							   height: 40
+							   color: colorCode
+							   radius: 5
+						   }
+
+						   Text {
+							   text: name
+							   anchors.verticalCenter: parent.verticalCenter
+							   font.bold: true
+						   }
+					   }
+					   MouseArea {
+						   anchors.fill: parent
+						   onClicked: list.currentIndex = index
+					   }
+				   }
+			   }
 			   highlight: Rectangle {
 				   color: "lightsteelblue";
 				   radius: 2

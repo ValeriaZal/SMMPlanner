@@ -173,7 +173,6 @@ ApplicationWindow
 
 							spacing: 10
 						}
-
 					}
 
 					model: ListModel {
@@ -204,8 +203,6 @@ ApplicationWindow
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 		}
-
-
 	}
 
 	RowLayout {
@@ -235,8 +232,9 @@ ApplicationWindow
 			}
 
 			Image {
+				id: startIcon
 				anchors.fill: parent
-				source: "../icons/color-wheel128.png"
+				source: "../icons/color_picker.jpg"
 				fillMode: Image.Stretch
 			}
 
@@ -335,6 +333,7 @@ ApplicationWindow
 		title: "Выберите цвет шаблона поста"
 		onAccepted: {
 			console.log("Chosen color: " + colorDialog.color)
+			startIcon.visible = false
 			templateColorButtonBackground.color = colorDialog.color
 		}
 		onRejected: {

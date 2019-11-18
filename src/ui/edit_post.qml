@@ -5,7 +5,6 @@ import QtQml 2.2
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.3
 
-//import QtQuick.Controls 1.3
 import QtQuick.Dialogs 1.3
 import Qt.labs.calendar 1.0
 
@@ -44,7 +43,7 @@ ApplicationWindow
 			font.weight: Font.Bold
 			clip: true
 			horizontalAlignment: Text.AlignLeft
-			cursorVisible: false
+			//cursorVisible: false
 			Layout.fillHeight: false
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -320,6 +319,11 @@ ApplicationWindow
 						fillMode: Image.Stretch
 					}
 
+
+					onClicked: {
+
+					}
+
 				}
 
 				Text {
@@ -363,8 +367,4 @@ ApplicationWindow
 
 
 
-/*##^##
-Designer {
-	D{i:17;anchors_height:100;anchors_width:100;anchors_x:129;anchors_y:471}
-}
-##^##*/
+

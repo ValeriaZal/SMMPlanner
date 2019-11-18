@@ -179,7 +179,7 @@ ApplicationWindow
 
 					onClicked: {
 						console.log("newPostButton clicked")
-						var component = Qt.createComponent("new_post.qml");
+						var component = Qt.createComponent("edit_post.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
 					}
@@ -219,7 +219,7 @@ ApplicationWindow
 
 						onClicked: {
 							console.log("newTemplateButton clicked")
-							var component = Qt.createComponent("new_template.qml");
+							var component = Qt.createComponent("edit_template.qml");
 							win = component.createObject(applicationWindow);
 							win.show();
 						}
