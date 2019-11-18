@@ -14,47 +14,109 @@ Item
 	id: calendarWindow
 	width: 1440
 	height: 900
-	//color: "#f3f3f4"
 
 	Calendar
 	{
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.fill: parent
-        //anchors.top: monthText.bottom
 
 		style: CalendarStyle
 		{
 			gridVisible: true
+
 			dayDelegate: Rectangle
 			{
-				gradient: Gradient
-				{
-					GradientStop {
-						position: 0.00
-						color: styleData.selected ? "#ffffff" : (styleData.visibleMonth && styleData.valid ? "#dddedf" : "#404142");
-					}
-				}
+				id: rectDelegate
+				color: styleData.selected ? "#ffffff" : (styleData.visibleMonth && styleData.valid ? "#dddedf" : "#404142")
 
 				Label {
+					id: dayText
 					text: styleData.date.getDate()
-                    /*anchors.top: parent
-					anchors.left: parent
-                    anchors.right: parent*/
 					color: styleData.visibleMonth && styleData.valid ? "#000000" : "light grey"
 				}
 
-				ListView
-				{
-					id: dayPostsListView
-					model: Qt.fontFamilies()
-					delegate: ItemDelegate
-					{
-						text: modelData
-						highlighted: ListView.isCurrentItem
-						onClicked: listView.currentIndex = index
-					}
-					ScrollIndicator.vertical: ScrollIndicator { }
+				Rectangle {
+					id: listViewBackground
+					anchors.top: dayText.bottom
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.bottom: parent.bottom
+					//color: rectDelegate.color
 
+					ListView {
+						id: listView
+						anchors.rightMargin: 6
+						anchors.leftMargin: 6
+						anchors.bottomMargin: 6
+						anchors.topMargin: 6
+						highlightFollowsCurrentItem: true
+						snapMode: ListView.SnapToItem
+						boundsBehavior: Flickable.StopAtBounds
+						highlightRangeMode: ListView.NoHighlightRange
+						contentHeight: 30
+						contentWidth: 250
+						clip: true
+						parent: listViewBackground
+						anchors.fill: parent
+
+
+						delegate: Item {
+							x: 0
+							width: listView.width
+							height: 25
+
+							Button {
+								anchors.rightMargin: 6
+								anchors.leftMargin: 6
+								anchors.bottomMargin: 6
+								anchors.topMargin: 6
+
+								width: listView.width
+
+								text: model.name
+
+								style: ButtonStyle {
+										background: Rectangle {
+											color: model.color // tag color
+											radius: 3
+											opacity: 0.75
+										}
+									}
+
+								onClicked: {
+									console.log("Post " + model.name + " clicked")
+								}
+							}
+
+						}
+
+						model: ListModel {
+							ListElement {
+								name: "post 1"
+								color: "grey"
+							}
+
+							ListElement {
+								name: "post 2"
+								color: "red"
+							}
+
+							ListElement {
+								name: "post 3"
+								color: "green"
+							}
+
+							ListElement {
+								name: "post 4"
+								color: "blue"
+							}
+
+							ListElement {
+								name: "post 5"
+								color: "black"
+							}
+						}
+					}
 				}
 			}
 		}
