@@ -24,7 +24,7 @@ if __name__ == "__main__":
     context.setContextProperty("componentCache", manager)
 
     current_path = os.path.abspath(os.path.dirname(__file__))
-    qml_file = os.path.join(current_path, 'ui/login_page.qml')
+    qml_file = os.path.join(current_path, 'ui/login_page.qml') # login_page
     engine.load(qml_file)
 
     login = Login()
