@@ -57,9 +57,8 @@ def install_app(location_src):
     main_fill_path = os.path.normpath(main_path + "/main.py")
     commandArgs.append(" " + main_fill_path)
 
-    #p = subprocess.Popen(["pyinstaller", commandArgs])
-    #p.wait()
-
+    p = subprocess.Popen(["pyinstaller", commandArgs])
+    p.wait()
 
     print("Copying qml files:")
     dst_folder = os.path.normpath(location_release + "/" + folder_name + "/ui")
@@ -70,6 +69,24 @@ def install_app(location_src):
             if file_.endswith("qml"):
                 print("Copying", file_, "from", root, "to", dst_folder)
                 shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+
+    print("Copying modules files:")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
+    if not os.path.exists(dst_folder):
+        os.mkdir(dst_folder)
+    for root, dirs, files in os.walk(os.path.normpath(main_path + "/modules/")):
+        for file_ in files:
+            print("Copying", file_, "from", root, "to", dst_folder)
+            shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+
+    print("Copying icons files:")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/icons")
+    if not os.path.exists(dst_folder):
+        os.mkdir(dst_folder)
+    for root, dirs, files in os.walk(os.path.normpath(main_path + "/icons/")):
+        for file_ in files:
+            print("Copying", file_, "from", root, "to", dst_folder)
+            shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
 
 # argv:
