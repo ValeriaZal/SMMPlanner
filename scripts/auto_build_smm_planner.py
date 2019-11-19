@@ -60,12 +60,14 @@ def install_app(location_src):
     p = subprocess.Popen(["pyinstaller", commandArgs])
     p.wait()
 
-    print("Copying qml files")
-    dst_folder = os.path.normpath(location_release + "/ui" + folder_name)
-    for root, dirs, files in os.walk(os.path.normpath(main_path + "/ui")):
+    print("Copying qml files:")
+    dst_folder = os.path.normpath(location_release + "/ui/" + folder_name)
+    for root, dirs, files in os.walk(os.path.normpath(main_path + "/ui/")):
         for file_ in files:
             if file_.endswith("qml"):
                 shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+                print("Copying ", file_)
+
 
 # argv:
 # [0] script_name,
