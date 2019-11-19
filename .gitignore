@@ -46,6 +46,7 @@ CMakeLists.txt.user*
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyproject.*
 
 # C extensions
 *.so
@@ -167,3 +168,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# SMM build files
+Output/*
+Output
+Src_x64/*
+Src_x64
+Release_x64/*
+Release_x64
+supplement
+installer/packages/SMM_Planner/data
