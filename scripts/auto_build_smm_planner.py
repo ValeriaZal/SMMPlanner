@@ -101,7 +101,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Warning: lack of arguments. SMM Planner will build from source code from config_test branch")
         build_from = "src"
-        branch_or_version = "ui"
+        branch_or_version = "master"
     else:
         build_from = sys.argv[1]
         branch_or_version = sys.argv[2]
