@@ -168,3 +168,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# SMM build files
+Output/*
+Output
+Src_x64/*
+Src_x64
+Release_x64/*
+Release_x64
+supplement
