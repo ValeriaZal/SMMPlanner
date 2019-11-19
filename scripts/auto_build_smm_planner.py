@@ -61,7 +61,7 @@ def install_app(location_src):
     p.wait()
 
     print("Copying qml files")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name)
+    dst_folder = os.path.normpath(location_release + "/ui" + folder_name)
     for root, dirs, files in os.walk(os.path.normpath(main_path + "/ui")):
         for file_ in files:
             if file_.endswith("qml"):
