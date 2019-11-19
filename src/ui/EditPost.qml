@@ -5,8 +5,10 @@ import QtQml 2.2
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.3
 
-import QtQuick.Dialogs 1.3
-import Qt.labs.calendar 1.0
+import QtQuick.Controls 1.4 as Old
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls.Private 1.0
+//import QtQuick.Dialogs 1.2
 
 ApplicationWindow
 {
@@ -14,7 +16,7 @@ ApplicationWindow
 	width: 600
 	height: 600
 	color: "#f3f3f4"
-	title: qsTr("SMMPlanner: Edit post")
+	title: qsTr("SMMPlanner: Редактирование поста")
 
 	RowLayout {
 		id: nameRowLayout
@@ -43,7 +45,6 @@ ApplicationWindow
 			font.weight: Font.Bold
 			clip: true
 			horizontalAlignment: Text.AlignLeft
-			//cursorVisible: false
 			Layout.fillHeight: false
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -58,6 +59,7 @@ ApplicationWindow
 
 	ScrollView {
 		id: textAreaScrollView
+		parent: editPostWindow
 		height: 377
 		anchors.right: parent.right
 		anchors.rightMargin: 6
@@ -111,7 +113,7 @@ ApplicationWindow
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-			model: [ "Banana", "Apple", "Coconut" ]
+			model: [ "Default", "Music", "Info" ]
 		}
 
 		ComboBox
@@ -177,7 +179,7 @@ ApplicationWindow
 
 	RowLayout {
 		id: settingsRowLayout
-		parent: editPostWindow
+		//parent: editPostWindow
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 6
 		anchors.top: textAreaScrollView.bottom
@@ -253,7 +255,7 @@ ApplicationWindow
 							Button {
 								width: 20
 								height: 20
-								text: qsTr("x")
+								text: qsTr("X")
 							}
 
 							Text {
@@ -285,10 +287,6 @@ ApplicationWindow
 					}
 				}
 			}
-
-
-
-
 		}
 
 		ColumnLayout {
@@ -307,9 +305,9 @@ ApplicationWindow
 					Layout.fillWidth: false
 
 					background: Rectangle {
-						id: newTemplateButtonBackground
-						width: newTemplateButton.width
-						height: newTemplateButton.height
+						id: newPostButtonBackground
+						width: dateButton.width
+						height: dateButton.height
 						color: "transparent"
 					}
 
@@ -321,7 +319,7 @@ ApplicationWindow
 
 
 					onClicked: {
-
+						dateTimePickerDialog.open()
 					}
 
 				}
@@ -341,27 +339,64 @@ ApplicationWindow
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+				onClicked: {
+					console.log("publishButton clicked")
+					editPostWindow.close()
+				}
 			}
 		}
 	}
 
-
-	/*
 	Dialog {
-		id: dateDialog
-		visible: true
-		title: "Choose a date"
-		standardButtons: StandardButton.Ok | StandardButton.Cancel
+		id: dateTimePickerDialog
+		title: "Выберите дату публикации"
+		modal: true
 
-		onAccepted: console.log("Saving the date " +
-			calendar.selectedDate.toLocaleDateString())
+		standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
-		Calendar {
-			id: calendar
-			//onDoubleClicked: dateDialog.click(StandardButton.Save)
+		onAccepted: {
+			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
+			console.log("Selected the date " + calendar.selectedDate.toLocaleDateString())
+			dateTimeText.text = qsTr(calendar.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
+									 + " " + hoursComboBox.currentIndex.toString()
+									 + ":" + minutesComboBox.currentIndex.toString())
+		}
+
+		ColumnLayout {
+			Old.Calendar {
+				id: calendar
+				//Layout.centerIn: parent
+				onDoubleClicked: dateTimePickerDialog.click(DialogButtonBox.Ok)
+				//width: dateTimePickerDialog.width
+			}
+
+			RowLayout {
+				id: timeRowLayout
+				anchors.horizontalCenter: parent
+				anchors.top: calendar.bottom
+				anchors.bottom: footer.top
+
+				ComboBox {
+					id: hoursComboBox
+					model: 24
+					currentIndex: new Date().getHours()
+				}
+
+				Text {
+					text: ":"
+				}
+
+				ComboBox {
+					id: minutesComboBox
+					model: 64
+					currentIndex: new Date().getMinutes()
+				}
+			}
+
+			spacing: 1
 		}
 	}
-	*/
 }
 
 

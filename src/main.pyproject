@@ -1,3 +1,12 @@
 {
-    "files": ["main.py","modules/Login.py","ui/templates.qml","ui/edit_template.qml","ui/login_page.qml","ui/calendar.qml","ui/edit_post.qml","modules/ComponentCacheManager.py","ui/general_page.qml","ui/posts.qml"]
+    "files": ["ui/EditTemplate.qml",
+              "ui/Posts.qml",
+              "ui/LoginPage.qml",
+              "ui/GeneralPage.qml",
+              "ui/PostTemplates.qml",
+              "ui/EditPost.qml",
+              "ui/Calendar.qml",
+
+              "modules/ComponentCacheManager.py",
+              "modules/Login.py","main.py"]
 }

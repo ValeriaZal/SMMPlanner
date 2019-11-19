@@ -11,7 +11,7 @@ ApplicationWindow
 	width: 600
 	height: 600
 	color: "#f3f3f4"
-	title: qsTr("SMMPlanner: Edit template")
+	title: qsTr("SMMPlanner: Редактирование шаблона поста")
 
 	RowLayout {
 		id: nameRowLayout
@@ -69,8 +69,10 @@ ApplicationWindow
 			id: textArea
 			clip: true
 			text: qsTr("")
+			anchors.leftMargin: -10
+			anchors.topMargin: -6
 			anchors.rightMargin: -446
-			anchors.bottomMargin: -364
+			anchors.bottomMargin: -358
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
@@ -163,7 +165,7 @@ ApplicationWindow
 							Button {
 								width: 20
 								height: 20
-								text: qsTr("x")
+								text: qsTr("X")
 							}
 
 							Text {
@@ -202,6 +204,11 @@ ApplicationWindow
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+			onClicked: {
+				console.log("publishButton clicked")
+				editPostWindow.close()
+			}
 		}
 	}
 
@@ -296,7 +303,12 @@ ApplicationWindow
 				}
 				ListElement
 				{
-					text: "#magic"
+					text: "#info"
+					checked: false
+				}
+				ListElement
+				{
+					text: "#tag"
 					checked: false
 				}
 			}
@@ -340,9 +352,7 @@ ApplicationWindow
 			console.log("Canceled color")
 		}
 	}
-
 }
-
 
 
 /*##^##
