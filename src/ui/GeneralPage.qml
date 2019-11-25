@@ -3,7 +3,6 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
-//import QtQuick.Layouts 1.1
 
 ApplicationWindow
 {
@@ -46,7 +45,7 @@ ApplicationWindow
 			id: versionText
 			x: 1317
 			width: 123
-			text: qsTr("Version 0.11") // load from version file
+			text: qsTr("Version 1.3") // load from version file
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
@@ -220,10 +219,14 @@ ApplicationWindow
 					RoundButton {
 						id: newTemplateButton
 
-						width: 24
-						height: 24
+						width: 12
+						height: 32
 						text: "+"
+						Layout.preferredHeight: 32
+						Layout.preferredWidth: 32
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+						Layout.fillHeight: false
+						Layout.fillWidth: false
 
 						onClicked: {
 							console.log("newTemplateButton clicked")
