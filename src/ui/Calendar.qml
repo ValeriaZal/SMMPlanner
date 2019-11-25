@@ -1,16 +1,15 @@
-import QtQuick 2.0
-//import Qt.labs.calendar 1.0
+import QtQuick 2.13
 import QtQuick.Window 2.13
-import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.13
 
+import QtQuick.Layouts 1.4
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
 
-Item
-{
+Item {
 	id: calendarWindow
+
 	width: 1440
 	height: 900
 
@@ -26,16 +25,24 @@ Item
 			dayDelegate: Rectangle
 			{
 				id: rectDelegate
-				color: styleData.selected ? "#ffffff" : (styleData.visibleMonth && styleData.valid ? "#dddedf" : "#404142")
+				color: styleData.selected
+					   ? "#ffffff"
+					   : (styleData.visibleMonth && styleData.valid
+						  ? "#dddedf"
+						  : "#404142")
 
 				Label {
 					id: dayText
+
+					color: styleData.visibleMonth && styleData.valid
+						   ? "#000000"
+						   : "light grey"
 					text: styleData.date.getDate()
-					color: styleData.visibleMonth && styleData.valid ? "#000000" : "light grey"
 				}
 
 				Rectangle {
 					id: listViewBackground
+
 					anchors.top: dayText.bottom
 					anchors.left: parent.left
 					anchors.right: parent.right
@@ -43,19 +50,24 @@ Item
 
 					ListView {
 						id: listView
-						anchors.rightMargin: 6
+
+						parent: listViewBackground
+
 						anchors.leftMargin: 6
+						anchors.rightMargin: 6
 						anchors.bottomMargin: 6
 						anchors.topMargin: 6
-						highlightFollowsCurrentItem: true
-						snapMode: ListView.SnapToItem
-						boundsBehavior: Flickable.StopAtBounds
-						highlightRangeMode: ListView.NoHighlightRange
+						anchors.fill: parent
+
+						clip: true
 						contentHeight: 30
 						contentWidth: 250
-						clip: true
-						parent: listViewBackground
-						anchors.fill: parent
+
+						highlightFollowsCurrentItem: true
+						highlightRangeMode: ListView.NoHighlightRange
+
+						boundsBehavior: Flickable.StopAtBounds
+						snapMode: ListView.SnapToItem
 
 						delegate: Item {
 							x: 0
@@ -64,12 +76,17 @@ Item
 
 							Button {
 								id: postButton
-								anchors.rightMargin: 6
+
 								anchors.leftMargin: 6
+								anchors.rightMargin: 6
 								anchors.bottomMargin: 6
 								anchors.topMargin: 6
 
 								width: listView.width
+
+								onClicked: {
+									console.log("Post " + model.name + " clicked")
+								}
 
 								style: ButtonStyle {
 										background: Rectangle {
@@ -82,14 +99,10 @@ Item
 											text: model.name
 										}
 								}
-
-								onClicked: {
-									console.log("Post " + model.name + " clicked", "\tsum color = ", model.color.r + model.color.g + model.color.b)
-								}
 							}
-
 						}
 
+						// example
 						model: ListModel {
 							ListElement {
 								name: "post 1"

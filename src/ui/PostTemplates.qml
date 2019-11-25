@@ -4,15 +4,18 @@ import QtQuick.Controls 2.5
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.3
 
+
 Rectangle
 {
 	id: postsWindow
+
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
 
 	RowLayout {
 		id: rowLayout
+
 		x: 550
 		width: 400
 		height: 60
@@ -22,7 +25,9 @@ Rectangle
 
 		RoundButton {
 			id: newTemplateButton
+
 			text: "+"
+
 			onClicked: {
 				console.log("newTemplateButton clicked")
 				var component = Qt.createComponent("EditTemplate.qml");
@@ -33,14 +38,17 @@ Rectangle
 
 		Text {
 			id: element
+
 			text: qsTr("Добавить новый шаблон поста")
 			elide: Text.ElideLeft
 			font.pixelSize: 18
 		}
 	}
 
+
 	Rectangle {
 		id: listViewRectangle
+
 		width: 400
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 6
@@ -56,6 +64,9 @@ Rectangle
 			keyNavigationWraps: true
 			clip: true
 			anchors.fill: parent
+			focus: true
+
+			// example
 			model: ListModel {
 			   ListElement {
 				   name: "Default"
@@ -77,6 +88,7 @@ Rectangle
 				   colorCode: "green"
 			   }
 		   }
+
 		   delegate: Component {
 			   id: listItemDelegate
 
@@ -106,11 +118,12 @@ Rectangle
 				   }
 			   }
 		   }
+
 		   highlight: Rectangle {
 			   color: "lightsteelblue";
 			   radius: 2
 		   }
-		   focus: true
+
 		   onCurrentItemChanged: {
 			   console.log(model.get(list.currentIndex).name + ' template selected')
 		   }

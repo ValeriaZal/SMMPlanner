@@ -3,7 +3,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
-import QtQuick.Layouts 1.1
+//import QtQuick.Layouts 1.1
 
 ApplicationWindow
 {
@@ -16,24 +16,25 @@ ApplicationWindow
 	color: "#f3f3f4"
 
 	property var access_token: ""
+	property variant win;  // for newButtons
 
-    //onClosing: authentication.logout()
+	//onClosing: authentication.logout()
 
 	Loader {
 		id: loader
+
+		property string path: ""
 
 		anchors.top: topWindowContainer.bottom
 		anchors.bottom: bottomWindowContainer.top
 		anchors.left: parent.left
 		anchors.right: parent.right
-
-		property string path: ""
-
 		source: path
 	}
 
 	Rectangle {
 		id: bottomWindowContainer
+
 		y: 595
 		height: 25
 		color: "#d0d0d0"
@@ -58,6 +59,7 @@ ApplicationWindow
 
 	Rectangle {
 		id: topWindowContainer
+
 		x: 6
 		height: 50
 		color: "#d0d0d0"
@@ -70,6 +72,7 @@ ApplicationWindow
 
 		RowLayout {
 			id: userRowLayout
+
 			x: 1025
 			width: 415
 			anchors.bottom: parent.bottom
@@ -102,8 +105,8 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("logOutButton clicked")
-                    authentication.logout()
-                    applicationWindow.close()
+					authentication.logout()
+					applicationWindow.close()
 				}
 			}
 		}
@@ -130,6 +133,7 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
+
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -138,11 +142,13 @@ ApplicationWindow
 
 			RowLayout {
 				id: templatesRowLayout
+
 				width: 200
 				height: parent.height
 
 				Button {
 					id: postButton
+
 					text: qsTr("Посты")
 					Layout.rightMargin: 6
 					Layout.bottomMargin: 6
@@ -155,6 +161,7 @@ ApplicationWindow
 
 					onClicked: {
 						console.log("postButton clicked")
+
 						loader.path = "Posts.qml"
 						componentCache.trim();
 						loader.setSource(loader.path);
@@ -163,6 +170,7 @@ ApplicationWindow
 
 				RoundButton {
 					id: newPostButton
+
 					width: 12
 					height: 32
 					text: "+"
@@ -174,6 +182,7 @@ ApplicationWindow
 
 					onClicked: {
 						console.log("newPostButton clicked")
+
 						var component = Qt.createComponent("EditPost.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
@@ -182,11 +191,13 @@ ApplicationWindow
 
 				RowLayout {
 					id: postsRowLayout
+
 					width: 200
 					height: parent.height
 
 					Button {
 						id: templateButton
+
 						text: qsTr("Шаблоны")
 						Layout.rightMargin: 6
 						Layout.bottomMargin: 6
@@ -199,6 +210,7 @@ ApplicationWindow
 
 						onClicked: {
 							console.log("templateButton clicked")
+
 							loader.path = "PostTemplates.qml"
 							componentCache.trim();
 							loader.setSource(loader.path);
@@ -207,6 +219,7 @@ ApplicationWindow
 
 					RoundButton {
 						id: newTemplateButton
+
 						width: 24
 						height: 24
 						text: "+"
@@ -214,6 +227,7 @@ ApplicationWindow
 
 						onClicked: {
 							console.log("newTemplateButton clicked")
+
 							var component = Qt.createComponent("EditTemplate.qml");
 							win = component.createObject(applicationWindow);
 							win.show();

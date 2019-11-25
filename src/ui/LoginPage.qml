@@ -1,26 +1,28 @@
 import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
+
 import QtWebSockets 1.1
 import QtWebEngine 1.4
-
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.4
 
 ApplicationWindow {
 	id: loginWindow
+
 	title: qsTr("SMMPlanner: Log in")
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
 
-
 	Text {
 		id: tokenResult
+
 		text: ""
 	}
 
 	Rectangle {
 		id: bottomWindowContainer
+
 		y: 595
 		height: 25
 		color: "#d0d0d0"
@@ -30,6 +32,7 @@ ApplicationWindow {
 
 		Text {
 			id: versionText
+
 			x: 1317
 			width: 123
 			text: qsTr("Version 0.11")
@@ -45,6 +48,7 @@ ApplicationWindow {
 
 	Text {
 		id: welcomeText
+
 		x: 404
 		width: 632
 		height: 70
@@ -60,6 +64,7 @@ ApplicationWindow {
 
 	Rectangle {
 		id: webViewContainer
+
 		anchors.top: welcomeText.bottom
 		anchors.bottom: bottomWindowContainer.top
 		anchors.left: parent.left
@@ -70,23 +75,25 @@ ApplicationWindow {
 		anchors.topMargin: 6
 		anchors.bottomMargin: 6
 
-
 		WebEngineView {
 			anchors.fill: parent
 			id: webViewContent
 
 			// Cookies is not permitted for login info
-            profile: WebEngineProfile {
-                httpCacheType: WebEngineProfile.NoCache
-                persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
-            }
+			profile: WebEngineProfile {
+				httpCacheType: WebEngineProfile.NoCache
+				persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
+			}
+
+			// Get url
+			url: get_first_url("7221578", "groups,wall", "5.101")
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
-                var res = "https://oauth.vk.com/authorize?client_id="
-                        + app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
-                        + scopet + "&response_type=token&v=" + APIvt;
+				var res = "https://oauth.vk.com/authorize?client_id="
+						+ app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
+						+ scopet + "&response_type=token&v=" + APIvt;
 				return res;
 			}
 
@@ -115,16 +122,13 @@ ApplicationWindow {
 				return false;
 			}
 
-			// Get url
-            url: get_first_url("7221578", "groups,wall", "5.101")
-
 			onLoadingChanged: {
 				console.log(loadRequest.url)
 				// Case: successful log in process
 				if (token_found(loadRequest.url.toString())) {
-                    console.log("authentication.login(loadRequest.url.toString())")
-                    authentication.login(loadRequest.url.toString())
-                    console.log("token:", authentication.token)
+					console.log("authentication.login(loadRequest.url.toString())")
+					authentication.login(loadRequest.url.toString())
+					console.log("token:", authentication.token)
 					loginWindow.close();
 				}
 
@@ -135,17 +139,15 @@ ApplicationWindow {
 					loadHtml(html);
 				}
 
-                // Case: user is hacker
-                else{
-                    if (vk_lost(loadRequest.url.toString())) {
-                    webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
-                    }
-
-                }
+				// Case: user is hacker
+				else {
+					if (vk_lost(loadRequest.url.toString())) {
+						webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
+					}
+				}
 			}
 		}
 	}
-
 }
 
 /*##^##
