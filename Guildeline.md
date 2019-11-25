@@ -12,10 +12,10 @@
 
 1.1.1 Аттрибуты QML объектов всегда структурированы в следующем порядке:
 1. id
-2. property declarations
-3. signal declarations
-4. JavaScript functions
-5. object properties
+2. object properties
+3. property declarations
+4. signal declarations
+5. JavaScript functions
 6. child objects
 7. states
 8. transitions
@@ -26,17 +26,7 @@
 ```qml
 Rectangle {
     id: photo                                               // id on the first line makes it easy to find an object
-
-    property bool thumbnail: false                          // property declarations
-    property alias image: photoImage.source
-
-    signal clicked                                          // signal declarations
-
-    function doSomething(x)                                 // javascript functions
-    {
-        return x + photoImage.width
-    }
-
+    
     color: "gray"                                           // object properties
     x: 20                                                   // try to group related properties together
     y: 20
@@ -47,6 +37,16 @@ Rectangle {
         } else {
             200;
         }
+    }
+
+    property bool thumbnail: false                          // property declarations
+    property alias image: photoImage.source
+
+    signal clicked                                          // signal declarations
+
+    function doSomething(x)                                 // javascript functions
+    {
+        return x + photoImage.width
     }
 
     Rectangle {                                             // child objects
