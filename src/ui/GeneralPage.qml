@@ -15,8 +15,9 @@ ApplicationWindow
 	height: 900
 	color: "#f3f3f4"
 
-	property variant win;  // you can hold this as a reference..
 	property var access_token: ""
+
+    //onClosing: authentication.logout()
 
 	Loader {
 		id: loader
@@ -101,14 +102,8 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("logOutButton clicked")
-					applicationWindow.close()
-					/*applicationWindow.hide()
-					var component = Qt.createComponent("login_page.qml");
-					win = component.createObject(logOutButton);
-					win.show();*/
-					/*loader.path = "login_browser.qml"
-					componentCache.trim();
-					loader.setSource(loader.path);*/
+                    authentication.logout()
+                    applicationWindow.close()
 				}
 			}
 		}

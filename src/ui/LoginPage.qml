@@ -2,7 +2,7 @@ import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 import QtWebSockets 1.1
-import QtWebEngine 1.4
+import QtWebEngine 1.7
 
 import QtQuick.Layouts 1.1
 
@@ -17,13 +17,6 @@ ApplicationWindow {
 	Text {
 		id: tokenResult
 		text: ""
-	}
-
-	Connections {
-		target: login
-		onTokenResult: {
-			tokenResult.text = token;
-		}
 	}
 
 	Rectangle {
@@ -78,23 +71,22 @@ ApplicationWindow {
 		anchors.bottomMargin: 6
 
 
-
 		WebEngineView {
 			anchors.fill: parent
 			id: webViewContent
 
-
-
-			//property variant win;
-			//property variant res_token;
-
 			// Cookies is not permitted for login info
-			profile: WebEngineProfile {}
+            profile: WebEngineProfile {
+                httpCacheType: NoCache
+                persistentCookiesPolicy: NoPersistentCookies
+            }
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
-				var res = "https://oauth.vk.com/authorize?client_id=" + app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=" + scopet + "&response_type=token&v=" + APIvt;
+                var res = "https://oauth.vk.com/authorize?client_id="
+                        + app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
+                        + scopet + "&response_type=token&v=" + APIvt;
 				return res;
 			}
 
@@ -124,26 +116,16 @@ ApplicationWindow {
 			}
 
 			// Get url
-			url: get_first_url("7123948", "groups,wall", "5.101")
+            url: get_first_url("7221578", "groups,wall", "5.101")
 
 			onLoadingChanged: {
 				console.log(loadRequest.url)
 				// Case: successful log in process
 				if (token_found(loadRequest.url.toString())) {
-					console.log("login.token(loadRequest.url.toString())")
-					login.token(loadRequest.url.toString());
-					console.log("tokenResult.text:", tokenResult.text)
-					/*loginWindow.hide()
-					var component = Qt.createComponent("general_page.qml");
-					win = component.createObject(webViewContent);
-					win.access_token = tokenResult.text; //loadRequest.url.toString();
-					win.show();*/
+                    console.log("authentication.login(loadRequest.url.toString())")
+                    authentication.login(loadRequest.url.toString())
+                    console.log("token:", authentication.token)
 					loginWindow.close();
-				}
-
-				// Case: user is hacker
-				if (vk_lost(loadRequest.url.toString())) {
-					//webViewContent.url = get_first_url("7123948", "groups,wall", "5.101")
 				}
 
 				// Case: lost Internet connection
@@ -152,6 +134,14 @@ ApplicationWindow {
 					console.log(loadRequest.errorDomain)
 					loadHtml(html);
 				}
+
+                // Case: user is hacker
+                else{
+                    if (vk_lost(loadRequest.url.toString())) {
+                    webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
+                    }
+
+                }
 			}
 		}
 	}
