@@ -6,6 +6,7 @@ import QtQuick.Window 2.13
 import QtQuick.Layouts 1.4
 import QtQuick.Dialogs 1.3
 
+
 ApplicationWindow
 {
 	id: editTemplateWindow
@@ -14,6 +15,18 @@ ApplicationWindow
 	height: 600
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование шаблона поста")
+
+	function find(model, criteria)
+	{
+		for(var i = 0; i < model.count; ++i)
+		{
+			if (criteria(model.get(i)))
+			{
+				return model.get(i)
+			}
+		}
+		return -1
+	}
 
 
 	RowLayout {
@@ -136,13 +149,6 @@ ApplicationWindow
 			font.bold: true
 			Layout.fillHeight: true
 
-			function find(model, criteria) {
-			  for(var i = 0; i < model.count; ++i)
-				  if (criteria(model.get(i)))
-					  return model.get(i)
-			  return -1
-			}
-
 			// example
 			model: ListModel
 			{
@@ -245,7 +251,6 @@ ApplicationWindow
 		anchors.bottomMargin: 6
 		anchors.top: textAreaScrollView.bottom
 		anchors.topMargin: 6
-		parent: editTemplateWindow
 
 		RowLayout {
 			id: imageRowLayout
@@ -273,6 +278,12 @@ ApplicationWindow
 					anchors.fill: parent
 					source: "../icons/camera128.png"
 					fillMode: Image.Stretch
+				}
+
+				onClicked: {
+					console.log("imageButton clicked")
+
+					imageDialog.open()
 				}
 			}
 
@@ -313,38 +324,31 @@ ApplicationWindow
 						Row {
 							id: rowListView
 
+							spacing: 10
+
 							Button {
 								width: 20
 								height: 20
 								text: qsTr("X")
+
+								onClicked: {
+									console.log(delegateItemName.text + " removed from list")
+									imageListModel.remove(index)
+								}
+
 							}
 
 							Text {
+								id: delegateItemName
+
 								text: name
 								anchors.verticalCenter: parent.verticalCenter
 							}
-
-							spacing: 10
 						}
 					}
 
-					// example
 					model: ListModel {
-						ListElement {
-							name: "image1"
-						}
-
-						ListElement {
-							name: "image2"
-						}
-
-						ListElement {
-							name: "image3"
-						}
-
-						ListElement {
-							name: "image4"
-						}
+						id: imageListModel
 					}
 				}
 			}
@@ -380,6 +384,32 @@ ApplicationWindow
 
 		onRejected: {
 			console.log("Canceled color")
+		}
+	}
+
+	function updateImageListModel(fileUrls, model)
+	{
+		for(var i = 0; i < fileUrls.length; i++)
+		{
+			model.append({name: fileUrls[i]})
+		}
+	}
+
+	FileDialog {
+		id: imageDialog
+		title: "Выберите изображение"
+		folder: shortcuts.home
+		nameFilters: [ "Image files (*.jpg *.png *.bmp)" ]
+		selectMultiple: true
+
+		onAccepted: {
+			console.log("You chose: " + imageDialog.fileUrls + "\tcount: " + imageDialog.fileUrls.length)
+
+			updateImageListModel(imageDialog.fileUrls, imageListModel)
+		}
+
+		onRejected: {
+			console.log("Canceled")
 		}
 	}
 }

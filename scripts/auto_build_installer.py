@@ -20,7 +20,7 @@ if __name__ == "__main__":
     commandArgs = [" --offline-only",
                    " -c ..\installer\config\config.xml",
                    " -p ..\installer\packages",
-                   " ..\Output\SMM_Planner_Installer_test.exe"]
+                   " ..\Output\SMM_Planner_Installer.exe"]
     p = subprocess.Popen(["binarycreator.exe", commandArgs])
     p.wait()
     print("\nDone")
