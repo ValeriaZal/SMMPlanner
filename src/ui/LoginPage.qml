@@ -2,7 +2,7 @@ import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 import QtWebSockets 1.1
-import QtWebEngine 1.7
+import QtWebEngine 1.4
 
 import QtQuick.Layouts 1.1
 
@@ -77,8 +77,8 @@ ApplicationWindow {
 
 			// Cookies is not permitted for login info
             profile: WebEngineProfile {
-                httpCacheType: NoCache
-                persistentCookiesPolicy: NoPersistentCookies
+                httpCacheType: WebEngineProfile.NoCache
+                persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
             }
 
 			// Create initial url
