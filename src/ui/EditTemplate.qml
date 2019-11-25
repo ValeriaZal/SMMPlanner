@@ -1,20 +1,24 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQml 2.13
 import QtQuick.Window 2.13
 
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.4
 import QtQuick.Dialogs 1.3
 
 ApplicationWindow
 {
 	id: editTemplateWindow
+
 	width: 600
 	height: 600
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование шаблона поста")
 
+
 	RowLayout {
 		id: nameRowLayout
+
 		height: 60
 		anchors.right: parent.right
 		anchors.rightMargin: 6
@@ -25,6 +29,7 @@ ApplicationWindow
 
 		Text {
 			id: namePostText
+
 			text: qsTr("Название шаблона поста:")
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 			verticalAlignment: Text.AlignVCenter
@@ -35,6 +40,7 @@ ApplicationWindow
 
 		TextField {
 			id: namePostTextEdit
+
 			width: 80
 			height: 20
 			font.weight: Font.Bold
@@ -53,167 +59,10 @@ ApplicationWindow
 		}
 	}
 
-	ScrollView {
-		id: textAreaScrollView
-		anchors.right: parent.right
-		anchors.rightMargin: 6
-		anchors.left: parent.left
-		anchors.leftMargin: 6
-		anchors.bottom: parent.bottom
-		anchors.bottomMargin: 70
-		anchors.top: templatesRowLayout.bottom
-		anchors.topMargin: 6
-		clip: true
-
-		TextArea {
-			id: textArea
-			clip: true
-			text: qsTr("")
-			anchors.leftMargin: -10
-			anchors.topMargin: -6
-			anchors.rightMargin: -446
-			anchors.bottomMargin: -358
-			anchors.fill: parent
-			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-			textFormat: Text.RichText
-			verticalAlignment: Text.AlignTop
-			placeholderText: "Что у Вас нового?"
-
-		}
-
-		background: Rectangle {
-			implicitWidth: textAreaScrollView.width
-			implicitHeight: textAreaScrollView.height
-		}
-	}
-
-	RowLayout {
-		id: settingsRowLayout
-		anchors.right: parent.right
-		anchors.rightMargin: 6
-		anchors.left: parent.left
-		anchors.leftMargin: 6
-		anchors.bottom: parent.bottom
-		anchors.bottomMargin: 6
-		anchors.top: textAreaScrollView.bottom
-		anchors.topMargin: 6
-		parent: editTemplateWindow
-
-		RowLayout {
-			id: imageRowLayout
-			width: 303
-
-			Button {
-				id: imageButton
-				Layout.preferredHeight: 32
-				Layout.preferredWidth: 32
-				Layout.fillHeight: false
-				Layout.fillWidth: false
-
-				background: Rectangle {
-					id: imageRoundButtonBackground
-					width: imageButton.width
-					height: imageButton.height
-					color: "transparent"
-				}
-
-				Image {
-					sourceSize.height: 60
-					sourceSize.width: 60
-					anchors.fill: parent
-					source: "../icons/camera128.png"
-					fillMode: Image.Stretch
-				}
-			}
-
-			Rectangle {
-				id: attachedImageListViewBackground
-				width: 200
-				height: 200
-				color: "#ffffff"
-				Layout.preferredHeight: 75
-				Layout.fillHeight: true
-				Layout.preferredWidth: 300
-				Layout.fillWidth: true
-
-				ListView {
-					id: listView
-					anchors.rightMargin: 6
-					anchors.leftMargin: 6
-					anchors.bottomMargin: 6
-					anchors.topMargin: 6
-					highlightFollowsCurrentItem: true
-					snapMode: ListView.SnapToItem
-					boundsMovement: Flickable.StopAtBounds
-					boundsBehavior: Flickable.StopAtBounds
-					highlightRangeMode: ListView.NoHighlightRange
-					contentHeight: 30
-					contentWidth: 250
-					clip: true
-					parent: attachedImageListViewBackground
-					anchors.fill: parent
-
-
-					delegate: Item {
-						x: 1
-						width: listView.width
-						height: 30
-
-						Row {
-							id: rowListView
-
-							Button {
-								width: 20
-								height: 20
-								text: qsTr("X")
-							}
-
-							Text {
-								text: name
-								anchors.verticalCenter: parent.verticalCenter
-							}
-
-							spacing: 10
-						}
-					}
-
-					model: ListModel {
-						ListElement {
-							name: "image1"
-						}
-
-						ListElement {
-							name: "image2"
-						}
-
-						ListElement {
-							name: "image3"
-						}
-
-						ListElement {
-							name: "image4"
-						}
-					}
-				}
-			}
-		}
-
-		Button {
-			id: publishButton
-			text: qsTr("Закончить создание шаблона")
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-			onClicked: {
-				console.log("publishButton clicked")
-				editPostWindow.close()
-			}
-		}
-	}
 
 	RowLayout {
 		id: templatesRowLayout
+
 		x: 0
 		y: 0
 		height: 60
@@ -226,6 +75,7 @@ ApplicationWindow
 
 		Button {
 			id: templateColorButton
+
 			Layout.preferredHeight: 60
 			Layout.preferredWidth: 60
 			Layout.fillHeight: true
@@ -233,9 +83,16 @@ ApplicationWindow
 
 			background: Rectangle {
 				id: templateColorButtonBackground
+
 				width: templateColorButton.width
 				height: templateColorButton.height
 				color: "transparent"
+			}
+
+			onClicked: {
+				console.log("templateColorButton clicked")
+
+				colorDialog.open()
 			}
 
 			Image {
@@ -245,20 +102,19 @@ ApplicationWindow
 				fillMode: Image.Stretch
 			}
 
-			onClicked: {
-				colorDialog.open()
-			}
 
 		}
 
 		ComboBox {
 			id: templateComboBox
+
 			Layout.fillWidth: true
 			displayText: qsTr("Выбранный шаблон: " + currentText)
 			font.bold: true
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
+			// example
 			model:
 			[
 				"Default",
@@ -267,10 +123,10 @@ ApplicationWindow
 			]
 		}
 
-
 		ComboBox
 		{
 			id: tagComboBox
+
 			focusPolicy: Qt.ClickFocus
 			wheelEnabled: false
 			clip: true
@@ -287,6 +143,7 @@ ApplicationWindow
 			  return -1
 			}
 
+			// example
 			model: ListModel
 			{
 				id: tagsModel
@@ -313,6 +170,13 @@ ApplicationWindow
 				}
 			}
 
+			onAccepted: {
+				if (find(model, function(ListElement) { return ListElement.text === editText }) === -1)
+				{
+					model.append({text: editText, checked: false})
+				}
+			}
+
 			delegate: Item
 			{
 				width: parent.width
@@ -328,26 +192,192 @@ ApplicationWindow
 					onCheckedChanged: model.checked = checked
 				}
 			}
+		}
+	}
 
-			onAccepted: {
-				if (find(model, function(ListElement) { return ListElement.text === editText }) === -1)
-				{
-					model.append({text: editText, checked: false})
+
+	ScrollView {
+		id: textAreaScrollView
+
+		anchors.right: parent.right
+		anchors.rightMargin: 6
+		anchors.left: parent.left
+		anchors.leftMargin: 6
+		anchors.bottom: parent.bottom
+		anchors.bottomMargin: 70
+		anchors.top: templatesRowLayout.bottom
+		anchors.topMargin: 6
+		clip: true
+
+		TextArea {
+			id: textArea
+
+			clip: true
+			anchors.leftMargin: -10
+			anchors.topMargin: -6
+			anchors.rightMargin: -446
+			anchors.bottomMargin: -358
+			anchors.fill: parent
+			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+			textFormat: Text.RichText
+			verticalAlignment: Text.AlignTop
+			placeholderText: qsTr("Что у Вас нового?")
+			selectByMouse: true
+			focus: true
+
+		}
+
+		background: Rectangle {
+			implicitWidth: textAreaScrollView.width
+			implicitHeight: textAreaScrollView.height
+		}
+	}
+
+
+	RowLayout {
+		id: settingsRowLayout
+
+		anchors.right: parent.right
+		anchors.rightMargin: 6
+		anchors.left: parent.left
+		anchors.leftMargin: 6
+		anchors.bottom: parent.bottom
+		anchors.bottomMargin: 6
+		anchors.top: textAreaScrollView.bottom
+		anchors.topMargin: 6
+		parent: editTemplateWindow
+
+		RowLayout {
+			id: imageRowLayout
+
+			width: 303
+
+			Button {
+				id: imageButton
+
+				Layout.preferredHeight: 32
+				Layout.preferredWidth: 32
+				Layout.fillHeight: false
+				Layout.fillWidth: false
+
+				background: Rectangle {
+					id: imageRoundButtonBackground
+					width: imageButton.width
+					height: imageButton.height
+					color: "transparent"
+				}
+
+				Image {
+					sourceSize.height: 60
+					sourceSize.width: 60
+					anchors.fill: parent
+					source: "../icons/camera128.png"
+					fillMode: Image.Stretch
 				}
 			}
 
+			Rectangle {
+				id: attachedImageListViewBackground
+
+				width: 200
+				height: 200
+				color: "#ffffff"
+				Layout.preferredHeight: 75
+				Layout.fillHeight: true
+				Layout.preferredWidth: 300
+				Layout.fillWidth: true
+
+				ListView {
+					id: listView
+
+					anchors.rightMargin: 6
+					anchors.leftMargin: 6
+					anchors.bottomMargin: 6
+					anchors.topMargin: 6
+					highlightFollowsCurrentItem: true
+					snapMode: ListView.SnapToItem
+					boundsMovement: Flickable.StopAtBounds
+					boundsBehavior: Flickable.StopAtBounds
+					highlightRangeMode: ListView.NoHighlightRange
+					contentHeight: 30
+					contentWidth: 250
+					clip: true
+					parent: attachedImageListViewBackground
+					anchors.fill: parent
+
+					delegate: Item {
+						x: 1
+						width: listView.width
+						height: 30
+
+						Row {
+							id: rowListView
+
+							Button {
+								width: 20
+								height: 20
+								text: qsTr("X")
+							}
+
+							Text {
+								text: name
+								anchors.verticalCenter: parent.verticalCenter
+							}
+
+							spacing: 10
+						}
+					}
+
+					// example
+					model: ListModel {
+						ListElement {
+							name: "image1"
+						}
+
+						ListElement {
+							name: "image2"
+						}
+
+						ListElement {
+							name: "image3"
+						}
+
+						ListElement {
+							name: "image4"
+						}
+					}
+				}
+			}
 		}
 
+		Button {
+			id: publishButton
+
+			text: qsTr("Закончить создание шаблона")
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+			onClicked: {
+				console.log("publishButton clicked")
+
+				editPostWindow.close()
+			}
+		}
 	}
+
 
 	ColorDialog {
 		id: colorDialog
-		title: "Выберите цвет шаблона поста"
+		title: qsTr("Выберите цвет шаблона поста")
+
 		onAccepted: {
 			console.log("Chosen color: " + colorDialog.color)
+
 			startIcon.visible = false
 			templateColorButtonBackground.color = colorDialog.color
 		}
+
 		onRejected: {
 			console.log("Canceled color")
 		}

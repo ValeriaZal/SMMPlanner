@@ -1,22 +1,24 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQml 2.2
-
+import QtQml 2.13
 import QtQuick.Window 2.13
-import QtQuick.Layouts 1.3
 
+import QtQuick.Layouts 1.4
 import QtQuick.Controls 1.4 as Old
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Private 1.0
-//import QtQuick.Dialogs 1.2
+
 
 ApplicationWindow
 {
 	id: editPostWindow
+
 	width: 600
 	height: 600
+
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование поста")
+
 
 	RowLayout {
 		id: nameRowLayout
@@ -57,42 +59,8 @@ ApplicationWindow
 		}
 	}
 
-	ScrollView {
-		id: textAreaScrollView
-		parent: editPostWindow
-		height: 377
-		anchors.right: parent.right
-		anchors.rightMargin: 6
-		anchors.left: parent.left
-		anchors.leftMargin: 6
-		anchors.bottom: imageRowLayout.top
-		anchors.bottomMargin: 6
-		anchors.top: templatesRowLayout.bottom
-		anchors.topMargin: 6
-		clip: true
 
-		TextArea {
-			id: textArea
-			clip: true
-			text: qsTr("")
-			anchors.rightMargin: -446
-			anchors.bottomMargin: -334
-			anchors.fill: parent
-			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-			textFormat: Text.RichText
-			verticalAlignment: Text.AlignTop
-			placeholderText: "Что у Вас нового?"
-
-		}
-
-		background: Rectangle {
-			implicitWidth: textAreaScrollView.width
-			implicitHeight: textAreaScrollView.height
-		}
-	}
-
-	RowLayout
-	{
+	RowLayout {
 		id: templatesRowLayout
 		x: 0
 		y: 0
@@ -177,24 +145,68 @@ ApplicationWindow
 		}
 	}
 
+
+	ScrollView {
+		id: textAreaScrollView
+		parent: editPostWindow
+
+		height: 377
+		anchors.right: parent.right
+		anchors.rightMargin: 6
+		anchors.left: parent.left
+		anchors.leftMargin: 6
+		anchors.bottom: imageRowLayout.top
+		anchors.bottomMargin: 6
+		anchors.top: templatesRowLayout.bottom
+		anchors.topMargin: 6
+
+		clip: true
+
+		TextArea {
+			id: textArea
+			clip: true
+			text: qsTr("")
+			anchors.leftMargin: -5
+			anchors.topMargin: 1
+			font.family: "MS Shell Dlg 2"
+			anchors.rightMargin: -446
+			anchors.bottomMargin: -338
+			anchors.fill: parent
+			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+			textFormat: Text.RichText
+			verticalAlignment: Text.AlignTop
+			placeholderText: "Что у Вас нового?"
+			selectByMouse: true
+			focus: true
+		}
+
+		background: Rectangle {
+			implicitWidth: textAreaScrollView.width
+			implicitHeight: textAreaScrollView.height
+		}
+	}
+
+
 	RowLayout {
 		id: settingsRowLayout
-		//parent: editPostWindow
+
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 6
 		anchors.top: textAreaScrollView.bottom
 		anchors.topMargin: 6
 		anchors.right: parent.right
 		anchors.rightMargin: 6
-		anchors.leftMargin: 6
 		anchors.left: parent.left
+		anchors.leftMargin: 6
 
 		RowLayout {
 			id: imageRowLayout
+
 			width: 303
 
 			Button {
 				id: imageButton
+
 				Layout.preferredHeight: 32
 				Layout.preferredWidth: 32
 				Layout.fillHeight: false
@@ -202,6 +214,7 @@ ApplicationWindow
 
 				background: Rectangle {
 					id: imageRoundButtonBackground
+
 					width: imageButton.width
 					height: imageButton.height
 					color: "transparent"
@@ -218,9 +231,11 @@ ApplicationWindow
 
 			Rectangle {
 				id: attachedImageListViewBackground
+
 				width: 200
 				height: 200
 				color: "#ffffff"
+
 				Layout.preferredHeight: 75
 				Layout.fillHeight: true
 				Layout.preferredWidth: 300
@@ -228,21 +243,24 @@ ApplicationWindow
 
 				ListView {
 					id: listView
+					parent: attachedImageListViewBackground
+
+					clip: true
 					anchors.rightMargin: 6
 					anchors.leftMargin: 6
 					anchors.bottomMargin: 6
 					anchors.topMargin: 6
-					highlightFollowsCurrentItem: true
-					snapMode: ListView.SnapToItem
-					boundsMovement: Flickable.StopAtBounds
-					boundsBehavior: Flickable.StopAtBounds
-					highlightRangeMode: ListView.NoHighlightRange
-					contentHeight: 30
-					contentWidth: 250
-					clip: true
-					parent: attachedImageListViewBackground
 					anchors.fill: parent
 
+					contentHeight: 30
+					contentWidth: 250
+					snapMode: ListView.SnapToItem
+
+					highlightFollowsCurrentItem: true
+					highlightRangeMode: ListView.NoHighlightRange
+
+					boundsMovement: Flickable.StopAtBounds
+					boundsBehavior: Flickable.StopAtBounds
 
 					delegate: Item {
 						x: 1
@@ -251,6 +269,8 @@ ApplicationWindow
 
 						Row {
 							id: rowListView
+
+							spacing: 10
 
 							Button {
 								width: 20
@@ -262,12 +282,10 @@ ApplicationWindow
 								text: name
 								anchors.verticalCenter: parent.verticalCenter
 							}
-
-							spacing: 10
 						}
-
 					}
 
+					// exaple
 					model: ListModel {
 						ListElement {
 							name: "image1"
@@ -289,6 +307,7 @@ ApplicationWindow
 			}
 		}
 
+
 		ColumnLayout {
 			id: saveButtonsColumnLayout
 
@@ -299,6 +318,7 @@ ApplicationWindow
 
 				Button {
 					id: dateButton
+
 					Layout.preferredHeight: 32
 					Layout.preferredWidth: 32
 					Layout.fillHeight: false
@@ -306,6 +326,7 @@ ApplicationWindow
 
 					background: Rectangle {
 						id: newPostButtonBackground
+
 						width: dateButton.width
 						height: dateButton.height
 						color: "transparent"
@@ -319,13 +340,16 @@ ApplicationWindow
 
 
 					onClicked: {
+						console.log("dateButton clicked")
+
 						dateTimePickerDialog.open()
 					}
-
 				}
+
 
 				Text {
 					id: dateTimeText
+
 					verticalAlignment: Text.AlignVCenter
 					horizontalAlignment: Text.AlignLeft
 					font.pixelSize: 12
@@ -335,6 +359,7 @@ ApplicationWindow
 
 			Button {
 				id: publishButton
+
 				text: qsTr("Закончить редактирование поста")
 				Layout.fillHeight: true
 				Layout.fillWidth: true
@@ -348,34 +373,44 @@ ApplicationWindow
 		}
 	}
 
+
 	Dialog {
 		id: dateTimePickerDialog
-		title: "Выберите дату публикации"
+
+		title: qsTr("Выберите дату публикации")
 		modal: true
 
 		standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
 		onAccepted: {
 			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
-			console.log("Selected the date " + calendar.selectedDate.toLocaleDateString())
-			dateTimeText.text = qsTr(calendar.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
+			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString())
+
+			dateTimeText.text = qsTr(datePicker.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
 									 + " " + hoursComboBox.currentIndex.toString()
 									 + ":" + minutesComboBox.currentIndex.toString())
 		}
 
 		ColumnLayout {
+			spacing: 1
+
 			Old.Calendar {
-				id: calendar
-				//Layout.centerIn: parent
-				onDoubleClicked: dateTimePickerDialog.click(DialogButtonBox.Ok)
-				//width: dateTimePickerDialog.width
+				id: datePicker
+
+				anchors.left: parent.left
+				anchors.right: parent.right
+
+				onDoubleClicked: {
+					console.log("dateTimePickerDialog.accept()")
+
+					dateTimePickerDialog.accept()
+				}
 			}
 
 			RowLayout {
-				id: timeRowLayout
 				anchors.horizontalCenter: parent
-				anchors.top: calendar.bottom
-				anchors.bottom: footer.top
+				anchors.top: datePicker.bottom
+				// anchors.bottom: footer.top
 
 				ComboBox {
 					id: hoursComboBox
@@ -389,12 +424,10 @@ ApplicationWindow
 
 				ComboBox {
 					id: minutesComboBox
-					model: 64
-					currentIndex: new Date().getMinutes()
+					model: 60
+					currentIndex: new Date().getMinutes()+10
 				}
 			}
-
-			spacing: 1
 		}
 	}
 }

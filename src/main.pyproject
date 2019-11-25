@@ -8,5 +8,7 @@
               "ui/Calendar.qml",
 
               "modules/ComponentCacheManager.py",
-              "modules/Login.py","main.py"]
+              "modules/WindowManager.py",
+              "modules/AuthenticationManager.py",
+              "main.py"]
 }
