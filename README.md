@@ -34,11 +34,14 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 
 
 ## Source Code Directory Layout
+* [hooks](hooks) - содержит проект с исходниками для установщика
 * [installer](installer) - содержит проект с исходниками для установщика
-* [Output](Output) - содержит пример исполняемой конфигурации
 * [scripts](scripts) - содержит скрипты для автоматической сборки компонентов
 * [src](src) - содержит исходники
-* [supplement](supplement) - содержит файлы для отладки для текущей версии [исполняемой конфигурации](Output)
+* [BUILD.md](BUILD.md) - инструкция по ручной/автоматической сборке из исходников
+* [Guildeline.md](Guildeline.md) - соглашения о стиле написания кода
+* [README.md](README.md) - коротко о главном
+* [version](version) - файл, содержащий номер текущей версии
 
 
 ## Known Issues
