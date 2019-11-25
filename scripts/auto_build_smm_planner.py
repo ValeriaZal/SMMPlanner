@@ -13,6 +13,7 @@ location_release = os.path.normpath("../Output")
 location_workpath = os.path.normpath("../supplement")
 location_spec = location_release
 folder_name = "SMM_Planner"
+pyqt5_qt_folder_name = os.path.normpath("C:\Program Files\Python37\Lib\site-packages\PyQt5\Qt")
 
 # to allow the script to be run from anywhere - not just the cwd - store the absolute path to the script file
 script_root = os.path.dirname(os.path.realpath(__file__))
@@ -60,6 +61,11 @@ def install_app(location_src):
     p = subprocess.Popen(["pyinstaller", commandArgs])
     p.wait()
 
+    copy_data(location_src)
+
+def copy_data(location_src):
+    main_path = os.path.join(script_root, "", location_src)
+
     print("Copying qml files:")
     dst_folder = os.path.normpath(location_release + "/" + folder_name + "/ui")
     if not os.path.exists(dst_folder):
@@ -70,14 +76,21 @@ def install_app(location_src):
                 print("Copying", file_, "from", root, "to", dst_folder)
                 shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
-    print("Copying modules files:")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
-    if not os.path.exists(dst_folder):
-        os.mkdir(dst_folder)
-    for root, dirs, files in os.walk(os.path.normpath(main_path + "/modules/")):
-        for file_ in files:
-            print("Copying", file_, "from", root, "to", dst_folder)
-            shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+    print("Copying PyQtWebEngine files:")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/")
+    src_folder = os.path.normpath(pyqt5_qt_folder_name + "/")
+    shutil.rmtree(dst_folder)
+    shutil.copytree(src_folder, dst_folder, ignore=None)
+
+
+    #print("Copying modules files:")
+    #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
+    #if not os.path.exists(dst_folder):
+    #    os.mkdir(dst_folder)
+    #for root, dirs, files in os.walk(os.path.normpath(main_path + "/modules/")):
+    #    for file_ in files:
+    #        print("Copying", file_, "from", root, "to", dst_folder)
+    #        shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
     print("Copying icons files:")
     dst_folder = os.path.normpath(location_release + "/" + folder_name + "/icons")
@@ -87,6 +100,8 @@ def install_app(location_src):
         for file_ in files:
             print("Copying", file_, "from", root, "to", dst_folder)
             shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+
+
 
 
 # argv:
@@ -99,9 +114,9 @@ if __name__ == "__main__":
 
     build_from = ""
     if len(sys.argv) < 3:
-        print("Warning: lack of arguments. SMM Planner will build from source code from config_test branch")
         build_from = "src"
         branch_or_version = "master"
+        print("Warning: lack of arguments. SMM Planner will build from source code from branch:", branch_or_version)
     else:
         build_from = sys.argv[1]
         branch_or_version = sys.argv[2]
