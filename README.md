@@ -29,7 +29,7 @@ SMM Planner доступен как отдельное приложение с �
 ```
 git clone https://github.com/ValeriaZal/SMMPlanner
 ```
-- Сборка SMM Planner'a и инсталлятора описана в [BUILD.md](https://github.com/ValeriaZal/SMMPlanner/blob/docs/BUILD.md)
+- Сборка SMM Planner'a и инсталлятора описана в [BUILD.md](https://github.com/ValeriaZal/SMMPlanner/blob/master/BUILD.md)
 - После сборки бинарники можно найти `Output\`
 
 
