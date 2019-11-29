@@ -1,9 +1,11 @@
-import os
+﻿import os
 
 from PyQt5 import QtWidgets, QtCore, QtQml
 
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
+from modules.FileReader import FileReader
+
 
 class WindowManager(QtCore.QObject):
     def __init__(self, parent=None):
@@ -13,6 +15,7 @@ class WindowManager(QtCore.QObject):
 
         self._engine = QtQml.QQmlApplicationEngine()
 
+        self._reader = FileReader()
         self._authentication = AuthenticationManager()
         self._manager = ComponentCacheManager(self._engine)
 
@@ -24,6 +27,9 @@ class WindowManager(QtCore.QObject):
         )
         self._engine.rootContext().setContextProperty(
             "componentCache", self._manager
+        )
+        self._engine.rootContext().setContextProperty(
+            "fileReader", self._reader
         )
 
     def init(self):

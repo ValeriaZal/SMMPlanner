@@ -1,4 +1,4 @@
-{
+﻿{
     "files": ["ui/EditTemplate.qml",
               "ui/Posts.qml",
               "ui/LoginPage.qml",
@@ -10,5 +10,6 @@
               "modules/ComponentCacheManager.py",
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
+              "modules/FileReader.py",
               "main.py"]
 }

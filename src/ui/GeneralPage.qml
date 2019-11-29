@@ -1,4 +1,4 @@
-import QtQuick 2.13
+﻿import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
@@ -44,15 +44,16 @@ ApplicationWindow
 		Text {
 			id: versionText
 			x: 1317
-			width: 123
-			text: qsTr("Version 1.3") // load from version file
+            width: 123
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
-			verticalAlignment: Text.AlignVCenter
+            verticalAlignment: Text.AlignTop
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.right: parent.right
 			font.pixelSize: 15
+
+            Component.onCompleted: fileReader.getVersion();
 		}
 	}
 
@@ -240,4 +241,13 @@ ApplicationWindow
 			}
 		}
 	}
+
+
+    Connections {
+        target: fileReader
+
+        onVersion: {
+            versionText.text = qsTr("Version " + version)
+        }
+    }
 }
