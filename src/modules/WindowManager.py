@@ -42,8 +42,8 @@ class WindowManager(QtCore.QObject):
 
 
     def on_logout_signal(self):
-        self.current_page = "../ui/LoginPage.qml"
-        # self.current_page = "../ui/GeneralPage.qml"
+        # self.current_page = "../ui/LoginPage.qml"
+        self.current_page = "../ui/GeneralPage.qml"
         self._engine.rootObjects()[-1].show()
 
     @property
