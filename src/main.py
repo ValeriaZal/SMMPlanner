@@ -6,7 +6,7 @@ from modules.WindowManager import WindowManager
 
 APIv = "5.101"
 app_id = "7221578"
-scope = "groups,wall"
+scope = "groups,wall,photos"
 
 if __name__ == "__main__":
     app = QtGui.QGuiApplication(sys.argv)

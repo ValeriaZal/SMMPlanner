@@ -86,7 +86,7 @@ ApplicationWindow {
             }*/
 
 			// Get url
-			url: get_first_url("7221578", "groups,wall", "5.101")
+            url: get_first_url("7221578", "groups,wall,photos", "5.101")
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
@@ -142,7 +142,7 @@ ApplicationWindow {
 				// Case: user is hacker
 				else {
 					if (vk_lost(loadRequest.url.toString())) {
-						webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
+                        webViewContent.url = get_first_url("7221578", "groups,wall,photos", "5.101")
 					}
 				}
 			}
