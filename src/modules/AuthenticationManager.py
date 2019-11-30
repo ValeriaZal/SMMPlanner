@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtCore
 class AuthenticationManager(QtCore.QObject):
     login_signal = QtCore.pyqtSignal()
     logout_signal = QtCore.pyqtSignal()
+    close_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -30,10 +31,16 @@ class AuthenticationManager(QtCore.QObject):
         self._token = ""
         self.logout_signal.emit()
 
+    @QtCore.pyqtSlot()
+    def close(self):
+        self._token = ""
+        self.close_signal.emit()
+
     def _get_token(self, url_with_token):
         find_begin = url_with_token.find("access_token")
         find_end = url_with_token.find("&", find_begin)
         res_token = url_with_token[find_begin+len("access_token="):find_end]
         find_begin = url_with_token.find("user_id")
-        res_id = url_with_token[find_begin+len("user_id="):]
+        find_end = url_with_token.find("&", find_begin)
+        res_id = url_with_token[find_begin+len("user_id="):find_end]
         return res_token, res_id

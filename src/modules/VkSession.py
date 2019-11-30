@@ -9,14 +9,19 @@ non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 
 class VkSession:
     class __VkSession:
-        def __init__(self, token, user_id):
+        def __init__(self, token, user_id, api_v):
             self._token = token
             self._user_id = user_id
-            self._api_v = 5.101
+            self._api_v = api_v
             self._session = vk.AuthSession(access_token=token)
             self._vk_api = vk.API(self._session)
             self._cache = CacheDatabase(self._user_id)
             self.load_cache()
+
+        def close(self):
+            self._cache.close()
+            self._cache.delete()
+            del self._cache
 
         def load_cache(self):
             groups_info = self._get_groups_info()
@@ -41,6 +46,7 @@ class VkSession:
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)
 
             posts_info = []
+            time.sleep(0.5)
             for group in groups['items']:
                 group_db_id = self._cache.get_group_id(str(group))
                 postponed_posts = self._vk_api.wall.get(owner_id="-" + str(group), count="3", filter="postponed", v=self._api_v)
@@ -51,7 +57,7 @@ class VkSession:
                                         1, post['date'], post['marked_as_ads'], post['post_type'],
                                         post['text'].translate(non_bmp_map), 0, post['can_publish'], post['can_edit'],
                                         post['can_delete']))
-                time.sleep(0.6)
+                time.sleep(0.9)
                 owner_posts = self._vk_api.wall.get(owner_id="-" + str(group), count="3", filter="owner", v=self._api_v)
                 for post in owner_posts['items']:
                     posts_info.append((post['id'], group_db_id, post['from_id'], post['owner_id'],
@@ -64,11 +70,17 @@ class VkSession:
 
 
     instance = None
-    def __init__(self, token, user_id):
+    def __init__(self, token, user_id, api_v):
         if not VkSession.instance:
-            VkSession.instance = VkSession.__VkSession(token, user_id)
+            VkSession.instance = VkSession.__VkSession(token, user_id, api_v)
         else:
             VkSession.instance._token = token
+            VkSession.instance._user_id = user_id
+            VkSession.instance._api_v = api_v
+            VkSession.instance._session = vk.AuthSession(access_token=token)
+            VkSession.instance._vk_api = vk.API(self._session)
+            VkSession.instance._cache = CacheDatabase(self._user_id)
+            VkSession.instance.load_cache()
 
     def __getattr__(self, name):
         return getattr(self.instance, name)

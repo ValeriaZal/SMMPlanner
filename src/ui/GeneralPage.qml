@@ -18,7 +18,7 @@ ApplicationWindow
 	property var access_token: ""
 	property variant win;  // for newButtons
 
-	//onClosing: authentication.logout()
+    onClosing: authentication.close()
 
 	Loader {
 		id: loader

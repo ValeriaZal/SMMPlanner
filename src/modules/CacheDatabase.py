@@ -1,20 +1,34 @@
 # This Python file uses the following encoding: utf-8
 import sqlite3
 from sqlite3 import Error
+import os
 
 class CacheDatabase:
     class __CacheDatabase:
         def __init__(self, user_id):
-            self._db = f"D:/Files/Documents/Studying/4_year/rep/SMMPlanner/src/user_cache/{user_id}/cache.db"
+            current_dir = os.path.abspath(os.path.dirname(__file__))
+            db = f"../user_cache/{user_id}/cache.db"
+            self._db = os.path.join(current_dir, db)
             print(self._db)
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
 
+        def close(self):
+            try:
+                self._conn.close()
+            except Error as e:
+                print(e)
+
+        def delete(self):
+            os.remove(self._db)
+
         def _create_connection(self):
             self._conn = None
             try:
                 self._conn = sqlite3.connect(self._db)
+                self._conn.commit()
+
             except Error as e:
                 print(e)
 
@@ -22,6 +36,7 @@ class CacheDatabase:
             try:
                 c = self._conn.cursor()
                 c.execute(create_table_sql)
+                self._conn.commit()
             except Error as e:
                 print(e)
         def _create_tables(self):
@@ -107,11 +122,13 @@ class CacheDatabase:
         if not CacheDatabase.instance:
             CacheDatabase.instance = CacheDatabase.__CacheDatabase(user_id)
         else:
-            CacheDatabase.instance._db = f"../user_cache/{user_id}/cache.db"
+            current_dir = os.path.abspath(os.path.dirname(__file__))
+            db = f"../user_cache/{user_id}/cache.db"
+            CacheDatabase.instance._db = os.path.join(current_dir, db)
+            print(self._db)
             CacheDatabase.instance._conn = None
             CacheDatabase.instance._create_connection()
             CacheDatabase.instance._tables = self._create_tables()
-            CacheDatabase.instance._conn.commit()
 
     def __getattr__(self, name):
         return getattr(self.instance, name)

@@ -14,12 +14,6 @@ ApplicationWindow {
 	height: 900
 	color: "#f3f3f4"
 
-	Text {
-		id: tokenResult
-
-		text: ""
-	}
-
 	Rectangle {
 		id: bottomWindowContainer
 
@@ -86,14 +80,14 @@ ApplicationWindow {
             }*/
 
 			// Get url
-            url: get_first_url("7221578", "groups,wall,photos", "5.101")
+            url: get_first_url(app_id, scope, APIv)
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
 				var res = "https://oauth.vk.com/authorize?client_id="
 						+ app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
-						+ scopet + "&response_type=token&v=" + APIvt;
+                        + scopet + "&response_type=token&v=" + APIvt + "&state=123456";
 				return res;
 			}
 
@@ -142,7 +136,7 @@ ApplicationWindow {
 				// Case: user is hacker
 				else {
 					if (vk_lost(loadRequest.url.toString())) {
-                        webViewContent.url = get_first_url("7221578", "groups,wall,photos", "5.101")
+                        webViewContent.url = get_first_url(app_id, scope, APIv)
 					}
 				}
 			}
