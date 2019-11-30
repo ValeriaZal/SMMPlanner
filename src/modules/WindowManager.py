@@ -5,11 +5,14 @@ from PyQt5 import QtWidgets, QtCore, QtQml
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
 
+from modules.VkSession import VkSession
+
 class WindowManager(QtCore.QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         self._current_page = ""
+        self.vk_session = None
 
         self._engine = QtQml.QQmlApplicationEngine()
 
@@ -46,6 +49,8 @@ class WindowManager(QtCore.QObject):
 
     @current_page.setter
     def current_page(self, page):
+        if(page == "../ui/GeneralPage.qml"):
+            self.vk_session = VkSession(self._authentication.token, self._authentication.user_id)
         self._current_page = page
         current_dir = os.path.abspath(os.path.dirname(__file__))
         qml_file = os.path.join(current_dir, self.current_page)

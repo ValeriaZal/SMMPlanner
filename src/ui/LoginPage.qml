@@ -80,10 +80,10 @@ ApplicationWindow {
 			id: webViewContent
 
 			// Cookies is not permitted for login info
-			profile: WebEngineProfile {
+            /*profile: WebEngineProfile {
 				httpCacheType: WebEngineProfile.NoCache
 				persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
-			}
+            }*/
 
 			// Get url
 			url: get_first_url("7221578", "groups,wall", "5.101")
