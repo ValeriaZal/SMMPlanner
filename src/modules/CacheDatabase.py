@@ -7,9 +7,12 @@ class CacheDatabase:
     class __CacheDatabase:
         def __init__(self, user_id):
             current_dir = os.path.abspath(os.path.dirname(__file__))
+            directory = f"../user_cache/{user_id}"
+            full_path_dir = os.path.join(current_dir, directory)
+            if not os.path.exists(full_path_dir):
+                os.makedirs(full_path_dir)
             db = f"../user_cache/{user_id}/cache.db"
             self._db = os.path.join(current_dir, db)
-            print(self._db)
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
