@@ -46,12 +46,12 @@ class VkSession:
 
         def _get_posts_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)
-
+            count = "15" # how many posts/postponed posts we load
             posts_info = []
             time.sleep(0.5)
             for group in groups['items']:
                 group_db_id = self._cache.get_group_id(str(group))
-                postponed_posts = self._vk_api.wall.get(owner_id="-" + str(group), count="3", filter="postponed", v=self._api_v)
+                postponed_posts = self._vk_api.wall.get(owner_id="-" + str(group), count=count, filter="postponed", v=self._api_v)
                 for post in postponed_posts['items']:
                     # We need as a tuple:"vk_id","group_id","from_id","owner_id","postponed","date","marked_as_ads",
                     #                    "post_type","text","can_pin","can_publish","can_edit","can_delete"
@@ -60,7 +60,7 @@ class VkSession:
                                         post['text'].translate(non_bmp_map), 0, post['can_publish'], post['can_edit'],
                                         post['can_delete']))
                 time.sleep(0.9)
-                owner_posts = self._vk_api.wall.get(owner_id="-" + str(group), count="3", filter="owner", v=self._api_v)
+                owner_posts = self._vk_api.wall.get(owner_id="-" + str(group), count=count, filter="owner", v=self._api_v)
                 for post in owner_posts['items']:
                     posts_info.append((post['id'], group_db_id, post['from_id'], post['owner_id'],
                                         0, post['date'], post['marked_as_ads'], post['post_type'],
