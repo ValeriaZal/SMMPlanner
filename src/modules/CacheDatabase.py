@@ -6,16 +6,24 @@ import os
 class CacheDatabase:
     class __CacheDatabase:
         def __init__(self, user_id):
+            self._create_dirs(user_id)
             current_dir = os.path.abspath(os.path.dirname(__file__))
-            directory = f"../user_cache/{user_id}"
-            full_path_dir = os.path.join(current_dir, directory)
-            if not os.path.exists(full_path_dir):
-                os.makedirs(full_path_dir)
             db = f"../user_cache/{user_id}/cache.db"
             self._db = os.path.join(current_dir, db)
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
+
+        def _create_dirs(self, user_id):
+            current_dir = os.path.abspath(os.path.dirname(__file__))
+            directory = f"../user_cache"
+            full_path_dir = os.path.join(current_dir, directory)
+            if not os.path.exists(full_path_dir):
+                os.makedirs(full_path_dir)
+            directory = f"../user_cache/{user_id}"
+            full_path_dir = os.path.join(current_dir, directory)
+            if not os.path.exists(full_path_dir):
+                os.makedirs(full_path_dir)
 
         def close(self):
             try:
@@ -110,7 +118,7 @@ class CacheDatabase:
                     cur.execute(sql, data)
                     self._conn.commit()
                 else:
-                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(self._tables[table])))
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
             else:
                 print(f"Error: cannot find table '{table}'")
 
@@ -125,6 +133,7 @@ class CacheDatabase:
         if not CacheDatabase.instance:
             CacheDatabase.instance = CacheDatabase.__CacheDatabase(user_id)
         else:
+            CacheDatabase.instance._create_dirs(user_id)
             current_dir = os.path.abspath(os.path.dirname(__file__))
             db = f"../user_cache/{user_id}/cache.db"
             CacheDatabase.instance._db = os.path.join(current_dir, db)

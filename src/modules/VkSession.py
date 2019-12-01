@@ -4,6 +4,7 @@ import sys
 import time
 
 from modules.CacheDatabase import CacheDatabase
+from modules.DataDatabase import DataDatabase
 
 non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 
@@ -16,6 +17,7 @@ class VkSession:
             self._session = vk.AuthSession(access_token=token)
             self._vk_api = vk.API(self._session)
             self._cache = CacheDatabase(self._user_id)
+            self._data = DataDatabase(self._user_id)
             self.load_cache()
 
         def close(self):
