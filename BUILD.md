@@ -32,7 +32,7 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 ### 2. Сборка из исходников
 
 1. Перейти в каталог `SMMPlanner\src`;
-2. Открыть cmd и ввести следующую команду: `pyinstaller SMM_Planner.py`
+2. Открыть cmd и ввести следующую команду: `pyinstaller main.py`
        Указав доп. параметры можно изменить каталоги сборки. Подробнее: https://pyinstaller.readthedocs.io/en/stable/usage.html;
 3. При вызове `pyinstaller` без доп. параметров в каталоге `dist` будут располагаться файлы исполняемой кофигурации, а в каталоге `build` - файлы для отладки;
 4. В каталоге `dist\SMM_Planner` лежит `SMM_Planner.exe`.
