@@ -32,7 +32,7 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 ### 2. Сборка из исходников
 
 1. Перейти в каталог `SMMPlanner\src`;
-2. Открыть cmd и ввести следующую команду:
+2. Открыть cmd с правами администратора и ввести следующую команду:
 ```
 pyinstaller --noconsole --noconfirm --clean --distpath ../Output --workpath ../supplement --name SMM_Planner --specpath ../Output --log-level=TRACE main.py
 ```
