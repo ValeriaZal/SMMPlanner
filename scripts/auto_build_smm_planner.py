@@ -13,7 +13,8 @@ location_release = os.path.normpath("../Output")
 location_workpath = os.path.normpath("../supplement")
 location_spec = location_release
 folder_name = "SMM_Planner"
-pyqt5_qt_folder_name = os.path.normpath("C:\Program Files\Python37\Lib\site-packages\PyQt5\Qt")
+#pyqt5_qt_folder_name = os.path.normpath("C:\Program Files\Python37\Lib\site-packages\PyQt5\Qt")
+pyqt5_qt_folder_name = os.path.normpath("/modules/PyQt5/Qt")
 
 # to allow the script to be run from anywhere - not just the cwd - store the absolute path to the script file
 script_root = os.path.dirname(os.path.realpath(__file__))
@@ -45,7 +46,7 @@ def download_and_unzip(key, value):
 
 def install_app(location_src):
     # pyinstaller
-    commandArgs = [" --noconsole",
+    commandArgs = [" --noconsole  --noconfirm",
                    " --distpath " + location_release,
                    " --workpath " + location_workpath,
                    " --name " + folder_name,
@@ -63,6 +64,7 @@ def install_app(location_src):
 
     copy_data(location_src)
 
+
 def copy_data(location_src):
     main_path = os.path.join(script_root, "", location_src)
 
@@ -76,13 +78,42 @@ def copy_data(location_src):
                 print("Copying", file_, "from", root, "to", dst_folder)
                 shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
+    print("Copying icons files:")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/icons")
+    if not os.path.exists(dst_folder):
+        os.mkdir(dst_folder)
+    for root, dirs, files in os.walk(os.path.normpath(main_path + "/icons/")):
+        for file_ in files:
+            print("Copying", file_, "from", root, "to", dst_folder)
+            shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
+            
+    pyqt5_add_folder = os.path.join(main_path + pyqt5_qt_folder_name)
+
     print("Copying PyQtWebEngine files:")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/")
-    src_folder = os.path.normpath(pyqt5_qt_folder_name + "/")
+    print("Copying PyQtWebEngine bin files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/bin")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/bin")
+    shutil.rmtree(dst_folder)
+    shutil.copytree(src_folder, dst_folder, ignore=None)
+    
+    print("Copying PyQtWebEngine resources files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/resources")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/resources")
     shutil.rmtree(dst_folder)
     shutil.copytree(src_folder, dst_folder, ignore=None)
 
+    print("Copying PyQtWebEngine translations files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/translations")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/translations")
+    shutil.rmtree(dst_folder)
+    shutil.copytree(src_folder, dst_folder, ignore=None)
 
+    print("Copying PyQtWebEngine plugins files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/plugins")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/plugins")
+    shutil.rmtree(dst_folder)
+    shutil.copytree(src_folder, dst_folder, ignore=None)
+    
     #print("Copying modules files:")
     #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
     #if not os.path.exists(dst_folder):
@@ -92,14 +123,6 @@ def copy_data(location_src):
     #        print("Copying", file_, "from", root, "to", dst_folder)
     #        shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
-    print("Copying icons files:")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/icons")
-    if not os.path.exists(dst_folder):
-        os.mkdir(dst_folder)
-    for root, dirs, files in os.walk(os.path.normpath(main_path + "/icons/")):
-        for file_ in files:
-            print("Copying", file_, "from", root, "to", dst_folder)
-            shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
 
 
 
