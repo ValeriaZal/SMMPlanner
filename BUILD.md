@@ -32,17 +32,20 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 ### 2. Сборка из исходников
 
 1. Перейти в каталог `SMMPlanner\src`;
-2. Открыть cmd и ввести следующую команду: `pyinstaller main.py`
-       Указав доп. параметры можно изменить каталоги сборки. Подробнее: https://pyinstaller.readthedocs.io/en/stable/usage.html;
-3. При вызове `pyinstaller` без доп. параметров в каталоге `dist` будут располагаться файлы исполняемой кофигурации, а в каталоге `build` - файлы для отладки;
-4. В каталоге `dist\SMM_Planner` лежит `SMM_Planner.exe`.
+2. Открыть cmd и ввести следующую команду:
+```
+pyinstaller --noconsole --noconfirm --clean --distpath ../Output --workpath ../supplement --name SMM_Planner --specpath ../Output --log-level=TRACE main.py
+```
+   Подробнее о параметрах: https://pyinstaller.readthedocs.io/en/stable/usage.html;
+3. Скопировать все каталоги, кроме modules, из каталога с исходниками (где лежит main.py) в каталог `../Output` (рядом с `SMM_Planner.exe`);
+4. Исполняемый файл `../Output/SMM_Planner/SMM_Planner.exe` запускает программу.
     
 ### 3. Сборка инсталлятора
 
-0. Важно, чтобы в каталоге `..\Output\SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`)
-1. Открыть в QtCreator `installer\installer.pro`
+0. Важно, чтобы в каталоге `../Output/SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`)
+1. Открыть в QtCreator `installer/installer.pro`
 2. Собрать проект (build, Ctrl+B)
-3. В каталоге `..\Output` по итогу будет располагаться файл `SMM_Planner_Installer.exe`.
+3. В каталоге `../Output` по итогу будет располагаться файл `SMM_Planner_Installer.exe`.
 
     
 ## 3. Auto build instruction
@@ -79,7 +82,7 @@ python scripts/auto_build_smm_planner.py
 
 ### 2. Автоматическая сборка инсталлятора:
 
-Важно, чтобы в каталоге `..\Output\SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`)
+Важно, чтобы в каталоге `../Output/SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`)
 
 Запуск скрипта проводить из командной строки, запущенной от имени администратора:
 ```
