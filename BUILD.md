@@ -37,15 +37,16 @@ git clone https://github.com/ValeriaZal/SMMPlanner
 pyinstaller --noconsole --noconfirm --clean --distpath ../Output --workpath ../supplement --name SMM_Planner --specpath ../Output --log-level=TRACE main.py
 ```
    Подробнее о параметрах: https://pyinstaller.readthedocs.io/en/stable/usage.html;
-3. Скопировать все каталоги, кроме modules, из каталога с исходниками (где лежит main.py) в каталог `../Output` (рядом с `SMM_Planner.exe`);
+3. Скопировать все каталоги, кроме modules, из каталога с исходниками (где лежит `main.py`) в каталог `../Output` (рядом с `SMM_Planner.exe`);
 4. Исполняемый файл `../Output/SMM_Planner/SMM_Planner.exe` запускает программу.
     
 ### 3. Сборка инсталлятора
 
-0. Важно, чтобы в каталоге `../Output/SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`)
-1. Открыть в QtCreator `installer/installer.pro`
-2. Собрать проект (build, Ctrl+B)
-3. В каталоге `../Output` по итогу будет располагаться файл `SMM_Planner_Installer.exe`.
+0. Важно, чтобы в каталоге `../Output/SMM_Planner` должна находится исполняемая конфигурация (результат работы скрипта `auto_build_smm_planner.py`);
+1. Скопировать каталог `../Output/SMM_Planner/` (получен в п.2.2) в `installer/packages/SMM_Planner/data`;
+2. Открыть в QtCreator `installer/installer.pro`;
+3. Собрать проект (build, Ctrl+B);
+4. В каталоге `../Output` по итогу будет располагаться файл `SMM_Planner_Installer.exe`.
 
     
 ## 3. Auto build instruction
