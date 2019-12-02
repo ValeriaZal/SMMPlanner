@@ -14,7 +14,7 @@ location_workpath = os.path.normpath("../supplement")
 location_spec = location_release
 folder_name = "SMM_Planner"
 #pyqt5_qt_folder_name = os.path.normpath("C:\Program Files\Python37\Lib\site-packages\PyQt5\Qt")
-pyqt5_qt_folder_name = os.path.normpath("/modules/PyQt5/Qt")
+pyqt5_qt_folder_name = os.path.normpath("/PyQt5/Qt")
 
 # to allow the script to be run from anywhere - not just the cwd - store the absolute path to the script file
 script_root = os.path.dirname(os.path.realpath(__file__))
@@ -90,29 +90,29 @@ def copy_data(location_src):
     pyqt5_add_folder = os.path.join(main_path + pyqt5_qt_folder_name)
 
     print("Copying PyQtWebEngine files:")
-    print("Copying PyQtWebEngine bin files:")
-    src_folder = os.path.normpath(pyqt5_add_folder + "/bin")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/bin")
-    shutil.rmtree(dst_folder)
-    shutil.copytree(src_folder, dst_folder, ignore=None)
+    print("\tCopying PyQtWebEngine bin files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/bin/QtWebEngineProcess.exe")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/bin/QtWebEngineProcess.exe")
+    shutil.copy(src_folder, dst_folder)
     
-    print("Copying PyQtWebEngine resources files:")
-    src_folder = os.path.normpath(pyqt5_add_folder + "/resources")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/resources")
-    shutil.rmtree(dst_folder)
+    print("\tCopying PyQtWebEngine resources files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/resources/")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/resources/")
+    if os.path.exists(dst_folder):
+        os.rmtree(dst_folder)
     shutil.copytree(src_folder, dst_folder, ignore=None)
 
-    print("Copying PyQtWebEngine translations files:")
-    src_folder = os.path.normpath(pyqt5_add_folder + "/translations")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/translations")
-    shutil.rmtree(dst_folder)
+    print("\tCopying PyQtWebEngine translations files:")
+    src_folder = os.path.normpath(pyqt5_add_folder + "/translations/")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/translations/")
+    if os.path.exists(dst_folder):
+        os.rmtree(dst_folder)
     shutil.copytree(src_folder, dst_folder, ignore=None)
 
-    print("Copying PyQtWebEngine plugins files:")
-    src_folder = os.path.normpath(pyqt5_add_folder + "/plugins")
-    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/plugins")
-    shutil.rmtree(dst_folder)
-    shutil.copytree(src_folder, dst_folder, ignore=None)
+    #print("\tCopying PyQtWebEngine plugins files:")
+    #src_folder = os.path.normpath(pyqt5_add_folder + "/plugins/")
+    #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/plugins/")
+    #shutil.copytree(src_folder, dst_folder, ignore=None)
     
     #print("Copying modules files:")
     #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
