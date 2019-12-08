@@ -91,11 +91,28 @@ ApplicationWindow
 				id: comboBox
 				width: 200
 				displayText: "Selected Group"
-			}
+                textRole: "key"
+                model: ListModel {
+                    ListElement { key: "First"; value: 123 }
+                    ListElement { key: "Second"; value: 456 }
+                    ListElement { key: "Third"; value: 789 }
+                }
+
+                MouseArea {
+                        anchors.fill: parent
+                        onWheel: {
+                            // do nothing
+                        }
+                        onReleased: {
+                            console.log("Selected Group clicked")
+                            db_manager.choose_group("124653069") // test group id
+                        }
+                    }
+                }
 
 			Button {
 				id: logOutButton
-				text: qsTr("Log Out")
+                text: qsTr("Выйти")
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
 				Layout.leftMargin: 6

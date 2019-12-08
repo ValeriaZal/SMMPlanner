@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtQml
 
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
+from modules.DataBaseManager import DataBaseManager
 
 from modules.VkSession import VkSession
 
@@ -22,16 +23,22 @@ class WindowManager(QtCore.QObject):
 
         self._authentication = AuthenticationManager()
         self._manager = ComponentCacheManager(self._engine)
+        self._db_manager = DataBaseManager()
+
 
         self._authentication.login_signal.connect(self.on_login_signal)
         self._authentication.logout_signal.connect(self.on_logout_signal)
         self._authentication.close_signal.connect(self.on_close_signal)
+        self._db_manager.choose_group_signal.connect(self.on_choose_group)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
         )
         self._engine.rootContext().setContextProperty(
             "componentCache", self._manager
+        )
+        self._engine.rootContext().setContextProperty(
+            "db_manager", self._db_manager
         )
         self._engine.rootContext().setContextProperty(
             "APIv", self.api_v
@@ -51,7 +58,6 @@ class WindowManager(QtCore.QObject):
         self.current_page = "../ui/GeneralPage.qml"
         self._engine.rootObjects()[-1].show()
 
-
     def on_logout_signal(self):
         self.current_page = "../ui/LoginPage.qml"
         # self.current_page = "../ui/GeneralPage.qml"
@@ -59,6 +65,10 @@ class WindowManager(QtCore.QObject):
 
     def on_close_signal(self):
         self.vk_session.close()
+
+    def on_choose_group(self):
+        self.vk_session.set_group(self._db_manager.group) # group is a property = vk_id without "-"
+        self.vk_session.load_cache_posts()
 
 
     @property

@@ -10,6 +10,8 @@
               "modules/ComponentCacheManager.py",
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
+              "modules/DataBaseManager.py",
+
               "modules/CacheDatabase.py",
               "modules/DataDatabase.py",
 

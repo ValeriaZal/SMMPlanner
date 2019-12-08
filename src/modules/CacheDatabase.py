@@ -50,6 +50,7 @@ class CacheDatabase:
                 self._conn.commit()
             except Error as e:
                 print(e)
+
         def _create_tables(self):
             sql_create_groups_table = """ CREATE TABLE IF NOT EXISTS groups (
                                             id integer PRIMARY KEY,
@@ -122,11 +123,34 @@ class CacheDatabase:
             else:
                 print(f"Error: cannot find table '{table}'")
 
+        def update(self, table, data):
+            if(table in self._tables.keys()):
+                sql = f"DELETE FROM {table} WHERE postponed = 1"
+                cur = self._conn.cursor()
+                cur.execute(sql, ())
+                if(len(data) == len(self._tables[table])):
+                    cols = "("
+                    insert_cols = "("
+                    for col in self._tables[table]:
+                        cols += f"{col},"
+                        insert_cols += "?,"
+                    cols = cols[:-1] + ")"
+                    insert_cols = insert_cols[:-1] + ")"
+                    sql = f"IF NOT EXISTS ( SELECT 1 FROM {table} WHERE vk_id = {data[0]} AND postponed = 1 ) \nBEGIN \nINSERT INTO {table} {cols} VALUES {insert_cols} \nEND"
+                    cur.execute(sql, ())
+                    self._conn.commit()
+                else:
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
+            else:
+                print(f"Error: cannot find table '{table}'")
+
         def get_group_id(self, vk_id):
             cur = self._conn.cursor()
             cur.execute("SELECT * FROM groups WHERE vk_id=?", (vk_id,))
             rows = cur.fetchall()
-            return rows[0][0]
+            if(len(rows) > 0):
+                return rows[0][0]
+            return -1
 
     instance = None
     def __init__(self, user_id):
