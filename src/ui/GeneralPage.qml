@@ -3,7 +3,6 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
-
 ApplicationWindow
 {
 	id: applicationWindow
@@ -17,7 +16,7 @@ ApplicationWindow
 	property var access_token: ""
 	property variant win;  // for newButtons
 
-	//onClosing: authentication.logout()
+    onClosing: authentication.close()
 
 	Loader {
 		id: loader
@@ -45,7 +44,7 @@ ApplicationWindow
 			id: versionText
 			x: 1317
 			width: 123
-			text: qsTr("Version 1.3") // load from version file
+			text: qsTr("Version 0.11") // load from version file
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
@@ -90,11 +89,28 @@ ApplicationWindow
 				id: comboBox
 				width: 200
 				displayText: "Selected Group"
-			}
+                textRole: "key"
+                model: ListModel {
+                    ListElement { key: "First"; value: 123 }
+                    ListElement { key: "Second"; value: 456 }
+                    ListElement { key: "Third"; value: 789 }
+                }
+
+                MouseArea {
+                        anchors.fill: parent
+                        onWheel: {
+                            // do nothing
+                        }
+                        onReleased: {
+                            console.log("Selected Group clicked")
+                            db_manager.choose_group("124653069") // test group id
+                        }
+                    }
+                }
 
 			Button {
 				id: logOutButton
-				text: qsTr("Log Out")
+                text: qsTr("Выйти")
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
 				Layout.leftMargin: 6
@@ -216,26 +232,26 @@ ApplicationWindow
 						}
 					}
 
-					RoundButton {
-						id: newTemplateButton
+                    RoundButton {
+                        id: newTemplateButton
 
-						width: 12
-						height: 32
-						text: "+"
-						Layout.preferredHeight: 32
-						Layout.preferredWidth: 32
-						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-						Layout.fillHeight: false
-						Layout.fillWidth: false
+                        width: 12
+                        height: 32
+                        text: "+"
+                        Layout.preferredHeight: 32
+                        Layout.preferredWidth: 32
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillHeight: false
+                        Layout.fillWidth: false
 
-						onClicked: {
-							console.log("newTemplateButton clicked")
+                        onClicked: {
+                            console.log("newTemplateButton clicked")
 
-							var component = Qt.createComponent("EditTemplate.qml");
-							win = component.createObject(applicationWindow);
-							win.show();
-						}
-					}
+                            var component = Qt.createComponent("EditTemplate.qml");
+                            win = component.createObject(applicationWindow);
+                            win.show();
+                        }
+                    }
 				}
 			}
 		}

@@ -466,8 +466,3 @@ ApplicationWindow
 		}
 	}
 }
-
-
-
-
-
