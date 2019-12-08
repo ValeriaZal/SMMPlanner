@@ -29,7 +29,7 @@ ApplicationWindow {
 
 			x: 1317
 			width: 123
-			text: qsTr("Version 0.11")
+			text: qsTr("Version 1.3")
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
