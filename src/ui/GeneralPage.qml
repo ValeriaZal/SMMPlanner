@@ -3,8 +3,6 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
 
-//import QtQuick.Layouts 1.1
-
 ApplicationWindow
 {
 	id: applicationWindow
@@ -234,22 +232,26 @@ ApplicationWindow
 						}
 					}
 
-					RoundButton {
-						id: newTemplateButton
+                    RoundButton {
+                        id: newTemplateButton
 
-						width: 24
-						height: 24
-						text: "+"
-						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        width: 12
+                        height: 32
+                        text: "+"
+                        Layout.preferredHeight: 32
+                        Layout.preferredWidth: 32
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillHeight: false
+                        Layout.fillWidth: false
 
-						onClicked: {
-							console.log("newTemplateButton clicked")
+                        onClicked: {
+                            console.log("newTemplateButton clicked")
 
-							var component = Qt.createComponent("EditTemplate.qml");
-							win = component.createObject(applicationWindow);
-							win.show();
-						}
-					}
+                            var component = Qt.createComponent("EditTemplate.qml");
+                            win = component.createObject(applicationWindow);
+                            win.show();
+                        }
+                    }
 				}
 			}
 		}
