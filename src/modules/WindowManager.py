@@ -30,6 +30,7 @@ class WindowManager(QtCore.QObject):
         self._authentication.logout_signal.connect(self.on_logout_signal)
         self._authentication.close_signal.connect(self.on_close_signal)
         self._db_manager.choose_group_signal.connect(self.on_choose_group)
+        self._db_manager.update_signal.connect(self.on_update)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
@@ -69,6 +70,9 @@ class WindowManager(QtCore.QObject):
     def on_choose_group(self):
         self.vk_session.set_group(self._db_manager.group) # group is a property = vk_id without "-"
         self.vk_session.load_cache_posts()
+
+    def on_update(self):
+        self.vk_session.update()
 
 
     @property

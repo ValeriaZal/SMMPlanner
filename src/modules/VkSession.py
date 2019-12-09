@@ -32,6 +32,9 @@ class VkSession():
             groups_info = self._get_groups_info()
             for item in groups_info:
                 self._cache.insert("groups", item)
+            if(self._curr_group == None):
+                self._curr_group = groups_info[0][0]
+                self.load_cache_posts()
 
         def load_cache_posts(self):
             posts_info = self._get_posts_info()
@@ -42,11 +45,9 @@ class VkSession():
             self._curr_group = group
 
         def update(self):
-            group_db_id = self._cache.get_group_id(str(self._curr_group))
-
             posts_info = self._get_posts_info()
             for item in posts_info:
-                self._cache.update("posts", item)
+                self._cache.update(self._curr_group, "posts", item)
 
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)
@@ -75,7 +76,7 @@ class VkSession():
             for post in owner_posts['items']:
                 posts_info.append((post['id'], group_db_id, post['from_id'], post['owner_id'],
                                     0, post['date'], post['marked_as_ads'], post['post_type'],
-                                    post['text'], post['can_pin'], 0, 0,
+                                    post['text'].translate(non_bmp_map), post['can_pin'], 0, 0,
                                     post['can_delete']))
 
             return posts_info
