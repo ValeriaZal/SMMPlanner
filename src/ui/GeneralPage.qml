@@ -44,7 +44,7 @@ ApplicationWindow
 			id: versionText
 			x: 1317
 			width: 123
-			text: qsTr("Version 0.11") // load from version file
+            text: qsTr("Version 1.10") // load from version file
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignVCenter
@@ -91,9 +91,9 @@ ApplicationWindow
 				displayText: "Selected Group"
                 textRole: "key"
                 model: ListModel {
-                    ListElement { key: "First"; value: 123 }
-                    ListElement { key: "Second"; value: 456 }
-                    ListElement { key: "Third"; value: 789 }
+                    ListElement { key: "First group"; value: 123 }
+                    ListElement { key: "Second group"; value: 456 }
+                    ListElement { key: "Third group"; value: 789 }
                 }
 
                 MouseArea {
@@ -148,7 +148,7 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
-
+                    db_manager.update()
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);

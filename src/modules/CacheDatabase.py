@@ -78,6 +78,7 @@ class CacheDatabase:
                                             can_publish integer,
                                             can_edit integer,
                                             can_delete integer,
+                                            UNIQUE(vk_id, group_id),
                                             FOREIGN KEY (group_id) REFERENCES groups (id)
                                         ); """
             sql_create_attachments_table = """ CREATE TABLE IF NOT EXISTS attachments (
@@ -114,7 +115,7 @@ class CacheDatabase:
                         insert_cols += "?,"
                     cols = cols[:-1] + ")"
                     insert_cols = insert_cols[:-1] + ")"
-                    sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
+                    sql = f"INSERT OR REPLACE INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
                     cur.execute(sql, data)
                     self._conn.commit()
@@ -123,12 +124,15 @@ class CacheDatabase:
             else:
                 print(f"Error: cannot find table '{table}'")
 
-        def update(self, table, data):
+        def update(self, group, table, data):
             if(table in self._tables.keys()):
-                sql = f"DELETE FROM {table} WHERE postponed = 1"
                 cur = self._conn.cursor()
-                cur.execute(sql, ())
+#                sql = f"DELETE FROM {table} WHERE postponed = 1"
+#
+#
+#                self._conn.commit()
                 if(len(data) == len(self._tables[table])):
+                    group_db_id = self.get_group_id(group)
                     cols = "("
                     insert_cols = "("
                     for col in self._tables[table]:
@@ -136,8 +140,8 @@ class CacheDatabase:
                         insert_cols += "?,"
                     cols = cols[:-1] + ")"
                     insert_cols = insert_cols[:-1] + ")"
-                    sql = f"IF NOT EXISTS ( SELECT 1 FROM {table} WHERE vk_id = {data[0]} AND postponed = 1 ) \nBEGIN \nINSERT INTO {table} {cols} VALUES {insert_cols} \nEND"
-                    cur.execute(sql, ())
+                    sql = f"INSERT OR REPLACE INTO {table} {cols} VALUES {insert_cols}"
+                    cur.execute(sql, data)
                     self._conn.commit()
                 else:
                     print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
