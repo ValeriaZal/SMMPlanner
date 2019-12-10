@@ -17,11 +17,7 @@ ApplicationWindow
 	property var access_token: ""
 	property variant win;  // for newButtons
 
-<<<<<<< Updated upstream
-	//onClosing: authentication.logout()
-=======
 	onClosing: authentication.close()
->>>>>>> Stashed changes
 
 	Loader {
 		id: loader
@@ -48,27 +44,17 @@ ApplicationWindow
 		Text {
 			id: versionText
 			x: 1317
-<<<<<<< Updated upstream
-            width: 123
-			anchors.rightMargin: 10
-			horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignTop
-=======
+
 			width: 123
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
 			verticalAlignment: Text.AlignTop
->>>>>>> Stashed changes
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.right: parent.right
 			font.pixelSize: 15
 
-<<<<<<< Updated upstream
-            Component.onCompleted: fileReader.getVersion();
-=======
 			Component.onCompleted: fileReader.getVersion();
->>>>>>> Stashed changes
 		}
 	}
 
@@ -103,11 +89,6 @@ ApplicationWindow
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 			ComboBox {
-<<<<<<< Updated upstream
-				id: comboBox
-				width: 200
-				displayText: "Selected Group"
-=======
 				id: groupComboBox
 				property bool ready: false;
 
@@ -147,16 +128,11 @@ ApplicationWindow
 				onModelChanged: {
 					console.log("groupComboBox: onModelChanged")
 				}
->>>>>>> Stashed changes
 			}
 
 			Button {
 				id: logOutButton
-<<<<<<< Updated upstream
-				text: qsTr("Log Out")
-=======
 				text: qsTr("Выйти")
->>>>>>> Stashed changes
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
 				Layout.leftMargin: 6
@@ -194,11 +170,7 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
-<<<<<<< Updated upstream
-
-=======
-					db_manager.update()
->>>>>>> Stashed changes
+					//db_manager.update()
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -248,7 +220,7 @@ ApplicationWindow
 					onClicked: {
 						console.log("newPostButton clicked")
 
-						var component = Qt.createComponent("EditPost.qml");
+						var component = Qt.createComponent("NewPost.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
 					}
@@ -307,22 +279,11 @@ ApplicationWindow
 		}
 	}
 
-<<<<<<< Updated upstream
-
-    Connections {
-        target: fileReader
-
-        onVersion: {
-            versionText.text = qsTr("Version " + version)
-        }
-    }
-=======
 	Connections {
-			target: fileReader
+		target: fileReader
 
-			onVersion: {
-				versionText.text = qsTr("Version " + version)
-			}
+		onVersion: {
+			versionText.text = qsTr("Version " + version)
 		}
->>>>>>> Stashed changes
+	}
 }

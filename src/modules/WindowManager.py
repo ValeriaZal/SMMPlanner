@@ -1,36 +1,37 @@
-﻿import os
+import os
 
 from PyQt5 import QtWidgets, QtCore, QtQml
 
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
-<<<<<<< Updated upstream
-=======
 from modules.DataBaseManager import DataBaseManager
->>>>>>> Stashed changes
 from modules.FileReader import FileReader
 
+from modules.VkSession import VkSession
 
 class WindowManager(QtCore.QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.api_v = "5.101"
+        self.app_id = "7221578"
+        self.scope = "groups,wall,photos"
+
         self._current_page = ""
+        self.vk_session = None
 
         self._engine = QtQml.QQmlApplicationEngine()
 
-        self._reader = FileReader()
         self._authentication = AuthenticationManager()
         self._manager = ComponentCacheManager(self._engine)
-<<<<<<< Updated upstream
-=======
         self._db_manager = DataBaseManager()
         self._reader = FileReader()
 
->>>>>>> Stashed changes
-
         self._authentication.login_signal.connect(self.on_login_signal)
         self._authentication.logout_signal.connect(self.on_logout_signal)
+        self._authentication.close_signal.connect(self.on_close_signal)
+        self._db_manager.choose_group_signal.connect(self.on_choose_group)
+        self._db_manager.update_signal.connect(self.on_update)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
@@ -39,7 +40,16 @@ class WindowManager(QtCore.QObject):
             "componentCache", self._manager
         )
         self._engine.rootContext().setContextProperty(
-            "fileReader", self._reader
+            "db_manager", self._db_manager
+        )
+        self._engine.rootContext().setContextProperty(
+            "APIv", self.api_v
+        )
+        self._engine.rootContext().setContextProperty(
+            "app_id", self.app_id
+        )
+        self._engine.rootContext().setContextProperty(
+            "scope", self.scope
         )
         self._engine.rootContext().setContextProperty(
             "fileReader", self._reader
@@ -53,15 +63,20 @@ class WindowManager(QtCore.QObject):
         self.current_page = "../ui/GeneralPage.qml"
         self._engine.rootObjects()[-1].show()
 
-
     def on_logout_signal(self):
-<<<<<<< Updated upstream
-        # self.current_page = "../ui/LoginPage.qml"
-        self.current_page = "../ui/GeneralPage.qml"
-=======
         self.current_page = "../ui/LoginPage.qml"
->>>>>>> Stashed changes
         self._engine.rootObjects()[-1].show()
+
+    def on_close_signal(self):
+        self.vk_session.close()
+
+    def on_choose_group(self):
+        self.vk_session.set_group(self._db_manager.group) # group is a property = vk_id without "-"
+        self.vk_session.load_cache_posts()
+
+    def on_update(self):
+        self.vk_session.update()
+
 
     @property
     def current_page(self):
@@ -69,6 +84,8 @@ class WindowManager(QtCore.QObject):
 
     @current_page.setter
     def current_page(self, page):
+        if(page == "../ui/GeneralPage.qml"):
+            self.vk_session = VkSession(self._authentication.token, self._authentication.user_id, self.api_v)
         self._current_page = page
         current_dir = os.path.abspath(os.path.dirname(__file__))
         qml_file = os.path.join(current_dir, self.current_page)

@@ -4,17 +4,21 @@ import QtQml 2.13
 import QtQuick.Window 2.13
 
 import QtQuick.Layouts 1.4
-import QtQuick.Dialogs 1.3
+import QtQuick.Controls 1.4 as Old
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls.Private 1.0
+import QtQuick.Dialogs 1.3 as OldDialog
 
 
 ApplicationWindow
 {
-	id: editTemplateWindow
+	id: newPostWindow
 
 	width: 600
 	height: 600
+
 	color: "#f3f3f4"
-	title: qsTr("SMMPlanner: Редактирование шаблона поста")
+	title: qsTr("SMMPlanner: Создание поста")
 
 	function find(model, criteria)
 	{
@@ -28,10 +32,8 @@ ApplicationWindow
 		return -1
 	}
 
-
 	RowLayout {
 		id: nameRowLayout
-
 		height: 60
 		anchors.right: parent.right
 		anchors.rightMargin: 6
@@ -42,24 +44,21 @@ ApplicationWindow
 
 		Text {
 			id: namePostText
-
-			text: qsTr("Название шаблона поста:")
+			text: qsTr("Название поста:")
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 			verticalAlignment: Text.AlignVCenter
 			Layout.fillHeight: true
 			Layout.fillWidth: false
-			font.pixelSize: 18
+			font.pixelSize: 25
 		}
 
 		TextField {
 			id: namePostTextEdit
-
 			width: 80
 			height: 20
 			font.weight: Font.Bold
 			clip: true
 			horizontalAlignment: Text.AlignLeft
-			cursorVisible: false
 			Layout.fillHeight: false
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -75,7 +74,6 @@ ApplicationWindow
 
 	RowLayout {
 		id: templatesRowLayout
-
 		x: 0
 		y: 0
 		height: 60
@@ -86,101 +84,36 @@ ApplicationWindow
 		anchors.left: parent.left
 		anchors.right: parent.right
 
-		Button {
-			id: templateColorButton
-
-			Layout.preferredHeight: 60
-			Layout.preferredWidth: 60
-			Layout.fillHeight: true
-			Layout.fillWidth: false
-
-			background: Rectangle {
-				id: templateColorButtonBackground
-
-				width: templateColorButton.width
-				height: templateColorButton.height
-				color: "transparent"
-			}
-
-			onClicked: {
-				console.log("templateColorButton clicked")
-
-				colorDialog.open()
-			}
-
-			Image {
-				id: startIcon
-				anchors.fill: parent
-				source: "../icons/color_picker.jpg"
-				fillMode: Image.Stretch
-			}
-
-
-		}
-
 		ComboBox {
 			id: templateComboBox
-
+			font.bold: true
+			editable: false
 			Layout.fillWidth: true
 			displayText: qsTr("Выбранный шаблон: " + currentText)
-			font.bold: true
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 			// example
-			model:
-			[
-				"Default",
-				"Music",
-				"Info"
-			]
+			model: [ "Default", "Music", "Info" ]
 		}
 
 		ComboBox
 		{
 			id: tagComboBox
-
-			focusPolicy: Qt.ClickFocus
-			wheelEnabled: false
-			clip: true
+			flat: false
 			editable: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 			displayText: qsTr("Tags")
-			font.bold: true
 			Layout.fillHeight: true
 
-			// example
 			model: ListModel
 			{
-				id: tagsModel
+				id: tagsListModel
 
-				ListElement
-				{
-					text: "#music"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#info"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#info"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#tag"
-					checked: false
-				}
-			}
-
-			onAccepted: {
-				if (find(model, function(ListElement) { return ListElement.text === editText }) === -1)
-				{
-					model.append({text: editText, checked: false})
-				}
+				//example
+				ListElement { tag: "#music"; checked: false }
+				ListElement { tag: "#info"; checked: false }
+				ListElement { tag: "#tag"; checked: false }
 			}
 
 			delegate: Item
@@ -192,45 +125,62 @@ ApplicationWindow
 				{
 					id: checkDelegate
 					width: parent.width
-					text: model.text
-					checked: model.checked
+					text: model.tag
 					highlighted: tagComboBox.highlightedIndex === index
+					checked: model.checked
 					onCheckedChanged: model.checked = checked
 				}
 			}
+
+			onAccepted: {
+				if (find(tagsListModel, function(ListElement) { return ListElement.tag === tagComboBox.editText }) === -1)
+				{
+					var editTextTmp = tagComboBox.editText
+					if (editTextTmp.charAt(0) !== '#') {
+						editTextTmp = "#" + editTextTmp;
+					}
+					console.log(editTextTmp.charAt(0))
+
+					tagsListModel.append({tag: editTextTmp, checked: true})
+				}
+			}
+
 		}
 	}
 
 
 	ScrollView {
 		id: textAreaScrollView
+		//parent: editPostWindow
 
+		height: 325
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
 		anchors.leftMargin: 6
-		anchors.bottom: parent.bottom
-		anchors.bottomMargin: 70
+		anchors.bottom: imageRowLayout.top
+		anchors.bottomMargin: 6
 		anchors.top: templatesRowLayout.bottom
 		anchors.topMargin: 6
+
 		clip: true
 
 		TextArea {
 			id: textArea
-
 			clip: true
+			text: qsTr("")
 			anchors.leftMargin: -4
 			anchors.topMargin: -1
-			anchors.rightMargin: -450
-			anchors.bottomMargin: -353
+			font.family: "MS Shell Dlg 2"
+			anchors.rightMargin: -446
+			anchors.bottomMargin: -284
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
 			verticalAlignment: Text.AlignTop
-			placeholderText: qsTr("Что у Вас нового?")
+			placeholderText: "Что у Вас нового?"
 			selectByMouse: true
 			focus: true
-
 		}
 
 		background: Rectangle {
@@ -243,14 +193,14 @@ ApplicationWindow
 	RowLayout {
 		id: settingsRowLayout
 
-		anchors.right: parent.right
-		anchors.rightMargin: 6
-		anchors.left: parent.left
-		anchors.leftMargin: 6
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 6
 		anchors.top: textAreaScrollView.bottom
 		anchors.topMargin: 6
+		anchors.right: parent.right
+		anchors.rightMargin: 6
+		anchors.left: parent.left
+		anchors.leftMargin: 6
 
 		RowLayout {
 			id: imageRowLayout
@@ -267,6 +217,7 @@ ApplicationWindow
 
 				background: Rectangle {
 					id: imageRoundButtonBackground
+
 					width: imageButton.width
 					height: imageButton.height
 					color: "transparent"
@@ -293,6 +244,7 @@ ApplicationWindow
 				width: 200
 				height: 200
 				color: "#ffffff"
+
 				Layout.preferredHeight: 75
 				Layout.fillHeight: true
 				Layout.preferredWidth: 300
@@ -300,21 +252,24 @@ ApplicationWindow
 
 				ListView {
 					id: listView
+					parent: attachedImageListViewBackground
 
+					clip: true
 					anchors.rightMargin: 6
 					anchors.leftMargin: 6
 					anchors.bottomMargin: 6
 					anchors.topMargin: 6
-					highlightFollowsCurrentItem: true
-					snapMode: ListView.SnapToItem
-					boundsMovement: Flickable.StopAtBounds
-					boundsBehavior: Flickable.StopAtBounds
-					highlightRangeMode: ListView.NoHighlightRange
+					anchors.fill: parent
+
 					contentHeight: 30
 					contentWidth: 250
-					clip: true
-					parent: attachedImageListViewBackground
-					anchors.fill: parent
+					snapMode: ListView.SnapToItem
+
+					highlightFollowsCurrentItem: true
+					highlightRangeMode: ListView.NoHighlightRange
+
+					boundsMovement: Flickable.StopAtBounds
+					boundsBehavior: Flickable.StopAtBounds
 
 					delegate: Item {
 						x: 1
@@ -329,7 +284,7 @@ ApplicationWindow
 							Button {
 								width: 20
 								height: 20
-								text: qsTr("X")
+								text: qsTr("x")
 
 								onClicked: {
 									console.log(delegateItemName.text + " removed from list")
@@ -354,36 +309,140 @@ ApplicationWindow
 			}
 		}
 
-		Button {
-			id: publishButton
 
-			text: qsTr("Закончить создание шаблона")
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+		ColumnLayout {
+			id: saveButtonsColumnLayout
 
-			onClicked: {
-				console.log("publishButton clicked")
+			RowLayout {
+				id: dateTimeRowLayout
+				width: 100
+				height: 100
 
-				editPostWindow.close()
+				Button {
+					id: dateButton
+
+					Layout.preferredHeight: 32
+					Layout.preferredWidth: 32
+					Layout.fillHeight: false
+					Layout.fillWidth: false
+
+					background: Rectangle {
+						id: newPostButtonBackground
+
+						width: dateButton.width
+						height: dateButton.height
+						color: "transparent"
+					}
+
+					Image {
+						anchors.fill: parent
+						source: "../icons/date.png"
+						fillMode: Image.Stretch
+					}
+
+
+					onClicked: {
+						console.log("dateButton clicked")
+
+						dateTimePickerDialog.open()
+					}
+				}
+
+
+				Text {
+					id: dateTimeText
+
+					verticalAlignment: Text.AlignVCenter
+					horizontalAlignment: Text.AlignLeft
+					font.pixelSize: 12
+					text: qsTr(new Date(new Date().getTime() + 86400000).toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm"))
+				}
+			}
+
+			Button {
+				id: savePostButton
+				text: qsTr("Сохранить пост")
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+				onClicked: {
+					console.log("savePostButton clicked")
+					// sync with db
+				}
+			}
+
+			Button {
+				id: publishPostButton
+
+				text: qsTr("Закончить редактирование поста")
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+				onClicked: {
+					console.log("publishPostButton clicked")
+					// sync with db
+					newPostWindow.close()
+				}
 			}
 		}
 	}
 
 
-	ColorDialog {
-		id: colorDialog
-		title: qsTr("Выберите цвет шаблона поста")
+	Dialog {
+		id: dateTimePickerDialog
+
+		title: qsTr("Выберите дату публикации")
+
+		x: (parent.width - width) / 2
+		y: (parent.height - height) / 2
+
+		standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
 		onAccepted: {
-			console.log("Chosen color: " + colorDialog.color)
+			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
+			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString())
 
-			startIcon.visible = false
-			templateColorButtonBackground.color = colorDialog.color
+			dateTimeText.text = qsTr(datePicker.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
+									 + " " + hoursComboBox.currentIndex.toString()
+									 + ":" + minutesComboBox.currentIndex.toString())
 		}
 
-		onRejected: {
-			console.log("Canceled color")
+		ColumnLayout {
+			spacing: 1
+
+			Old.Calendar {
+				id: datePicker
+
+				anchors.left: parent.left
+				anchors.right: parent.right
+				//onDoubleClicked: {
+				//	console.log("dateTimePickerDialog.accept()")
+				//	dateTimePickerDialog.accept()
+				//}
+			}
+
+			RowLayout {
+				anchors.horizontalCenter: parent
+				anchors.top: datePicker.bottom
+
+				ComboBox {
+					id: hoursComboBox
+					model: 24
+					currentIndex: new Date().getHours()
+				}
+
+				Text {
+					text: ":"
+				}
+
+				ComboBox {
+					id: minutesComboBox
+					model: 60
+					currentIndex: new Date().getMinutes()+10
+				}
+			}
 		}
 	}
 
@@ -395,7 +454,7 @@ ApplicationWindow
 		}
 	}
 
-	FileDialog {
+	OldDialog.FileDialog {
 		id: imageDialog
 		title: "Выберите изображение"
 		folder: shortcuts.home
@@ -403,7 +462,8 @@ ApplicationWindow
 		selectMultiple: true
 
 		onAccepted: {
-			console.log("You chose: " + imageDialog.fileUrls + "\tcount: " + imageDialog.fileUrls.length)
+			console.log("You chose: " + imageDialog.fileUrls)
+			console.log(imageDialog.fileUrls.length)
 
 			updateImageListModel(imageDialog.fileUrls, imageListModel)
 		}
@@ -415,8 +475,6 @@ ApplicationWindow
 }
 
 
-/*##^##
-Designer {
-	D{i:6;anchors_height:16;anchors_width:582}D{i:5;anchors_height:0}
-}
-##^##*/
+
+
+

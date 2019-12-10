@@ -1,18 +1,18 @@
-﻿{
+{
     "files": ["ui/EditTemplate.qml",
               "ui/Posts.qml",
               "ui/LoginPage.qml",
               "ui/GeneralPage.qml",
               "ui/PostTemplates.qml",
               "ui/EditPost.qml",
+              "ui/NewPost.qml",
               "ui/Calendar.qml",
 
               "modules/ComponentCacheManager.py",
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
-<<<<<<< Updated upstream
               "modules/FileReader.py",
-=======
+
               "modules/DataBaseManager.py",
               "modules/FileReader.py",
 
@@ -21,6 +21,5 @@
 
               "modules/VkSession.py",
 
->>>>>>> Stashed changes
               "main.py"]
 }

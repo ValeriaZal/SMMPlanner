@@ -6,7 +6,6 @@ import QtWebSockets 1.1
 import QtWebEngine 1.4
 import QtQuick.Layouts 1.4
 
-
 ApplicationWindow {
 	id: loginWindow
 
@@ -14,13 +13,6 @@ ApplicationWindow {
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
-
-
-	Text {
-		id: tokenResult
-
-		text: ""
-	}
 
 	Rectangle {
 		id: bottomWindowContainer
@@ -35,20 +27,6 @@ ApplicationWindow {
 		Text {
 			id: versionText
 
-			x: 1317
-<<<<<<< Updated upstream
-            width: 123
-			anchors.rightMargin: 10
-			horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignTop
-			anchors.top: parent.top
-			anchors.bottom: parent.bottom
-			anchors.right: parent.right
-            font.pixelSize: 15
-
-            Component.onCompleted: fileReader.getVersion();
-        }
-=======
 			width: 123
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
@@ -60,7 +38,6 @@ ApplicationWindow {
 
 			Component.onCompleted: fileReader.getVersion();
 		}
->>>>>>> Stashed changes
 	}
 
 	Text {
@@ -95,6 +72,7 @@ ApplicationWindow {
 		WebEngineView {
 			anchors.fill: parent
 			id: webViewContent
+			anchors.bottomMargin: 0
 
 			// Cookies is not permitted for login info
 			profile: WebEngineProfile {
@@ -103,22 +81,14 @@ ApplicationWindow {
 			}
 
 			// Get url
-<<<<<<< Updated upstream
-			url: get_first_url("7221578", "groups,wall", "5.101")
-=======
 			url: get_first_url(app_id, scope, APIv)
->>>>>>> Stashed changes
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
 				var res = "https://oauth.vk.com/authorize?client_id="
 						+ app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
-<<<<<<< Updated upstream
-						+ scopet + "&response_type=token&v=" + APIvt;
-=======
 						+ scopet + "&response_type=token&v=" + APIvt + "&state=123456";
->>>>>>> Stashed changes
 				return res;
 			}
 
@@ -167,35 +137,24 @@ ApplicationWindow {
 				// Case: user is hacker
 				else {
 					if (vk_lost(loadRequest.url.toString())) {
-<<<<<<< Updated upstream
-						webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
-=======
 						webViewContent.url = get_first_url(app_id, scope, APIv)
->>>>>>> Stashed changes
 					}
 				}
 			}
 		}
 	}
-<<<<<<< Updated upstream
-
-    Connections {
-        target: fileReader
-
-        onVersion: {
-            versionText.text = qsTr("Version " + version)
-        }
-    }
-}
-=======
->>>>>>> Stashed changes
 
 	Connections {
-			target: fileReader
+		target: fileReader
 
-			onVersion: {
-				versionText.text = qsTr("Version " + version)
-			}
+		onVersion: {
+			versionText.text = qsTr("Version " + version)
 		}
+	}
 }
 
+/*##^##
+Designer {
+	D{i:3;anchors_height:91;anchors_width:632;anchors_x:404;anchors_y:161}
+}
+##^##*/

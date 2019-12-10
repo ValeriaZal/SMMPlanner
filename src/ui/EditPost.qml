@@ -14,6 +14,8 @@ ApplicationWindow
 {
 	id: editPostWindow
 
+	property string postStatus: "postponed";
+
 	width: 600
 	height: 600
 
@@ -159,7 +161,7 @@ ApplicationWindow
 		id: textAreaScrollView
 		//parent: editPostWindow
 
-		height: 377
+		height: 323
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
@@ -179,7 +181,7 @@ ApplicationWindow
 			anchors.topMargin: 1
 			font.family: "MS Shell Dlg 2"
 			anchors.rightMargin: -446
-			anchors.bottomMargin: -338
+			anchors.bottomMargin: -284
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
@@ -320,9 +322,47 @@ ApplicationWindow
 			id: saveButtonsColumnLayout
 
 			RowLayout {
+				id: savePublishRowLayout
+				width: 100
+				height: 100
+
+
+				Button {
+					id: savePostButton
+					text: qsTr("Сохранить")
+					visible: (postStatus === "postponed")
+
+					onClicked: {
+						console.log("savePostButton clicked")
+						// sync with db
+						editPostWindow.close()
+					}
+				}
+
+				Button {
+					id: publishButton
+
+					text: qsTr("Опубликовать")
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+					visible: (postStatus === "postponed")
+
+					onClicked: {
+						console.log("publishButton clicked")
+						// sync with db
+						editPostWindow.close()
+					}
+				}
+			}
+
+			RowLayout {
 				id: dateTimeRowLayout
 				width: 100
 				height: 100
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+				Layout.fillHeight: false
+				Layout.fillWidth: true
 
 				Button {
 					id: dateButton
@@ -366,19 +406,19 @@ ApplicationWindow
 			}
 
 			Button {
-				id: publishButton
-
-				text: qsTr("Закончить редактирование поста")
+				id: deletePostButton
+				text: qsTr("Удалить пост")
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 				onClicked: {
-					console.log("publishButton clicked")
-
+					console.log("deletePostButton clicked")
+					// sync with db
 					editPostWindow.close()
 				}
 			}
+
 		}
 	}
 
