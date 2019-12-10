@@ -4,6 +4,10 @@ from PyQt5 import QtWidgets, QtCore, QtQml
 
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
+<<<<<<< Updated upstream
+=======
+from modules.DataBaseManager import DataBaseManager
+>>>>>>> Stashed changes
 from modules.FileReader import FileReader
 
 
@@ -18,6 +22,12 @@ class WindowManager(QtCore.QObject):
         self._reader = FileReader()
         self._authentication = AuthenticationManager()
         self._manager = ComponentCacheManager(self._engine)
+<<<<<<< Updated upstream
+=======
+        self._db_manager = DataBaseManager()
+        self._reader = FileReader()
+
+>>>>>>> Stashed changes
 
         self._authentication.login_signal.connect(self.on_login_signal)
         self._authentication.logout_signal.connect(self.on_logout_signal)
@@ -27,6 +37,9 @@ class WindowManager(QtCore.QObject):
         )
         self._engine.rootContext().setContextProperty(
             "componentCache", self._manager
+        )
+        self._engine.rootContext().setContextProperty(
+            "fileReader", self._reader
         )
         self._engine.rootContext().setContextProperty(
             "fileReader", self._reader
@@ -42,8 +55,12 @@ class WindowManager(QtCore.QObject):
 
 
     def on_logout_signal(self):
+<<<<<<< Updated upstream
         # self.current_page = "../ui/LoginPage.qml"
         self.current_page = "../ui/GeneralPage.qml"
+=======
+        self.current_page = "../ui/LoginPage.qml"
+>>>>>>> Stashed changes
         self._engine.rootObjects()[-1].show()
 
     @property

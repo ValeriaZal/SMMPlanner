@@ -10,6 +10,17 @@
               "modules/ComponentCacheManager.py",
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
+<<<<<<< Updated upstream
               "modules/FileReader.py",
+=======
+              "modules/DataBaseManager.py",
+              "modules/FileReader.py",
+
+              "modules/CacheDatabase.py",
+              "modules/DataDatabase.py",
+
+              "modules/VkSession.py",
+
+>>>>>>> Stashed changes
               "main.py"]
 }

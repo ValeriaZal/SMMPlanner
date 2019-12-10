@@ -17,7 +17,11 @@ ApplicationWindow
 	property var access_token: ""
 	property variant win;  // for newButtons
 
+<<<<<<< Updated upstream
 	//onClosing: authentication.logout()
+=======
+	onClosing: authentication.close()
+>>>>>>> Stashed changes
 
 	Loader {
 		id: loader
@@ -44,16 +48,27 @@ ApplicationWindow
 		Text {
 			id: versionText
 			x: 1317
+<<<<<<< Updated upstream
             width: 123
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignTop
+=======
+			width: 123
+			anchors.rightMargin: 10
+			horizontalAlignment: Text.AlignRight
+			verticalAlignment: Text.AlignTop
+>>>>>>> Stashed changes
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.right: parent.right
 			font.pixelSize: 15
 
+<<<<<<< Updated upstream
             Component.onCompleted: fileReader.getVersion();
+=======
+			Component.onCompleted: fileReader.getVersion();
+>>>>>>> Stashed changes
 		}
 	}
 
@@ -73,8 +88,8 @@ ApplicationWindow
 		RowLayout {
 			id: userRowLayout
 
-			x: 1025
-			width: 415
+			x: 946
+			width: 494
 			anchors.bottom: parent.bottom
 			anchors.top: parent.top
 			anchors.right: parent.right
@@ -88,14 +103,60 @@ ApplicationWindow
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 			ComboBox {
+<<<<<<< Updated upstream
 				id: comboBox
 				width: 200
 				displayText: "Selected Group"
+=======
+				id: groupComboBox
+				property bool ready: false;
+
+				width: 500
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+				textRole: "group_name"
+				model: ListModel {
+					id: groupListModel
+
+					ListElement { group_name: "SelectedGroup"; value: 0 }
+					ListElement { group_name: "Long---Long---Long---Long---Long---Name(48chars)"; value: 11111 }
+					ListElement { group_name: "First group"; value: 123 }
+					ListElement { group_name: "Second group"; value: 456 }
+					ListElement { group_name: "Third group"; value: 789 }
+				}
+
+				// groupListModel.append({group_name: editText, value: false})
+
+				onCurrentTextChanged: {
+					console.log("Selected Group clicked")
+					console.log("currentIndex = ", model.get(currentIndex).value)
+
+					if (ready === true && groupListModel.get(0).group_name === "SelectedGroup")
+					{
+						groupListModel.remove(0);
+					}
+
+					//db_manager.choose_group("124653069") // test group id
+				}
+
+				Component.onCompleted: {
+					console.log("groupComboBox: Component.onCompleted")
+					ready = true;
+				}
+
+				onModelChanged: {
+					console.log("groupComboBox: onModelChanged")
+				}
+>>>>>>> Stashed changes
 			}
 
 			Button {
 				id: logOutButton
+<<<<<<< Updated upstream
 				text: qsTr("Log Out")
+=======
+				text: qsTr("Выйти")
+>>>>>>> Stashed changes
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
 				Layout.leftMargin: 6
@@ -133,7 +194,11 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
+<<<<<<< Updated upstream
 
+=======
+					db_manager.update()
+>>>>>>> Stashed changes
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -242,6 +307,7 @@ ApplicationWindow
 		}
 	}
 
+<<<<<<< Updated upstream
 
     Connections {
         target: fileReader
@@ -250,4 +316,13 @@ ApplicationWindow
             versionText.text = qsTr("Version " + version)
         }
     }
+=======
+	Connections {
+			target: fileReader
+
+			onVersion: {
+				versionText.text = qsTr("Version " + version)
+			}
+		}
+>>>>>>> Stashed changes
 }

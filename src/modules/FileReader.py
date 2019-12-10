@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 ﻿# This Python file uses the following encoding: utf-8
+=======
+# This Python file uses the following encoding: utf-8
+>>>>>>> Stashed changes
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot

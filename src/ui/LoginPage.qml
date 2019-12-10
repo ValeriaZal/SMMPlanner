@@ -36,6 +36,7 @@ ApplicationWindow {
 			id: versionText
 
 			x: 1317
+<<<<<<< Updated upstream
             width: 123
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
@@ -47,6 +48,19 @@ ApplicationWindow {
 
             Component.onCompleted: fileReader.getVersion();
         }
+=======
+			width: 123
+			anchors.rightMargin: 10
+			horizontalAlignment: Text.AlignRight
+			verticalAlignment: Text.AlignTop
+			anchors.top: parent.top
+			anchors.bottom: parent.bottom
+			anchors.right: parent.right
+			font.pixelSize: 15
+
+			Component.onCompleted: fileReader.getVersion();
+		}
+>>>>>>> Stashed changes
 	}
 
 	Text {
@@ -89,14 +103,22 @@ ApplicationWindow {
 			}
 
 			// Get url
+<<<<<<< Updated upstream
 			url: get_first_url("7221578", "groups,wall", "5.101")
+=======
+			url: get_first_url(app_id, scope, APIv)
+>>>>>>> Stashed changes
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
 				var res = "https://oauth.vk.com/authorize?client_id="
 						+ app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
+<<<<<<< Updated upstream
 						+ scopet + "&response_type=token&v=" + APIvt;
+=======
+						+ scopet + "&response_type=token&v=" + APIvt + "&state=123456";
+>>>>>>> Stashed changes
 				return res;
 			}
 
@@ -145,12 +167,17 @@ ApplicationWindow {
 				// Case: user is hacker
 				else {
 					if (vk_lost(loadRequest.url.toString())) {
+<<<<<<< Updated upstream
 						webViewContent.url = get_first_url("7221578", "groups,wall", "5.101")
+=======
+						webViewContent.url = get_first_url(app_id, scope, APIv)
+>>>>>>> Stashed changes
 					}
 				}
 			}
 		}
 	}
+<<<<<<< Updated upstream
 
     Connections {
         target: fileReader
@@ -160,9 +187,15 @@ ApplicationWindow {
         }
     }
 }
+=======
+>>>>>>> Stashed changes
 
-/*##^##
-Designer {
-	D{i:3;anchors_height:91;anchors_width:632;anchors_x:404;anchors_y:161}
+	Connections {
+			target: fileReader
+
+			onVersion: {
+				versionText.text = qsTr("Version " + version)
+			}
+		}
 }
-##^##*/
+

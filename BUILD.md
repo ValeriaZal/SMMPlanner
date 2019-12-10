@@ -21,6 +21,7 @@ SMM Planner build instructions
 4. Pywin32: `pip install pypiwin32` or https://github.com/mhammond/pywin32/releases
 5. PyInstaller: `pip install pyinstaller` or https://www.pyinstaller.org/
 6. PyQtWebEngine: `pip install PyQtWebEngine` or https://pypi.org/project/PyQtWebEngine/
+6. Lib VK API (python): `pip install vk`
 
 ## 2. Manual build instruction
 
