@@ -286,4 +286,12 @@ ApplicationWindow
 			versionText.text = qsTr("Version " + version)
 		}
 	}
+
+	Connections {
+		target: fileReader
+
+		onVersion: {
+			versionText.text = qsTr("Version " + version)
+		}
+	}
 }

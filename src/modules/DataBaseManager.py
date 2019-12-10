@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
 
 class DataBaseManager(QtCore.QObject):
-    choose_group_signal = QtCore.pyqtSignal()
-    update_signal = QtCore.pyqtSignal()
+    choose_group_signal = QtCore.pyqtSignal(str, arguments=['choose_group_signal'])
+    update_signal = QtCore.pyqtSignal(arguments=['update_signal'])
 
     def __init__(self, parent=None):
         super().__init__(parent)
