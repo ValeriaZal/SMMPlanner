@@ -117,12 +117,14 @@ ApplicationWindow
 						groupListModel.remove(0);
 					}
 
-					//db_manager.choose_group("124653069") // test group id
+					//db_manager.choose_group(groupListModel.get(0).group_name) // test group id ("124653069")
 				}
 
 				Component.onCompleted: {
 					console.log("groupComboBox: Component.onCompleted")
 					ready = true;
+
+
 				}
 
 				onModelChanged: {
@@ -288,7 +290,7 @@ ApplicationWindow
 	}
 
 	Connections {
-		target: fileReader
+		target: db_manager
 
 		onVersion: {
 			versionText.text = qsTr("Version " + version)
