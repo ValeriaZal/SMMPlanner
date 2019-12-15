@@ -383,6 +383,10 @@ ApplicationWindow
                     var res_get_tags = db_manager.get_tags()
                     console.log("EditPost:", "db_manager.res_get_tags():", res_get_tags)
                     // ---------------
+                    // --- EXAMPLE ---
+                    var res_get_templates = db_manager.get_templates()
+                    console.log("EditPost:", "db_manager.get_templates():", res_get_templates)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}

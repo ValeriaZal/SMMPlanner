@@ -6,6 +6,7 @@ class DataBaseManager(QtCore.QObject):
     load_posts_signal = QtCore.pyqtSignal()
     get_post_signal = QtCore.pyqtSignal()
     get_tags_signal = QtCore.pyqtSignal()
+    get_templates_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -16,6 +17,7 @@ class DataBaseManager(QtCore.QObject):
         self._db = ""
         self._res_post = []
         self._tags = []
+        self._templates = []
 
     @QtCore.pyqtProperty(str, constant=True)
     def group(self):
@@ -41,6 +43,9 @@ class DataBaseManager(QtCore.QObject):
     def tags(self):
         return self._tags
 
+    @QtCore.pyqtProperty(list)
+    def templates(self):
+        return self._templates
 
     @QtCore.pyqtSlot(str)
     def choose_group(self, group_vk_id):
@@ -71,6 +76,12 @@ class DataBaseManager(QtCore.QObject):
         self.get_tags_signal.emit()
         return self._tags
 
+    # get_templates() -> [<Names of templates>]
+    @QtCore.pyqtSlot(result=list)
+    def get_templates(self):
+        self.get_templates_signal.emit()
+        return self._templates
+
     @posts.setter
     def posts(self, post_list):
         self._posts = post_list
@@ -83,13 +94,17 @@ class DataBaseManager(QtCore.QObject):
     def post_id(self, post_id):
         self._post_id = post_id
 
-    @post_id.setter
+    @res_post.setter
     def res_post(self, res_post):
         self._res_post = res_post
 
     @tags.setter
     def tags(self, tags):
         self._tags = tags
+
+    @templates.setter
+    def templates(self, templates):
+        self._templates = templates
 
 
 

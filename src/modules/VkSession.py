@@ -62,6 +62,9 @@ class VkSession():
         def get_tags(self):
             return self._data.get_tags()
 
+        def get_templates(self):
+            return self._data.get_templates()
+
         def update(self):
             posts_info = self._get_posts_info()
             for item in posts_info:
