@@ -184,6 +184,17 @@ class DataDatabase:
                 return res
             return []
 
+        def get_tags(self):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM tags")
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    res.append(r[1])
+                return res
+            return []
+
     instance = None
     def __init__(self, user_id):
         if not DataDatabase.instance:

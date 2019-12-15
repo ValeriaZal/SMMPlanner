@@ -5,6 +5,7 @@ class DataBaseManager(QtCore.QObject):
     update_signal = QtCore.pyqtSignal()
     load_posts_signal = QtCore.pyqtSignal()
     get_post_signal = QtCore.pyqtSignal()
+    get_tags_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -14,12 +15,13 @@ class DataBaseManager(QtCore.QObject):
         self._post_id = ""
         self._db = ""
         self._res_post = []
+        self._tags = []
 
     @QtCore.pyqtProperty(str, constant=True)
     def group(self):
         return self._curr_group
 
-    @QtCore.pyqtProperty(str, constant=True)
+    @QtCore.pyqtProperty(list, constant=True)
     def posts(self):
         return self._posts
 
@@ -31,9 +33,13 @@ class DataBaseManager(QtCore.QObject):
     def db(self):
         return self._db
 
-    @QtCore.pyqtProperty(str)
+    @QtCore.pyqtProperty(list)
     def res_post(self):
         return self._res_post
+
+    @QtCore.pyqtProperty(list)
+    def tags(self):
+        return self._tags
 
 
     @QtCore.pyqtSlot(str)
@@ -59,6 +65,12 @@ class DataBaseManager(QtCore.QObject):
         self.get_post_signal.emit()
         return self._res_post
 
+    # get_tags() -> [<tags>]
+    @QtCore.pyqtSlot(result=list)
+    def get_tags(self):
+        self.get_tags_signal.emit()
+        return self._tags
+
     @posts.setter
     def posts(self, post_list):
         self._posts = post_list
@@ -74,6 +86,10 @@ class DataBaseManager(QtCore.QObject):
     @post_id.setter
     def res_post(self, res_post):
         self._res_post = res_post
+
+    @tags.setter
+    def tags(self, tags):
+        self._tags = tags
 
 
 
