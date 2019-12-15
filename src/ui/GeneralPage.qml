@@ -149,6 +149,10 @@ ApplicationWindow
 				onClicked: {
 					console.log("calendarButton clicked")
                     db_manager.update()
+                    // --- EXAMPLE ---
+                    var p = db_manager.load_posts()
+                    console.log(p)
+                    // ---------------
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);

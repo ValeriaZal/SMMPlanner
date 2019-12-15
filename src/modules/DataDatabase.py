@@ -140,6 +140,23 @@ class DataDatabase:
             else:
                 print(f"Error: cannot find table '{table}'")
 
+        def get_posts(self, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE from_id=?", (f"-{group_vk_id}",))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    status = "Saved"
+                    cur.execute("SELECT * FROM templates WHERE id=?", (f"{r[3]}",))
+                    template_rows = cur.fetchall()
+                    colour = "default"
+                    if(len(template_rows) > 0):
+                        colour = template_rows[0][3]
+                    res.append([r[0], r[1], colour, r[6], status])
+                return res
+            return []
+
     instance = None
     def __init__(self, user_id):
         if not DataDatabase.instance:

@@ -31,6 +31,7 @@ class WindowManager(QtCore.QObject):
         self._authentication.close_signal.connect(self.on_close_signal)
         self._db_manager.choose_group_signal.connect(self.on_choose_group)
         self._db_manager.update_signal.connect(self.on_update)
+        self._db_manager.load_posts_signal.connect(self.on_load_posts)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
@@ -73,6 +74,11 @@ class WindowManager(QtCore.QObject):
 
     def on_update(self):
         self.vk_session.update()
+
+    def on_load_posts(self):
+#        post_list = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 0]]
+        post_list = self.vk_session.load_posts()
+        self._db_manager.posts = post_list
 
 
     @property

@@ -41,6 +41,11 @@ class VkSession():
             for item in posts_info:
                 self._cache.insert("posts", item)
 
+        def load_posts(self):
+            cache_posts = self._cache.get_posts(self._curr_group)
+            data_posts = self._data.get_posts(self._curr_group)
+            return cache_posts + data_posts
+
         def set_group(self, group):
             self._curr_group = group
 

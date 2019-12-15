@@ -127,10 +127,6 @@ class CacheDatabase:
         def update(self, group, table, data):
             if(table in self._tables.keys()):
                 cur = self._conn.cursor()
-#                sql = f"DELETE FROM {table} WHERE postponed = 1"
-#
-#
-#                self._conn.commit()
                 if(len(data) == len(self._tables[table])):
                     group_db_id = self.get_group_id(group)
                     cols = "("
@@ -148,9 +144,23 @@ class CacheDatabase:
             else:
                 print(f"Error: cannot find table '{table}'")
 
+        def get_posts(self, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE from_id=?", (f"-{group_vk_id}",))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    status = "Published"
+                    if(r[5] == 1):
+                        status = "Postponed"
+                    res.append([r[1], "VK post", "default", r[6], status])
+                return res
+            return []
+
         def get_group_id(self, vk_id):
             cur = self._conn.cursor()
-            cur.execute("SELECT * FROM groups WHERE vk_id=?", (vk_id,))
+            cur.execute("SELECT 1 FROM groups WHERE vk_id=?", (vk_id,))
             rows = cur.fetchall()
             if(len(rows) > 0):
                 return rows[0][0]
