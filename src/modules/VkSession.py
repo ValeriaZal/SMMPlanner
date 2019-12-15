@@ -49,6 +49,16 @@ class VkSession():
         def set_group(self, group):
             self._curr_group = group
 
+        def get_post(self, post_id, db):
+            if(db == "cache"):
+                res = self._cache.get_post(post_id, self._curr_group)
+                return res
+            elif(db == "data"):
+                res = self._data.get_post(post_id, self._curr_group)
+                return res
+            else:
+                print("Error! Post is not found")
+
         def update(self):
             posts_info = self._get_posts_info()
             for item in posts_info:

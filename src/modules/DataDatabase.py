@@ -159,6 +159,31 @@ class DataDatabase:
                 return res
             return []
 
+        def get_post(self, post_id, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE id=? AND group_id=?", (post_id, f"-{group_vk_id}"))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                colour = "#00d9fb"
+                template_name = ""
+                cur.execute("SELECT * FROM templates WHERE id=?", (f"{rows[0][3]}",))
+                template_rows = cur.fetchall()
+                if(len(template_rows) > 0):
+                    colour = template_rows[0][2]
+                    template_name = template_rows[0][1]
+                cur.execute("SELECT * FROM post_tag_list WHERE post_id=?", (f"{rows[0][0]}",))
+                tag_list_rows = cur.fetchall()
+                tags = []
+                if(len(tag_list_rows) > 0):
+                    for tag_r in tag_list_rows:
+                        cur.execute("SELECT * FROM tags WHERE id=?", (f"{tag_r[2]}",))
+                        tags_rows = cur.fetchall()
+                        if(len(tags_rows) > 0):
+                            tags.append(tags_rows[0][1])
+                res = [rows[0][1], template_name, colour, tags, rows[0][5], rows[0][6]]
+                return res
+            return []
+
     instance = None
     def __init__(self, user_id):
         if not DataDatabase.instance:

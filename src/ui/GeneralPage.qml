@@ -151,7 +151,7 @@ ApplicationWindow
                     db_manager.update()
                     // --- EXAMPLE ---
                     var p = db_manager.load_posts()
-                    console.log(p)
+                    console.log("GeneralPage:", "db_manager.load_posts():", p)
                     // ---------------
 					loader.path = "Calendar.qml"
 					componentCache.trim();

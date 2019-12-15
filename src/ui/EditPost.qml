@@ -375,7 +375,10 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("publishButton clicked")
-
+                    // --- EXAMPLE ---
+                    var p = db_manager.get_post(1, "data")
+                    console.log("EditPost:", "db_manager.get_post():", p)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}

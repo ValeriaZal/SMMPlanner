@@ -167,6 +167,16 @@ class CacheDatabase:
                 return rows[0][0]
             return -1
 
+        def get_post(self, post_id, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE vk_id=? AND from_id=?", (post_id,f"-{group_vk_id}"))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                colour = "#00d9fb"
+                res = ["", "", colour, [], rows[0][6], rows[0][9]]
+                return res
+            return []
+
     instance = None
     def __init__(self, user_id):
         if not CacheDatabase.instance:
