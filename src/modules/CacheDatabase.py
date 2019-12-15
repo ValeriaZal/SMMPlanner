@@ -150,11 +150,12 @@ class CacheDatabase:
             rows = cur.fetchall()
             if(len(rows) > 0):
                 res = []
+                colour = "#00d9fb"
                 for r in rows:
                     status = "Published"
                     if(r[5] == 1):
                         status = "Postponed"
-                    res.append([r[1], "VK post", "default", r[6], status])
+                    res.append([r[1], "VK post", colour, r[6], status])
                 return res
             return []
 

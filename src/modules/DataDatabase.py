@@ -13,6 +13,7 @@ class DataDatabase:
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
+            self.insert("templates", ("Default", "#00d9fb", "", ""))
 
         def _create_dirs(self, user_id):
             current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -64,10 +65,10 @@ class DataDatabase:
             sql_create_templates_table = """ CREATE TABLE IF NOT EXISTS templates (
                                             id integer PRIMARY KEY,
                                             name text NOT NULL,
-                                            group_id integer NOT NULL,
                                             colour text,
                                             date integer,
-                                            text text
+                                            text text,
+                                            UNIQUE(name)
                                         ); """
             sql_create_post_attachments_table = """ CREATE TABLE IF NOT EXISTS post_attachments (
                                             id integer PRIMARY KEY,
@@ -83,7 +84,8 @@ class DataDatabase:
 
             sql_create_tags_table = """ CREATE TABLE IF NOT EXISTS tags (
                                             id integer PRIMARY KEY,
-                                            name text NOT NULL
+                                            name text NOT NULL,
+                                            UNIQUE(name)
                                         ); """
 
             sql_create_post_tag_list_table = """ CREATE TABLE IF NOT EXISTS post_tag_list (
@@ -111,7 +113,7 @@ class DataDatabase:
                 self._create_table(sql_create_temp_tag_list_table)
 
                 return {"posts":["name","group_id","template_id","status","date","text"],
-                        "templates":["name","group_id","colour","date","text"],
+                        "templates":["name","colour","date","text"],
                         "post_attachments":["post_id"],
                         "template_attachments":["post_id"],
                         "tags":["name"],
@@ -131,7 +133,7 @@ class DataDatabase:
                         insert_cols += "?,"
                     cols = cols[:-1] + ")"
                     insert_cols = insert_cols[:-1] + ")"
-                    sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
+                    sql = f"INSERT OR IGNORE INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
                     cur.execute(sql, data)
                     self._conn.commit()
@@ -142,7 +144,7 @@ class DataDatabase:
 
         def get_posts(self, group_vk_id):
             cur = self._conn.cursor()
-            cur.execute("SELECT * FROM posts WHERE from_id=?", (f"-{group_vk_id}",))
+            cur.execute("SELECT * FROM posts WHERE group_id=?", (f"-{group_vk_id}",))
             rows = cur.fetchall()
             if(len(rows) > 0):
                 res = []
@@ -150,9 +152,9 @@ class DataDatabase:
                     status = "Saved"
                     cur.execute("SELECT * FROM templates WHERE id=?", (f"{r[3]}",))
                     template_rows = cur.fetchall()
-                    colour = "default"
+                    colour = "#00d9fb"
                     if(len(template_rows) > 0):
-                        colour = template_rows[0][3]
+                        colour = template_rows[0][2]
                     res.append([r[0], r[1], colour, r[6], status])
                 return res
             return []
