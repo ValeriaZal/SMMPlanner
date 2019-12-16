@@ -13,7 +13,7 @@ class DataDatabase:
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
-            self.insert("templates", ("Default", "#00d9fb", "", ""))
+            self.insert_or_ignore("templates", ("Default", "#00d9fb", "", ""))
 
         def _create_dirs(self, user_id):
             current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -123,7 +123,7 @@ class DataDatabase:
                 print("Error! cannot create the database connection.")
                 return None
 
-        def insert(self, table, data):
+        def insert_or_ignore(self, table, data):
             if(table in self._tables.keys()):
                 if(len(data) == len(self._tables[table])):
                     cols = "("
@@ -134,6 +134,44 @@ class DataDatabase:
                     cols = cols[:-1] + ")"
                     insert_cols = insert_cols[:-1] + ")"
                     sql = f"INSERT OR IGNORE INTO {table} {cols} VALUES {insert_cols}"
+                    cur = self._conn.cursor()
+                    cur.execute(sql, data)
+                    self._conn.commit()
+                else:
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
+            else:
+                print(f"Error: cannot find table '{table}'")
+
+        def insert_or_replace(self, table, data):
+            if(table in self._tables.keys()):
+                if(len(data) == len(self._tables[table])):
+                    cols = "("
+                    insert_cols = "("
+                    for col in self._tables[table]:
+                        cols += f"{col},"
+                        insert_cols += "?,"
+                    cols = cols[:-1] + ")"
+                    insert_cols = insert_cols[:-1] + ")"
+                    sql = f"INSERT OR REPLACE INTO {table} {cols} VALUES {insert_cols}"
+                    cur = self._conn.cursor()
+                    cur.execute(sql, data)
+                    self._conn.commit()
+                else:
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
+            else:
+                print(f"Error: cannot find table '{table}'")
+
+        def insert(self, table, data):
+            if(table in self._tables.keys()):
+                if(len(data) == len(self._tables[table])):
+                    cols = "("
+                    insert_cols = "("
+                    for col in self._tables[table]:
+                        cols += f"{col},"
+                        insert_cols += "?,"
+                    cols = cols[:-1] + ")"
+                    insert_cols = insert_cols[:-1] + ")"
+                    sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
                     cur.execute(sql, data)
                     self._conn.commit()

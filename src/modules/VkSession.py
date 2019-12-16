@@ -65,6 +65,9 @@ class VkSession():
         def get_templates(self):
             return self._data.get_templates()
 
+        def add_tag(self, tag_name):
+            self._data.insert_or_ignore("tags", (tag_name,))
+
         def update(self):
             posts_info = self._get_posts_info()
             for item in posts_info:

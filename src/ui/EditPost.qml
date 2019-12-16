@@ -387,6 +387,10 @@ ApplicationWindow
                     var res_get_templates = db_manager.get_templates()
                     console.log("EditPost:", "db_manager.get_templates():", res_get_templates)
                     // ---------------
+                    // --- EXAMPLE ---
+                    var res_add_tag = db_manager.add_tag("#add_tag")
+                    console.log("EditPost:", "db_manager.add_tag():", res_add_tag)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}
