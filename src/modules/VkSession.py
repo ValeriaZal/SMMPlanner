@@ -66,7 +66,7 @@ class VkSession():
         def get_templates(self):
             return self._data.get_templates()
 
-        def add_tag_post(self, tag_name):
+        def add_tag(self, tag_name):
             self._data.insert_or_ignore("tags", (tag_name,))
 
         def save_post(self, post):
@@ -86,6 +86,8 @@ class VkSession():
         def publish_post(self, post):
             message, publish_date = self._post_const.create_post(post)
             self._post_const.publish_post(self._curr_group, message, publish_date)
+            post_id = self._data.get_post_id(publish_date)
+            self._data.delete_post(post_id)
 
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)

@@ -395,6 +395,10 @@ ApplicationWindow
                     var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
                     console.log("EditPost:", "db_manager.save_post():", res_save_post)
                     // ---------------
+                    // --- EXAMPLE ---
+                    // var res_publish_post = db_manager.publish_post(["My title",["art", "music"],"1580558400","It's my text"])
+                    // console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}

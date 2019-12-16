@@ -7,8 +7,9 @@ class DataBaseManager(QtCore.QObject):
     get_post_signal = QtCore.pyqtSignal()
     get_tags_signal = QtCore.pyqtSignal()
     get_templates_signal = QtCore.pyqtSignal()
-    add_tag_post_signal = QtCore.pyqtSignal()
+    add_tag_signal = QtCore.pyqtSignal()
     save_post_signal = QtCore.pyqtSignal()
+    publish_post_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -96,7 +97,7 @@ class DataBaseManager(QtCore.QObject):
 
     # add_tag(tag_name) -> True/False (might be ignored)
     @QtCore.pyqtSlot(str, result=bool)
-    def add_tag_post(self, tag_name):
+    def add_tag(self, tag_name):
         self._tag = tag_name
         self.add_tag_signal.emit()
         return True
@@ -106,6 +107,13 @@ class DataBaseManager(QtCore.QObject):
     def save_post(self, post):
         self._post = post
         self.save_post_signal.emit()
+        return True
+
+    # publish_post(["title",[<tags>],"date","text"]) -> True/False
+    @QtCore.pyqtSlot(list, result=bool)
+    def publish_post(self, post):
+        self._post = post
+        self.publish_post_signal.emit()
         return True
 
     @posts.setter
