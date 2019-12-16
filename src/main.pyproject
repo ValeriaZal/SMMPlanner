@@ -14,6 +14,7 @@
 
               "modules/CacheDatabase.py",
               "modules/DataDatabase.py",
+              "modules/PostConstructor.py",
 
               "modules/VkSession.py",
 

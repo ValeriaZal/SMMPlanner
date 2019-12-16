@@ -22,6 +22,7 @@ class VkSession():
             self._cache = CacheDatabase(self._user_id)
             self._data = DataDatabase(self._user_id)
             self.load_cache_groups()
+            self._post_const = PostConstructor(self._vk_api, self._api_v)
 
         def close(self):
             self._cache.close()
@@ -65,7 +66,7 @@ class VkSession():
         def get_templates(self):
             return self._data.get_templates()
 
-        def add_tag(self, tag_name):
+        def add_tag_post(self, tag_name):
             self._data.insert_or_ignore("tags", (tag_name,))
 
         def save_post(self, post):
@@ -81,6 +82,10 @@ class VkSession():
             posts_info = self._get_posts_info()
             for item in posts_info:
                 self._cache.update(self._curr_group, "posts", item)
+
+        def publish_post(self, post):
+            message, publish_date = self._post_const.create_post(post)
+            self._post_const.publish_post(self._curr_group, message, publish_date)
 
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)
