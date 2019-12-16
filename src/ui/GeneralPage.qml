@@ -1,8 +1,7 @@
-﻿import QtQuick 2.13
+import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.13
-
 
 ApplicationWindow
 {
@@ -18,6 +17,15 @@ ApplicationWindow
 	property variant win;  // for newButtons
 
 	onClosing: authentication.close()
+
+	Component.onCompleted: {
+		console.log("ApplicationWindow onCompleted")
+
+		loader.path = "Posts.qml"
+		componentCache.trim();
+		loader.setSource(loader.path);
+	}
+
 
 	Loader {
 		id: loader
@@ -89,46 +97,40 @@ ApplicationWindow
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 			ComboBox {
-				id: groupComboBox
-				property bool ready: false;
+				id: comboBox
 
 				width: 500
+				currentIndex: 0
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+
 				textRole: "group_name"
 				model: ListModel {
 					id: groupListModel
-
-					ListElement { group_name: "SelectedGroup"; value: 0 }
-					ListElement { group_name: "Long---Long---Long---Long---Long---Name(48chars)"; value: 11111 }
-					ListElement { group_name: "First group"; value: 123 }
-					ListElement { group_name: "Second group"; value: 456 }
-					ListElement { group_name: "Third group"; value: 789 }
 				}
 
-				// groupListModel.append({group_name: editText, value: false})
+				onCurrentIndexChanged: {
+					console.log("groupComboBox: onCurrentIndexChanged: ", currentIndex, "\t", groupListModel.get(currentIndex).value)
+					db_manager.choose_group(groupListModel.get(currentIndex).value)
 
-				onCurrentTextChanged: {
-					console.log("Selected Group clicked")
-					console.log("currentIndex = ", model.get(currentIndex).value)
-
-					if (ready === true && groupListModel.get(0).group_name === "SelectedGroup")
-					{
-						groupListModel.remove(0);
+					if (loader.path !== "PostTemplates.qml") {
+						console.log("reload loaded component")
+						componentCache.trim();
+						loader.setSource(loader.path);
 					}
 
-					//db_manager.choose_group(groupListModel.get(0).group_name) // test group id ("124653069")
 				}
 
 				Component.onCompleted: {
 					console.log("groupComboBox: Component.onCompleted")
-					ready = true;
+					var res_get_groups = db_manager.get_groups()
+					console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
 
-
-				}
-
-				onModelChanged: {
-					console.log("groupComboBox: onModelChanged")
+					for (var i = 0; i < res_get_groups.length; ++i)
+					{
+						console.log("[i]:", i, "res_get_groups[i][0]:", res_get_groups[i][0], "res_get_groups[i][1]:", res_get_groups[i][1])
+						groupListModel.append({group_name: res_get_groups[i][0], value:res_get_groups[i][1] })
+					}
 				}
 			}
 
@@ -172,7 +174,11 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
-					//db_manager.update()
+					db_manager.update()
+					// --- EXAMPLE ---
+					var p = db_manager.load_posts()
+					console.log("GeneralPage:", "db_manager.load_posts():", p)
+					// ---------------
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -222,7 +228,7 @@ ApplicationWindow
 					onClicked: {
 						console.log("newPostButton clicked")
 
-						var component = Qt.createComponent("NewPost.qml");
+						var component = Qt.createComponent("EditPost.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
 					}
@@ -283,14 +289,6 @@ ApplicationWindow
 
 	Connections {
 		target: fileReader
-
-		onVersion: {
-			versionText.text = qsTr("Version " + version)
-		}
-	}
-
-	Connections {
-		target: db_manager
 
 		onVersion: {
 			versionText.text = qsTr("Version " + version)

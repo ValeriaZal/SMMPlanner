@@ -14,8 +14,6 @@ ApplicationWindow
 {
 	id: editPostWindow
 
-	property string postStatus: "postponed";
-
 	width: 600
 	height: 600
 
@@ -161,7 +159,7 @@ ApplicationWindow
 		id: textAreaScrollView
 		//parent: editPostWindow
 
-		height: 323
+		height: 377
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
@@ -181,7 +179,7 @@ ApplicationWindow
 			anchors.topMargin: 1
 			font.family: "MS Shell Dlg 2"
 			anchors.rightMargin: -446
-			anchors.bottomMargin: -284
+			anchors.bottomMargin: -338
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
@@ -322,47 +320,9 @@ ApplicationWindow
 			id: saveButtonsColumnLayout
 
 			RowLayout {
-				id: savePublishRowLayout
-				width: 100
-				height: 100
-
-
-				Button {
-					id: savePostButton
-					text: qsTr("Сохранить")
-					visible: (postStatus === "postponed")
-
-					onClicked: {
-						console.log("savePostButton clicked")
-						// sync with db
-						editPostWindow.close()
-					}
-				}
-
-				Button {
-					id: publishButton
-
-					text: qsTr("Опубликовать")
-					Layout.fillHeight: true
-					Layout.fillWidth: true
-					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-					visible: (postStatus === "postponed")
-
-					onClicked: {
-						console.log("publishButton clicked")
-						// sync with db
-						editPostWindow.close()
-					}
-				}
-			}
-
-			RowLayout {
 				id: dateTimeRowLayout
 				width: 100
 				height: 100
-				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-				Layout.fillHeight: false
-				Layout.fillWidth: true
 
 				Button {
 					id: dateButton
@@ -406,19 +366,42 @@ ApplicationWindow
 			}
 
 			Button {
-				id: deletePostButton
-				text: qsTr("Удалить пост")
+				id: publishButton
+
+				text: qsTr("Закончить редактирование поста")
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 				onClicked: {
-					console.log("deletePostButton clicked")
-					// sync with db
+					console.log("publishButton clicked")
+                    // --- EXAMPLE ---
+                    var res_get_post = db_manager.get_post(1, "data")
+                    console.log("EditPost:", "db_manager.get_post():", res_get_post)
+                    // ---------------
+                    // --- EXAMPLE ---
+                    var res_get_tags = db_manager.get_tags()
+                    console.log("EditPost:", "db_manager.res_get_tags():", res_get_tags)
+                    // ---------------
+                    // --- EXAMPLE ---
+                    var res_get_templates = db_manager.get_templates()
+                    console.log("EditPost:", "db_manager.get_templates():", res_get_templates)
+                    // ---------------
+                    // --- EXAMPLE ---
+                    var res_add_tag = db_manager.add_tag("#add_tag")
+                    console.log("EditPost:", "db_manager.add_tag():", res_add_tag)
+                    // ---------------
+                    // --- EXAMPLE ---
+                    var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
+                    console.log("EditPost:", "db_manager.save_post():", res_save_post)
+                    // ---------------
+                    // --- EXAMPLE ---
+                    // var res_publish_post = db_manager.publish_post(["My title",["art", "music"],"1580558400","It's my text"])
+                    // console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}
-
 		}
 	}
 
@@ -506,8 +489,3 @@ ApplicationWindow
 		}
 	}
 }
-
-
-
-
-

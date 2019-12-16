@@ -194,7 +194,7 @@ ApplicationWindow
 					width: parent.width
 					text: model.text
 					checked: model.checked
-					highlighted: tagComboBox.highlightedIndex === index
+					highlighted: comboBox.highlightedIndex === index
 					onCheckedChanged: model.checked = checked
 				}
 			}
@@ -219,10 +219,10 @@ ApplicationWindow
 			id: textArea
 
 			clip: true
-			anchors.leftMargin: -4
-			anchors.topMargin: -1
-			anchors.rightMargin: -450
-			anchors.bottomMargin: -353
+			anchors.leftMargin: -10
+			anchors.topMargin: -6
+			anchors.rightMargin: -446
+			anchors.bottomMargin: -358
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 			textFormat: Text.RichText
@@ -364,8 +364,15 @@ ApplicationWindow
 
 			onClicked: {
 				console.log("publishButton clicked")
-
-				editPostWindow.close()
+                // --- EXAMPLE ---
+                var res_get_template = db_manager.get_template(["Default"])
+                console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
+                // ---------------
+                // --- EXAMPLE ---
+                var res_save_template = db_manager.save_template(["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]])
+                console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
+                // ---------------
+                editTemplateWindow.close()
 			}
 		}
 	}

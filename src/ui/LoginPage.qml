@@ -1,4 +1,4 @@
-﻿import QtQuick 2.13
+import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 
@@ -72,13 +72,12 @@ ApplicationWindow {
 		WebEngineView {
 			anchors.fill: parent
 			id: webViewContent
-			anchors.bottomMargin: 0
 
 			// Cookies is not permitted for login info
-			profile: WebEngineProfile {
+			/*profile: WebEngineProfile {
 				httpCacheType: WebEngineProfile.NoCache
 				persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
-			}
+			}*/
 
 			// Get url
 			url: get_first_url(app_id, scope, APIv)

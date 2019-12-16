@@ -13,8 +13,6 @@ Rectangle
 	height: 900
 	color: "#f3f3f4"
 
-	property variant win;  // for newButtons
-
 	RowLayout {
 		id: rowLayout
 
@@ -34,6 +32,10 @@ Rectangle
 				console.log("newTemplateButton clicked")
 				var component = Qt.createComponent("EditTemplate.qml");
 				win = component.createObject(applicationWindow);
+                // --- EXAMPLE ---
+                var res_delete_template = db_manager.delete_template("VZ")
+                console.log("GeneralPage:", "db_manager.delete_template():", res_delete_template)
+                // ---------------
 				win.show();
 			}
 		}
@@ -61,107 +63,80 @@ Rectangle
 		color: "transparent"
 
 		ListView {
-			id: templateListView
+			id: list
 			snapMode: ListView.SnapToItem
 			keyNavigationWraps: true
 			clip: true
 			anchors.fill: parent
 			focus: true
 
+			// example
 			model: ListModel {
-				id: templateListModel
+			   ListElement {
+				   name: "Default"
+				   colorCode: "grey"
+			   }
 
-				// example
-				ListElement { name: "Default"; colorCode: "grey" }
-				ListElement { name: "News"; colorCode: "red" }
-				ListElement { name: "Music"; colorCode: "blue" }
-				ListElement { name: "Art"; colorCode: "green" }
-			}
+			   ListElement {
+				   name: "News"
+				   colorCode: "red"
+			   }
 
-			Component.onCompleted: {
-				// load templates from db
-			}
+			   ListElement {
+				   name: "Music"
+				   colorCode: "blue"
+			   }
 
-			delegate: Component {
-				id: listItemDelegate
+			   ListElement {
+				   name: "Art"
+				   colorCode: "green"
+			   }
+		   }
 
-				Rectangle {
-					width: listViewRectangle.width;
-					height: 40
-					color: "transparent"
-					radius: 1
-					border.color: "#d3d2d2"
+		   delegate: Component {
+			   id: listItemDelegate
 
-					RowLayout {
-						id: rowLayoutItemDelegate
-						Layout.fillWidth: listViewRectangle.width
-						spacing: 20
+			   Item {
+				   width: listViewRectangle.width;
+				   height: 40
 
-						Row {
-							id: rowItemDelegate
-							Layout.preferredWidth: 350
-							Layout.fillWidth: true
-							spacing: 20
+				   Row {
+					   spacing: 20
 
-							Rectangle {
-								width: 40
-								height: 40
-								color: colorCode
-								radius: 5
-							}
+					   Rectangle {
+						   width: 40
+						   height: 40
+						   color: colorCode
+						   radius: 5
+					   }
 
-							Text {
-								text: name
-								anchors.verticalCenter: parent.verticalCenter
-								font.bold: true
-							}
-						}
+					   Text {
+						   text: name
+						   anchors.verticalCenter: parent.verticalCenter
+						   font.bold: true
+					   }
+				   }
+				   MouseArea {
+					   anchors.fill: parent
+					   onClicked: list.currentIndex = index
+				   }
+			   }
+		   }
 
-						Button {
-							id: deleteTemplateButton
-							x: 350
-							text: qsTr("x")
-							clip: true
-							Layout.preferredWidth: 20
-							Layout.preferredHeight: 20
-							Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+		   highlight: Rectangle {
+			   color: "lightsteelblue";
+			   radius: 2
+		   }
 
-							onClicked: {
-								console.log(listItemDelegate.text + " removed from list")
-								templateListModel.remove(index)
-								// sync with db
-							}
-
-						}
-
-						MouseArea {
-							anchors.fill: rowItemDelegate
-							onClicked: {
-								templateListView.currentIndex = index
-							}
-
-							onDoubleClicked: {
-								// open EditTemplate with prefilled fields
-
-								// open editPost with templateId
-								var component = Qt.createComponent("EditPost.qml");
-								win = component.createObject(applicationWindow);
-								win.show();
-							}
-						}
-					}
-				}
-			}
-
-			highlight: Rectangle {
-				color: "lightsteelblue"
-				radius: 2
-				//width: rowLayoutItemDelegate.width;
-			}
-
-			onCurrentItemChanged: {
-				console.log(templateListModel.get(templateListView.currentIndex).name + ' template selected')
-			}
-		}
+		   onCurrentItemChanged: {
+			   console.log(model.get(list.currentIndex).name + ' template selected')
+		   }
+	   }
 	}
 }
+
+/*##^##
+Designer {
+	D{i:1;anchors_y:60}D{i:4;anchors_height:60}
+}
+##^##*/

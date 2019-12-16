@@ -1,4 +1,4 @@
-﻿import QtQuick 2.13
+import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Templates 2.13
 
@@ -13,15 +13,6 @@ Item {
 	width: 1440
 	height: 900
 
-	property var calendarStyleData;
-	property date today: new Date();
-	property variant win;  // for newButtons
-
-	function isPastDate(date)
-	{
-		return date >= today
-	}
-
 	Calendar
 	{
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -29,16 +20,11 @@ Item {
 
 		style: CalendarStyle
 		{
-			id: calendarStyle
-
 			gridVisible: true
 
 			dayDelegate: Rectangle
 			{
-				id: dayDelegate
-
-				Component.onCompleted: {calendarStyleData=styleData}
-
+				id: rectDelegate
 				color: styleData.selected
 					   ? "#ffffff"
 					   : (styleData.visibleMonth && styleData.valid
@@ -88,8 +74,6 @@ Item {
 							width: listView.width
 							height: 25
 
-							property var postId; // ?
-
 							Button {
 								id: postButton
 
@@ -102,27 +86,18 @@ Item {
 
 								onClicked: {
 									console.log("Post " + model.name + " clicked")
-
-									// open editPost with postId
-									var component = Qt.createComponent("EditPost.qml");
-									win = component.createObject(applicationWindow);
-									win.show();
 								}
 
 								style: ButtonStyle {
-									background: Rectangle {
-										id: buttonStyleRectangle
+										background: Rectangle {
+											color: model.color // tag color
+											radius: 3
+											opacity: postButton.pressed ? 0.75 : 0.5
+										}
 
-										color: model.color // tag color
-										radius: 3
-										opacity: (postButton.pressed ? 0.75 : ((calendarStyleData.today===true) ? 0.5 : 0.25))
-
-										Component.onCompleted: {console.log("\t" + (isPastDate(calendarStyleData.date) === true ? 0.5 : 0.25) + " " + calendarStyleData.date)}
-									}
-
-									label: Text {
-										text: model.name + " [" + model.time_posting + "] "
-									}
+										label: Text {
+											text: model.name
+										}
 								}
 							}
 						}
@@ -131,31 +106,26 @@ Item {
 						model: ListModel {
 							ListElement {
 								name: "post 1"
-								time_posting: "12:00"
 								color: "grey"
 							}
 
 							ListElement {
 								name: "post 2"
-								time_posting: "20:20"
 								color: "red"
 							}
 
 							ListElement {
 								name: "post 3"
-								time_posting: "15:00"
 								color: "green"
 							}
 
 							ListElement {
 								name: "post 4"
-								time_posting: "12:20"
 								color: "blue"
 							}
 
 							ListElement {
 								name: "post 5"
-								time_posting: "23:00"
 								color: "black"
 							}
 						}
