@@ -13,7 +13,7 @@ class WindowManager(QtCore.QObject):
         super().__init__(parent)
 
         self.api_v = "5.101"
-        self.app_id = "7221578"
+        self.app_id = "7228740"
         self.scope = "groups,wall,photos"
 
         self._current_page = ""
@@ -44,6 +44,9 @@ class WindowManager(QtCore.QObject):
 
         self._db_manager.get_template_signal.connect(self.on_get_template)
         self._db_manager.save_template_signal.connect(self.on_save_template)
+
+        self._authentication.get_wall_posts_signal.connect(self.on_get_wall_posts)
+        self._authentication.get_wall_postponed_signal.connect(self.on_get_wall_postponed)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
@@ -122,6 +125,12 @@ class WindowManager(QtCore.QObject):
 
     def on_save_template(self):
         self.vk_session.save_template(self._db_manager.template)
+
+    def on_get_wall_posts(self):
+        self._authentication._group_id = self.vk_session._curr_group
+
+    def on_get_wall_postponed(self):
+        self._authentication._group_id = self.vk_session._curr_group
 
 
     @property
