@@ -271,6 +271,31 @@ class DataDatabase:
                 return rows[0][0]
             return 0
 
+        def delete_post(self, post_id):
+            cur = self._conn.cursor()
+            cur.execute("DELETE FROM posts WHERE id=?", (post_id, ))
+            self._conn.commit()
+
+        def get_template(self, template_name):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM templates WHERE name=?", (template_name, ))
+            rows = cur.fetchall()
+            res = []
+            if(len(rows) > 0):
+                res = list(rows[0])[1:]
+                cur.execute("SELECT * FROM temp_tag_list WHERE template_id=?", (f"{rows[0][0]}",))
+                tag_list_rows = cur.fetchall()
+                tags = []
+                if(len(tag_list_rows) > 0):
+                    for tag_r in tag_list_rows:
+                        cur.execute("SELECT * FROM tags WHERE id=?", (f"{tag_r[2]}",))
+                        tags_rows = cur.fetchall()
+                        if(len(tags_rows) > 0):
+                            tags.append(tags_rows[0][1])
+                res.append(tags)
+                return res
+            return []
+
     instance = None
     def __init__(self, user_id):
         if not DataDatabase.instance:

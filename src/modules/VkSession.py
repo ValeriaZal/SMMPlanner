@@ -7,6 +7,7 @@ import time
 
 from modules.CacheDatabase import CacheDatabase
 from modules.DataDatabase import DataDatabase
+from modules.PostConstructor import PostConstructor
 
 non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 
@@ -88,6 +89,10 @@ class VkSession():
             self._post_const.publish_post(self._curr_group, message, publish_date)
             post_id = self._data.get_post_id(publish_date)
             self._data.delete_post(post_id)
+
+        def get_template(self, template_name):
+            res = self._data.get_template(template_name)
+            return res
 
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)

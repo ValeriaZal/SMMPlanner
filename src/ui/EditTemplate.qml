@@ -364,8 +364,11 @@ ApplicationWindow
 
 			onClicked: {
 				console.log("publishButton clicked")
-
-				editPostWindow.close()
+                // --- EXAMPLE ---
+                var res_get_template = db_manager.get_template(["Default"])
+                console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
+                // ---------------
+                editTemplateWindow.close()
 			}
 		}
 	}
