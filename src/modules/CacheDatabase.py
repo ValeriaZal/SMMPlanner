@@ -159,6 +159,17 @@ class CacheDatabase:
                 return res
             return []
 
+        def get_groups(self):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM groups")
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    res.append([r[2], r[1]])
+                return res
+            return []
+
         def get_group_id(self, vk_id):
             cur = self._conn.cursor()
             cur.execute("SELECT 1 FROM groups WHERE vk_id=?", (vk_id,))

@@ -103,7 +103,13 @@ ApplicationWindow
                         }
                         onReleased: {
                             console.log("Selected Group clicked")
+                            // --- EXAMPLE ---
                             db_manager.choose_group("124653069") // test group id
+                            // ---------------
+                            // --- EXAMPLE ---
+                            var res_get_groups = db_manager.get_groups()
+                            console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
+                            // ---------------
                         }
                     }
                 }

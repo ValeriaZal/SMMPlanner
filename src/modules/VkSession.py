@@ -67,6 +67,9 @@ class VkSession():
         def get_templates(self):
             return self._data.get_templates()
 
+        def get_groups(self):
+            return self._cache.get_groups()
+
         def add_tag(self, tag_name):
             self._data.insert_or_ignore("tags", (tag_name,))
 

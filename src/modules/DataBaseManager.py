@@ -7,6 +7,7 @@ class DataBaseManager(QtCore.QObject):
     get_post_signal = QtCore.pyqtSignal()
     get_tags_signal = QtCore.pyqtSignal()
     get_templates_signal = QtCore.pyqtSignal()
+    get_groups_signal = QtCore.pyqtSignal()
     add_tag_signal = QtCore.pyqtSignal()
     save_post_signal = QtCore.pyqtSignal()
     publish_post_signal = QtCore.pyqtSignal()
@@ -16,7 +17,7 @@ class DataBaseManager(QtCore.QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._curr_group = ""
-        self._groups = ""
+        self._groups = []
         self._posts = []
         self._post_id = ""
         self._db = ""
@@ -55,6 +56,10 @@ class DataBaseManager(QtCore.QObject):
     @QtCore.pyqtProperty(list)
     def templates(self):
         return self._templates
+
+    @QtCore.pyqtProperty(list)
+    def groups(self):
+        return self._groups
 
     @QtCore.pyqtProperty(str)
     def tag(self):
@@ -106,6 +111,12 @@ class DataBaseManager(QtCore.QObject):
     def get_templates(self):
         self.get_templates_signal.emit()
         return self._templates
+
+    # get_groups() -> [[<group names>, <group id>]]
+    @QtCore.pyqtSlot(result=list)
+    def get_groups(self):
+        self.get_groups_signal.emit()
+        return self._groups
 
     # add_tag(tag_name) -> True/False (might be ignored)
     @QtCore.pyqtSlot(str, result=bool)
@@ -181,5 +192,9 @@ class DataBaseManager(QtCore.QObject):
     @template.setter
     def template(self, template):
         self._template = template
+
+    @groups.setter
+    def groups(self, groups):
+        self._groups = groups
 
 
