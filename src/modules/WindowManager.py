@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, QtCore, QtQml
 from modules.ComponentCacheManager import ComponentCacheManager
 from modules.AuthenticationManager import AuthenticationManager
 from modules.DataBaseManager import DataBaseManager
+from modules.FileReader import FileReader
 
 from modules.VkSession import VkSession
 
@@ -24,6 +25,7 @@ class WindowManager(QtCore.QObject):
         self._authentication = AuthenticationManager()
         self._manager = ComponentCacheManager(self._engine)
         self._db_manager = DataBaseManager()
+        self._reader = FileReader()
 
 
         self._authentication.login_signal.connect(self.on_login_signal)
@@ -66,6 +68,9 @@ class WindowManager(QtCore.QObject):
         )
         self._engine.rootContext().setContextProperty(
             "scope", self.scope
+        )
+        self._engine.rootContext().setContextProperty(
+            "fileReader", self._reader
         )
 
     def init(self):
