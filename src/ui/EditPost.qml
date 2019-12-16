@@ -391,6 +391,10 @@ ApplicationWindow
                     var res_add_tag = db_manager.add_tag("#add_tag")
                     console.log("EditPost:", "db_manager.add_tag():", res_add_tag)
                     // ---------------
+                    // --- EXAMPLE ---
+                    var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
+                    console.log("EditPost:", "db_manager.save_post():", res_save_post)
+                    // ---------------
 					editPostWindow.close()
 				}
 			}

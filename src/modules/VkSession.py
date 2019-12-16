@@ -68,6 +68,15 @@ class VkSession():
         def add_tag(self, tag_name):
             self._data.insert_or_ignore("tags", (tag_name,))
 
+        def save_post(self, post):
+            tuple_post, tags = self._data.post_to_save(post)
+            tuple_post[1] = "-"+str(self._curr_group)
+            self._data.insert_or_replace("posts", tuple(tuple_post))
+            post_id = self._data.get_post_id(post[3])
+            for tag in tags:
+                tag_id = self._data.get_tag_id(tag)
+                self._data.insert("post_tag_list", (post_id, tag_id))
+
         def update(self):
             posts_info = self._get_posts_info()
             for item in posts_info:

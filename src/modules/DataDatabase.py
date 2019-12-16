@@ -57,7 +57,7 @@ class DataDatabase:
                                             name text NOT NULL,
                                             group_id integer NOT NULL,
                                             template_id integer,
-                                            status integer,
+                                            status text,
                                             date integer,
                                             text text,
                                             FOREIGN KEY (template_id) REFERENCES templates (id)
@@ -243,6 +243,33 @@ class DataDatabase:
                     res.append(r[1])
                 return res
             return []
+
+        def post_to_save(self, post):
+            cur = self._conn.cursor()
+            template_id = 1
+            cur.execute("SELECT * FROM templates WHERE name=?", (post[1],))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                template_id = rows[0][0]
+            tuple_post = [post[0],0,template_id,"Saved",post[3],post[4]]
+            tags = post[3]
+            return tuple_post, tags
+
+        def get_post_id(self, date):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE date=?", (date, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
+
+        def get_tag_id(self, tag):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM tags WHERE name=?", (tag, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
 
     instance = None
     def __init__(self, user_id):
