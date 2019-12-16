@@ -92,6 +92,7 @@ class DataDatabase:
                                             id integer PRIMARY KEY,
                                             post_id integer,
                                             tag_id integer,
+                                            UNIQUE(tag_id, post_id),
                                             FOREIGN KEY (tag_id) REFERENCES tags (id),
                                             FOREIGN KEY (post_id) REFERENCES posts (id)
                                         ); """
@@ -100,6 +101,7 @@ class DataDatabase:
                                             id integer PRIMARY KEY,
                                             template_id integer,
                                             tag_id integer,
+                                            UNIQUE(tag_id, template_id),
                                             FOREIGN KEY (tag_id) REFERENCES tags (id),
                                             FOREIGN KEY (template_id) REFERENCES templates (id)
                                         ); """
@@ -266,6 +268,14 @@ class DataDatabase:
         def get_tag_id(self, tag):
             cur = self._conn.cursor()
             cur.execute("SELECT * FROM tags WHERE name=?", (tag, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
+
+        def get_template_id(self, template_name):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM templates WHERE name=?", (template_name, ))
             rows = cur.fetchall()
             if(len(rows) > 0):
                 return rows[0][0]

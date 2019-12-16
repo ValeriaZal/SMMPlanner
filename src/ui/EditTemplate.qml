@@ -368,6 +368,10 @@ ApplicationWindow
                 var res_get_template = db_manager.get_template(["Default"])
                 console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
                 // ---------------
+                // --- EXAMPLE ---
+                var res_save_template = db_manager.save_template(["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]])
+                console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
+                // ---------------
                 editTemplateWindow.close()
 			}
 		}

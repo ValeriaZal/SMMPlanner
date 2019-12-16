@@ -40,7 +40,9 @@ class WindowManager(QtCore.QObject):
         self._db_manager.add_tag_signal.connect(self.on_add_tag)
         self._db_manager.save_post_signal.connect(self.on_save_post)
         self._db_manager.publish_post_signal.connect(self.on_publish_post)
+
         self._db_manager.get_template_signal.connect(self.on_get_template)
+        self._db_manager.save_template_signal.connect(self.on_save_template)
 
         self._engine.rootContext().setContextProperty(
             "authentication", self._authentication
@@ -113,6 +115,9 @@ class WindowManager(QtCore.QObject):
         template_name = self._db_manager.template_name
         res = self.vk_session.get_template(template_name)
         self._db_manager.template = res
+
+    def on_save_template(self):
+        self.vk_session.save_template(self._db_manager.template)
 
 
     @property

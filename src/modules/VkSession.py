@@ -94,6 +94,13 @@ class VkSession():
             res = self._data.get_template(template_name)
             return res
 
+        def save_template(self, template):
+            self._data.insert_or_replace("templates", (template[0], template[1], template[2], template[3],))
+            post_id = self._data.get_template_id(template[1])
+            for tag in template[-1]:
+                tag_id = self._data.get_tag_id(tag)
+                self._data.insert_or_ignore("temp_tag_list", (post_id, tag_id))
+
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)
             groups_info = []
