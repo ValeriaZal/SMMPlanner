@@ -13,6 +13,7 @@ class DataBaseManager(QtCore.QObject):
     publish_post_signal = QtCore.pyqtSignal()
     get_template_signal = QtCore.pyqtSignal()
     save_template_signal = QtCore.pyqtSignal()
+    delete_template_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -151,6 +152,13 @@ class DataBaseManager(QtCore.QObject):
     def save_template(self, template):
         self._template = template
         self.save_template_signal.emit()
+        return True
+
+    # delete_template(template_name) -> True/False
+    @QtCore.pyqtSlot(str, result=bool)
+    def delete_template(self, template_name):
+        self._template_name = template_name
+        self.delete_template_signal.emit()
         return True
 
     @posts.setter

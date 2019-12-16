@@ -306,6 +306,24 @@ class DataDatabase:
                 return res
             return []
 
+        def delete_template(self, template_id):
+            cur = self._conn.cursor()
+            cur.execute("DELETE FROM templates WHERE id=?", (template_id, ))
+            self._conn.commit()
+
+        def change_post_templates(self, template_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE template_id=?", (template_id, ))
+            rows = cur.fetchall()
+            res = []
+            if(len(rows) > 0):
+                default_id = self.get_template_id("Default")
+                for r in rows:
+                    cur.execute(f"UPDATE posts SET template_id={default_id} WHERE template_id={template_id} AND id={r[0]}")
+                    self._conn.commit()
+                return True
+            return False
+
     instance = None
     def __init__(self, user_id):
         if not DataDatabase.instance:

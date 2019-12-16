@@ -32,6 +32,10 @@ Rectangle
 				console.log("newTemplateButton clicked")
 				var component = Qt.createComponent("EditTemplate.qml");
 				win = component.createObject(applicationWindow);
+                // --- EXAMPLE ---
+                var res_delete_template = db_manager.delete_template("VZ")
+                console.log("GeneralPage:", "db_manager.delete_template():", res_delete_template)
+                // ---------------
 				win.show();
 			}
 		}

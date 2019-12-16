@@ -44,6 +44,7 @@ class WindowManager(QtCore.QObject):
 
         self._db_manager.get_template_signal.connect(self.on_get_template)
         self._db_manager.save_template_signal.connect(self.on_save_template)
+        self._db_manager.delete_template_signal.connect(self.on_delete_template)
 
         self._authentication.get_wall_posts_signal.connect(self.on_get_wall_posts)
         self._authentication.get_wall_postponed_signal.connect(self.on_get_wall_postponed)
@@ -132,6 +133,8 @@ class WindowManager(QtCore.QObject):
     def on_get_wall_postponed(self):
         self._authentication._group_id = self.vk_session._curr_group
 
+    def on_delete_template(self):
+        self.vk_session.delete_template(self._db_manager._template_name)
 
     @property
     def current_page(self):
