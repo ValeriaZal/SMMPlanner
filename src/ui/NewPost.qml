@@ -396,7 +396,21 @@ ApplicationWindow
 				onClicked: {
 					console.log("savePostButton clicked")
 
-					var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
+					var tagList = [];
+					for (var i = 0; i < tagsListModel.count; ++i) {
+						if (tagsListModel.get(i).checked === true) {
+							tagList.push(tagsListModel.get(i).text.toString());
+						}
+					}
+
+					// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
+					var res_save_post = db_manager.publish_post(
+								//["My title",["art", "music"],"1580558400","It's my text"]
+								[namePostTextEdit.text.toString(),
+								tagList,
+								post_date.toString(),
+								textArea.text.toString()]
+								)
 					console.log("EditPost:", "db_manager.save_post():", res_save_post)
 				}
 			}
@@ -404,7 +418,7 @@ ApplicationWindow
 			Button {
 				id: publishPostButton
 
-				text: qsTr("Закончить редактирование поста")
+				text: qsTr("Опубликовать пост")
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

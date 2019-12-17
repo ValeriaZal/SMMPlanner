@@ -14,7 +14,7 @@ class WindowManager(QtCore.QObject):
         super().__init__(parent)
 
         self.api_v = "5.101"
-        self.app_id = "7228740"
+        self.app_id = "7250243" # 7221578 ## "7228740"
         self.scope = "groups,wall,photos"
 
         self._current_page = ""

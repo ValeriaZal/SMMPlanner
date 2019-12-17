@@ -1,17 +1,42 @@
 import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Templates 2.13
-
+import QtQml 2.0
 import QtQuick.Layouts 1.4
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
 
-Item {
+Rectangle {
 	id: calendarWindow
 
 	width: 1440
 	height: 900
+
+	Component.onCompleted: {
+		//console.log("calendarWindow.onCompleted", applicationWindow.list_posts)
+	}
+
+	function getDayListPosts(sdate) {
+		console.log("getDayListPosts: ", sdate)
+		var dayList = []
+		for (var i = 0; i < applicationWindow.list_posts.length; ++i) {
+			var tmp_date;
+			tmp_date = new Date(list_posts[i][3]*1000).setHours(12)
+			tmp_date = new Date(tmp_date).setMinutes(0)
+			tmp_date = new Date(tmp_date).setSeconds(0)
+			tmp_date = new Date(tmp_date).setMilliseconds(0)
+			//console.log(i, "tmp_date:", tmp_date, "tmp_date.getHours/Minutes():", tmp_date.getHours(), tmp_date.getMinutes())
+			//console.log(i, "tmp_date: ", tmp_date)
+			if (tmp_date === sdate) {
+				console.log("tmp_date === sdate")
+				dayList.push(list_posts[i])
+				console.log(i, "tmp_date:", tmp_date, "list_posts[i]", list_posts[i])
+			}
+		}
+		return dayList
+	}
+
 
 	Calendar
 	{
@@ -102,32 +127,23 @@ Item {
 							}
 						}
 
-						// example
+						// load_posts (list of post<id, title, color, time, status>)
 						model: ListModel {
-							ListElement {
-								name: "post 1"
-								color: "grey"
+							id: delegateListModel
+							//ListElement { post_id: 1; name: "post test"; color: "grey" }
+						}
+
+						Component.onCompleted: {
+							console.log("listView.onCompleted", styleData.date)
+							var dayListPost = getDayListPosts(styleData.date.getTime())
+							for (var i = 0; i < dayListPost.length; ++i) {
+								var color = "grey"
+								if (dayListPost[i][1] !== "VK post" && dayListPost[i][4] !== "Published") {
+									color = dayListPost[i][2]
+								}
+								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4]})
 							}
 
-							ListElement {
-								name: "post 2"
-								color: "red"
-							}
-
-							ListElement {
-								name: "post 3"
-								color: "green"
-							}
-
-							ListElement {
-								name: "post 4"
-								color: "blue"
-							}
-
-							ListElement {
-								name: "post 5"
-								color: "black"
-							}
 						}
 					}
 				}

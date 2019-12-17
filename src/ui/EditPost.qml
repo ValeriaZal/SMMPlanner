@@ -20,7 +20,7 @@ ApplicationWindow
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование поста")
 
-	property var post_id: 0 // TODO
+	//property var post_id: 0 // TODO
 	property var post_date: new Date()
 
 	function find(model, criteria)
@@ -39,7 +39,8 @@ ApplicationWindow
 	Component.onCompleted: {
 		console.log("editPostWindow.onCompleted")
 		// get_post(post_id, db) -> ["title","template_name","colour",[<tags>],"date","text"]
-		db_manager.get_post()
+		var res_get_post = db_manager.get_post(selected_post_id, "data")
+		console.log("EditPost:", "db_manager.get_post():", res_get_post)
 
 	}
 

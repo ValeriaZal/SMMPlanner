@@ -15,6 +15,7 @@ ApplicationWindow
 
 	property var access_token: ""
 	property variant win;  // for newButtons
+	property var list_posts: []
 
 	onClosing: authentication.close()
 
@@ -126,7 +127,7 @@ ApplicationWindow
 					var res_get_groups = db_manager.get_groups()
 					console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
 
-					if (groupListModel.count !== 0) {
+					if (groupListModel.count === 0) {
 						for (var i = 0; i < res_get_groups.length; ++i)
 						{
 							console.log("[i]:", i, "res_get_groups[i][0]:", res_get_groups[i][0], "res_get_groups[i][1]:", res_get_groups[i][1])
@@ -178,8 +179,8 @@ ApplicationWindow
 					console.log("calendarButton clicked")
 					db_manager.update()
 					// --- EXAMPLE ---
-					var p = db_manager.load_posts()
-					console.log("GeneralPage:", "db_manager.load_posts():", p)
+					list_posts = db_manager.load_posts()
+					console.log("calendarWindow:", "db_manager.load_posts():", list_posts)
 					// ---------------
 					loader.path = "Calendar.qml"
 					componentCache.trim();
