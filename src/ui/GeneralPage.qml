@@ -126,10 +126,12 @@ ApplicationWindow
 					var res_get_groups = db_manager.get_groups()
 					console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
 
-					for (var i = 0; i < res_get_groups.length; ++i)
-					{
-						console.log("[i]:", i, "res_get_groups[i][0]:", res_get_groups[i][0], "res_get_groups[i][1]:", res_get_groups[i][1])
-						groupListModel.append({group_name: res_get_groups[i][0], value:res_get_groups[i][1] })
+					if (groupListModel.count !== 0) {
+						for (var i = 0; i < res_get_groups.length; ++i)
+						{
+							console.log("[i]:", i, "res_get_groups[i][0]:", res_get_groups[i][0], "res_get_groups[i][1]:", res_get_groups[i][1])
+							groupListModel.append({group_name: res_get_groups[i][0], value:res_get_groups[i][1] })
+						}
 					}
 				}
 			}
@@ -228,7 +230,7 @@ ApplicationWindow
 					onClicked: {
 						console.log("newPostButton clicked")
 
-						var component = Qt.createComponent("EditPost.qml");
+						var component = Qt.createComponent("NewPost.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
 					}
@@ -273,7 +275,7 @@ ApplicationWindow
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 						Layout.fillHeight: false
 						Layout.fillWidth: false
-
+						visible: false
 						onClicked: {
 							console.log("newTemplateButton clicked")
 

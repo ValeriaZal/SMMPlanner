@@ -100,6 +100,7 @@ class VkSession():
         def save_template(self, template):
             self._data.insert_or_replace("templates", (template[0], template[1], template[2], template[3],))
             post_id = self._data.get_template_id(template[1])
+            #template_id = self._data.get_template_id(template[1])
             for tag in template[-1]:
                 tag_id = self._data.get_tag_id(tag)
                 self._data.insert_or_ignore("temp_tag_list", (post_id, tag_id))

@@ -18,7 +18,9 @@ ApplicationWindow
 	height: 600
 
 	color: "#f3f3f4"
-	title: qsTr("SMMPlanner: Создание поста")
+	title: qsTr("SMMPlanner: Редактирование поста")
+
+	property var post_date: new Date()
 
 	function find(model, criteria)
 	{
@@ -31,6 +33,27 @@ ApplicationWindow
 		}
 		return -1
 	}
+
+
+	Component.onCompleted: {
+		console.log("newPostWindow.onCompleted")
+		// get_post(post_id, db) -> ["title","template_name","colour",[<tags>],"date","text"]
+
+		var list_templates = db_manager.get_templates() // [<Names of templates>]
+		console.log(list_templates, list_templates.count, list_templates.length)
+		for (var i = 0; i < list_templates.length; ++i) {
+			templateComboBoxModel.append({template: list_templates[i]})
+		}
+		templateComboBox.currentIndex = 0
+
+
+		var list_tags = db_manager.get_tags() // [<tags>]
+		for (i = 0; i < list_tags.length; ++i) {
+			tagsListModel.append({tag: list_tags[i], checked: false})
+		}
+	}
+
+
 
 	RowLayout {
 		id: nameRowLayout
@@ -93,27 +116,45 @@ ApplicationWindow
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-			// example
-			model: [ "Default", "Music", "Info" ]
+			model: ListModel {
+				id: templateComboBoxModel
+				ListElement { template: "Default" } // temporary
+			}
 		}
+
 
 		ComboBox
 		{
 			id: tagComboBox
-			flat: false
+
+			focusPolicy: Qt.ClickFocus
+			wheelEnabled: false
+			clip: true
 			editable: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 			displayText: qsTr("Tags")
+			font.bold: true
 			Layout.fillHeight: true
 
+			// example
 			model: ListModel
 			{
 				id: tagsListModel
+				//ListElement { tag: "#music"; checked: false }
+			}
 
-				//example
-				ListElement { tag: "#music"; checked: false }
-				ListElement { tag: "#info"; checked: false }
-				ListElement { tag: "#tag"; checked: false }
+			onAccepted: {
+				var editTextTmp = tagComboBox.editText
+				if (editTextTmp.charAt(0) !== '#') {
+					editTextTmp = "#" + editTextTmp;
+				}
+				console.log(tagsListModel, editTextTmp)
+
+				if (find(tagsListModel, function(ListElement) { return ListElement.tag === editTextTmp }) === -1)
+				{
+					tagsListModel.append({tag: editTextTmp, checked: true})
+					db_manager.add_tag(editTextTmp)
+				}
 			}
 
 			delegate: Item
@@ -126,25 +167,11 @@ ApplicationWindow
 					id: checkDelegate
 					width: parent.width
 					text: model.tag
-					highlighted: tagComboBox.highlightedIndex === index
 					checked: model.checked
+					highlighted: comboBox.highlightedIndex === index
 					onCheckedChanged: model.checked = checked
 				}
 			}
-
-			onAccepted: {
-				if (find(tagsListModel, function(ListElement) { return ListElement.tag === tagComboBox.editText }) === -1)
-				{
-					var editTextTmp = tagComboBox.editText
-					if (editTextTmp.charAt(0) !== '#') {
-						editTextTmp = "#" + editTextTmp;
-					}
-					console.log(editTextTmp.charAt(0))
-
-					tagsListModel.append({tag: editTextTmp, checked: true})
-				}
-			}
-
 		}
 	}
 
@@ -368,7 +395,9 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("savePostButton clicked")
-					// sync with db
+
+					var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
+					console.log("EditPost:", "db_manager.save_post():", res_save_post)
 				}
 			}
 
@@ -382,13 +411,56 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("publishPostButton clicked")
-					// sync with db
+
+					var tagList = [];
+					for (var i = 0; i < tagsListModel.count; ++i) {
+						if (tagsListModel.get(i).checked === true) {
+							tagList.push(tagsListModel.get(i).text.toString());
+						}
+					}
+
+					// publish_post(["title",[<tags>],"date","text"]) -> True/False
+					var res_publish_post = db_manager.publish_post(
+								//["My title",["art", "music"],"1580558400","It's my text"]
+								[namePostTextEdit.text.toString(),
+								tagList,
+								post_date.toString(),
+								textArea.text.toString()]
+								)
+					console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
 					newPostWindow.close()
 				}
 			}
 		}
 	}
 
+	/*
+	console.log("publishButton clicked")
+	// --- EXAMPLE ---
+	var res_get_post = db_manager.get_post(1, "data")
+	console.log("EditPost:", "db_manager.get_post():", res_get_post)
+	// ---------------
+	// --- EXAMPLE ---
+	var res_get_tags = db_manager.get_tags()
+	console.log("EditPost:", "db_manager.res_get_tags():", res_get_tags)
+	// ---------------
+	// --- EXAMPLE ---
+	var res_get_templates = db_manager.get_templates()
+	console.log("EditPost:", "db_manager.get_templates():", res_get_templates)
+	// ---------------
+	// --- EXAMPLE ---
+	var res_add_tag = db_manager.add_tag("#add_tag")
+	console.log("EditPost:", "db_manager.add_tag():", res_add_tag)
+	// ---------------
+	// --- EXAMPLE ---
+	var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
+	console.log("EditPost:", "db_manager.save_post():", res_save_post)
+	// ---------------
+	// --- EXAMPLE ---
+	// var res_publish_post = db_manager.publish_post(["My title",["art", "music"],"1580558400","It's my text"])
+	// console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
+	// ---------------
+	*/
 
 	Dialog {
 		id: dateTimePickerDialog
@@ -402,8 +474,9 @@ ApplicationWindow
 
 		onAccepted: {
 			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
-			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString())
+			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString(), "timestamp: ", datePicker.selectedDate.getTime().toString())
 
+			post_date = datePicker.selectedDate.getTime()
 			dateTimeText.text = qsTr(datePicker.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
 									 + " " + hoursComboBox.currentIndex.toString()
 									 + ":" + minutesComboBox.currentIndex.toString())
@@ -473,8 +546,3 @@ ApplicationWindow
 		}
 	}
 }
-
-
-
-
-

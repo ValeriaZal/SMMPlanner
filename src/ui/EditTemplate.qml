@@ -16,6 +16,9 @@ ApplicationWindow
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование шаблона поста")
 
+	property string template_name: "Default"
+	property var template_idx: 0
+
 	function find(model, criteria)
 	{
 		for(var i = 0; i < model.count; ++i)
@@ -26,6 +29,30 @@ ApplicationWindow
 			}
 		}
 		return -1
+	}
+
+
+	Component.onCompleted: {
+		console.log("\t\teditTemplateWindow:", templatesWindow)
+		if (templatesWindow !== undefined) {
+			template_name = templatesWindow.template_name
+			template_idx = templatesWindow.template_idx
+		}
+
+		console.log("editTemplateWindow:", template_name, template_idx)
+
+		var i = (template_idx === 0) ? 0 : 1;
+		for (; i < templateListModel.count; ++i) {
+			templateComboBoxModel.append({template: templateListModel.get(i).name})
+		}
+
+		templateComboBox.currentIndex = template_idx
+
+		// --- EXAMPLE ---
+		//var res_get_template = db_manager.get_template(["Default"])
+		var res_get_template = ["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]]
+		console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
+		// ---------------
 	}
 
 
@@ -123,17 +150,15 @@ ApplicationWindow
 
 			Layout.fillWidth: true
 			displayText: qsTr("Выбранный шаблон: " + currentText)
+			textRole: template
 			font.bold: true
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-			// example
-			model:
-			[
-				"Default",
-				"Music",
-				"Info"
-			]
+			model: ListModel {
+				id: templateComboBoxModel
+				//ListElement { template: "Default" }
+			}
 		}
 
 		ComboBox
@@ -152,34 +177,21 @@ ApplicationWindow
 			// example
 			model: ListModel
 			{
-				id: tagsModel
-
-				ListElement
-				{
-					text: "#music"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#info"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#info"
-					checked: false
-				}
-				ListElement
-				{
-					text: "#tag"
-					checked: false
-				}
+				id: tagsListModel
+				//ListElement { text: "#music"; checked: false }
 			}
 
 			onAccepted: {
-				if (find(model, function(ListElement) { return ListElement.text === editText }) === -1)
+				var editTextTmp = tagComboBox.editText
+				if (editTextTmp.charAt(0) !== '#') {
+					editTextTmp = "#" + editTextTmp;
+				}
+				console.log(tagsListModel, editTextTmp)
+
+				if (find(tagsListModel, function(ListElement) { return ListElement.tag === editTextTmp }) === -1)
 				{
-					model.append({text: editText, checked: false})
+					tagsListModel.append({tag: editTextTmp, checked: true})
+					db_manager.add_tag(editTextTmp)
 				}
 			}
 
@@ -192,7 +204,7 @@ ApplicationWindow
 				{
 					id: checkDelegate
 					width: parent.width
-					text: model.text
+					text: model.tag
 					checked: model.checked
 					highlighted: comboBox.highlightedIndex === index
 					onCheckedChanged: model.checked = checked
@@ -225,7 +237,7 @@ ApplicationWindow
 			anchors.bottomMargin: -358
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-			textFormat: Text.RichText
+			textFormat: Text.AutoText
 			verticalAlignment: Text.AlignTop
 			placeholderText: qsTr("Что у Вас нового?")
 			selectByMouse: true
@@ -364,15 +376,27 @@ ApplicationWindow
 
 			onClicked: {
 				console.log("publishButton clicked")
-                // --- EXAMPLE ---
-                var res_get_template = db_manager.get_template(["Default"])
-                console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
-                // ---------------
-                // --- EXAMPLE ---
-                var res_save_template = db_manager.save_template(["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]])
-                console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
-                // ---------------
-                editTemplateWindow.close()
+
+				//var res_save_template = db_manager.save_template(["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]])
+
+				var tagList = [];
+				for (var i = 0; i < tagsListModel.count; ++i) {
+					if (tagsListModel.get(i).checked === true) {
+						tagList.push(tagsListModel.get(i).text.toString());
+					}
+				}
+
+				console.log("EditTemplate: save template: ", namePostTextEdit.text.toString(), templateColorButtonBackground.color.toString(), templateComboBox.currentText.toString(), textArea.text.toString(), tagList)
+				var res_save_template = db_manager.save_template(
+							[namePostTextEdit.text.toString(),
+							 templateColorButtonBackground.color.toString(),
+							 templateComboBox.currentText.toString(),
+							 textArea.text.toString(),
+							 tagList])
+				console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
+
+				templateListModel.append({name: namePostTextEdit.text, colorCode: templateColorButtonBackground.color })
+				editTemplateWindow.close()
 			}
 		}
 	}
@@ -393,6 +417,8 @@ ApplicationWindow
 			console.log("Canceled color")
 		}
 	}
+
+
 
 	function updateImageListModel(fileUrls, model)
 	{

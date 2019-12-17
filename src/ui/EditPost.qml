@@ -20,6 +20,9 @@ ApplicationWindow
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование поста")
 
+	property var post_id: 0 // TODO
+	property var post_date: new Date()
+
 	function find(model, criteria)
 	{
 		for(var i = 0; i < model.count; ++i)
@@ -31,6 +34,16 @@ ApplicationWindow
 		}
 		return -1
 	}
+
+
+	Component.onCompleted: {
+		console.log("editPostWindow.onCompleted")
+		// get_post(post_id, db) -> ["title","template_name","colour",[<tags>],"date","text"]
+		db_manager.get_post()
+
+	}
+
+
 
 	RowLayout {
 		id: nameRowLayout
@@ -93,38 +106,43 @@ ApplicationWindow
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-			// example
-			model: [ "Default", "Music", "Info" ]
+			model: ListModel {
+				id: templateComboBoxModel
+				//ListElement { template: "Default" }
+			}
 		}
 
 		ComboBox
 		{
 			id: tagComboBox
-			flat: false
+
+			focusPolicy: Qt.ClickFocus
+			wheelEnabled: false
+			clip: true
 			editable: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 			displayText: qsTr("Tags")
+			font.bold: true
 			Layout.fillHeight: true
 
+			// example
 			model: ListModel
 			{
 				id: tagsListModel
+				//ListElement { tag: "#music"; checked: false }
+			}
 
-				//example
-				ListElement
-				{
-					tag: "#music"
-					checked: false
+			onAccepted: {
+				var editTextTmp = tagComboBox.editText
+				if (editTextTmp.charAt(0) !== '#') {
+					editTextTmp = "#" + editTextTmp;
 				}
-				ListElement
+				console.log(tagsListModel, editTextTmp)
+
+				if (find(tagsListModel, function(ListElement) { return ListElement.tag === editTextTmp }) === -1)
 				{
-					tag: "#info"
-					checked: false
-				}
-				ListElement
-				{
-					tag: "#tag"
-					checked: false
+					tagsListModel.append({tag: editTextTmp, checked: true})
+					db_manager.add_tag(editTextTmp)
 				}
 			}
 
@@ -138,19 +156,11 @@ ApplicationWindow
 					id: checkDelegate
 					width: parent.width
 					text: model.tag
-					highlighted: comboBox.highlightedIndex === index
 					checked: model.checked
+					highlighted: comboBox.highlightedIndex === index
 					onCheckedChanged: model.checked = checked
 				}
 			}
-
-			onAccepted: {
-				if (find(model, function(ListElement) { return ListElement.tag === editText }) === -1)
-				{
-					model.append({tag: editText, checked: false})
-				}
-			}
-
 		}
 	}
 
@@ -159,7 +169,7 @@ ApplicationWindow
 		id: textAreaScrollView
 		//parent: editPostWindow
 
-		height: 377
+		height: 323
 		anchors.right: parent.right
 		anchors.rightMargin: 6
 		anchors.left: parent.left
@@ -320,9 +330,47 @@ ApplicationWindow
 			id: saveButtonsColumnLayout
 
 			RowLayout {
+				id: savePublishRowLayout
+				width: 100
+				height: 100
+
+
+				Button {
+					id: savePostButton
+					text: qsTr("Сохранить")
+					visible: (postStatus === "postponed")
+
+					onClicked: {
+						console.log("savePostButton clicked")
+						// sync with db
+						editPostWindow.close()
+					}
+				}
+
+				Button {
+					id: publishButton
+
+					text: qsTr("Опубликовать")
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+					visible: (postStatus === "postponed")
+
+					onClicked: {
+						console.log("publishButton clicked")
+						// sync with db
+						editPostWindow.close()
+					}
+				}
+			}
+
+			RowLayout {
 				id: dateTimeRowLayout
 				width: 100
 				height: 100
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+				Layout.fillHeight: false
+				Layout.fillWidth: true
 
 				Button {
 					id: dateButton
@@ -366,42 +414,19 @@ ApplicationWindow
 			}
 
 			Button {
-				id: publishButton
-
-				text: qsTr("Закончить редактирование поста")
+				id: deletePostButton
+				text: qsTr("Удалить пост")
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
 				onClicked: {
-					console.log("publishButton clicked")
-                    // --- EXAMPLE ---
-                    var res_get_post = db_manager.get_post(1, "data")
-                    console.log("EditPost:", "db_manager.get_post():", res_get_post)
-                    // ---------------
-                    // --- EXAMPLE ---
-                    var res_get_tags = db_manager.get_tags()
-                    console.log("EditPost:", "db_manager.res_get_tags():", res_get_tags)
-                    // ---------------
-                    // --- EXAMPLE ---
-                    var res_get_templates = db_manager.get_templates()
-                    console.log("EditPost:", "db_manager.get_templates():", res_get_templates)
-                    // ---------------
-                    // --- EXAMPLE ---
-                    var res_add_tag = db_manager.add_tag("#add_tag")
-                    console.log("EditPost:", "db_manager.add_tag():", res_add_tag)
-                    // ---------------
-                    // --- EXAMPLE ---
-                    var res_save_post = db_manager.save_post(["My title","Default",["art", "music"],"1580558400","It's my text"])
-                    console.log("EditPost:", "db_manager.save_post():", res_save_post)
-                    // ---------------
-                    // --- EXAMPLE ---
-                    // var res_publish_post = db_manager.publish_post(["My title",["art", "music"],"1580558400","It's my text"])
-                    // console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
-                    // ---------------
+					console.log("deletePostButton clicked")
+					// sync with db
 					editPostWindow.close()
 				}
 			}
+
 		}
 	}
 
@@ -416,7 +441,9 @@ ApplicationWindow
 
 		onAccepted: {
 			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
-			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString())
+			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString(), "timestamp: ", datePicker.selectedDate.getTime().toString())
+
+			post_date = datePicker.selectedDate.getTime()
 
 			dateTimeText.text = qsTr(datePicker.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
 									 + " " + hoursComboBox.currentIndex.toString()
