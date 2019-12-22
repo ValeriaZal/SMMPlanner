@@ -382,7 +382,7 @@ ApplicationWindow
 				var tagList = [];
 				for (var i = 0; i < tagsListModel.count; ++i) {
 					if (tagsListModel.get(i).checked === true) {
-						tagList.push(tagsListModel.get(i).text.toString());
+                        tagList.push(tagsListModel.get(i).tag.toString());
 					}
 				}
 
