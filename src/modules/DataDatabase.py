@@ -199,6 +199,23 @@ class DataDatabase:
                 return res
             return []
 
+        def get_posts_by_time(self, group_vk_id, start_time, end_time):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE (group_id=? AND date >= ? AND date <= ?)", (f"-{group_vk_id}",str(start_time), str(end_time)))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    status = "Saved"
+                    cur.execute("SELECT * FROM templates WHERE id=?", (f"{r[3]}",))
+                    template_rows = cur.fetchall()
+                    colour = "#00d9fb"
+                    if(len(template_rows) > 0):
+                        colour = template_rows[0][2]
+                    res.append([r[0], r[1], colour, r[6], status])
+                return res
+            return []
+
         def get_post(self, post_id, group_vk_id):
             cur = self._conn.cursor()
             cur.execute("SELECT * FROM posts WHERE id=? AND group_id=?", (post_id, f"-{group_vk_id}"))

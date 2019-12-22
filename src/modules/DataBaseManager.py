@@ -5,6 +5,7 @@ class DataBaseManager(QtCore.QObject):
     update_signal = QtCore.pyqtSignal()
     load_posts_signal = QtCore.pyqtSignal()
     get_post_signal = QtCore.pyqtSignal()
+    get_posts_by_time_signal = QtCore.pyqtSignal()
     get_tags_signal = QtCore.pyqtSignal()
     get_templates_signal = QtCore.pyqtSignal()
     get_groups_signal = QtCore.pyqtSignal()
@@ -21,6 +22,8 @@ class DataBaseManager(QtCore.QObject):
         self._groups = []
         self._posts = []
         self._post_id = ""
+        self._start_time = 0
+        self._end_time = 0
         self._db = ""
         self._tag = ""
         self._post = ""
@@ -37,6 +40,14 @@ class DataBaseManager(QtCore.QObject):
     @QtCore.pyqtProperty(list, constant=True)
     def posts(self):
         return self._posts
+
+    @QtCore.pyqtProperty(int)
+    def start_time(self):
+        return self._start_time
+
+    @QtCore.pyqtProperty(int)
+    def end_time(self):
+        return self._end_time
 
     @QtCore.pyqtProperty(str)
     def post_id(self):
@@ -101,6 +112,14 @@ class DataBaseManager(QtCore.QObject):
         self.get_post_signal.emit()
         return self._res_post
 
+    # get_posts_by_time(start_time, end_time) -> [<id, title, color, time, status>]
+    @QtCore.pyqtSlot(int, int, result=list)
+    def get_posts_by_time(self, start_time, end_time):
+        self._start_time = start_time
+        self._end_time = end_time
+        self.get_posts_by_time_signal.emit()
+        return self._posts
+
     # get_tags() -> [<tags>]
     @QtCore.pyqtSlot(result=list)
     def get_tags(self):
@@ -164,6 +183,14 @@ class DataBaseManager(QtCore.QObject):
     @posts.setter
     def posts(self, post_list):
         self._posts = post_list
+
+    @start_time.setter
+    def start_time(self, start_time):
+        self._start_time = start_time
+
+    @end_time.setter
+    def end_time(self, end_time):
+        self._end_time = end_time
 
     @db.setter
     def db(self, db):

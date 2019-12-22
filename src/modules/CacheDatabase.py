@@ -159,6 +159,21 @@ class CacheDatabase:
                 return res
             return []
 
+        def get_posts_by_time(self, group_vk_id, start_time, end_time):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE (from_id=? AND date >= ? AND date <= ?)", (f"-{group_vk_id}",str(start_time), str(end_time)))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                colour = "#00d9fb"
+                for r in rows:
+                    status = "Published"
+                    if(r[5] == 1):
+                        status = "Postponed"
+                    res.append([r[1], "VK post", colour, r[6], status])
+                return res
+            return []
+
         def get_groups(self):
             cur = self._conn.cursor()
             cur.execute("SELECT * FROM groups")

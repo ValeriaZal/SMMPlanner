@@ -37,6 +37,7 @@ class WindowManager(QtCore.QObject):
         self._db_manager.load_posts_signal.connect(self.on_load_posts)
 
         self._db_manager.get_post_signal.connect(self.on_get_post)
+        self._db_manager.get_posts_by_time_signal.connect(self.on_get_posts_by_time)
         self._db_manager.get_tags_signal.connect(self.on_get_tags)
         self._db_manager.get_templates_signal.connect(self.on_get_templates)
         self._db_manager.get_groups_signal.connect(self.on_get_groups)
@@ -105,6 +106,12 @@ class WindowManager(QtCore.QObject):
         db = self._db_manager.db
         res = self.vk_session.get_post(post_id, db)
         self._db_manager.res_post = res
+
+    def on_get_posts_by_time(self):
+        start_time = self._db_manager.start_time
+        end_time = self._db_manager.end_time
+        res = self.vk_session.get_posts_by_time(start_time, end_time)
+        self._db_manager.posts = res
 
     def on_get_tags(self):
         self._db_manager.tags = self.vk_session.get_tags()

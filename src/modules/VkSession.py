@@ -60,6 +60,12 @@ class VkSession():
                 return res
             else:
                 print("Error! Post is not found")
+                return []
+
+        def get_posts_by_time(self, start_time, end_time):
+            cache_posts = self._cache.get_posts_by_time(self._curr_group, start_time, end_time)
+            data_posts = self._data.get_posts_by_time(self._curr_group, start_time, end_time)
+            return cache_posts + data_posts
 
         def get_tags(self):
             return self._data.get_tags()
