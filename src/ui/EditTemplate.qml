@@ -405,10 +405,9 @@ ApplicationWindow
 				console.log("publishButton clicked")
 				imageListModel.clear()
 
-				var error_msg = post_field_is_valid()
-				console.log(post_field_is_valid)
+				var is_valid = post_field_is_valid()
 
-				if (error_msg) {
+				if (is_valid) {
 					var tagList = [];
 					for (var i = 0; i < tagsListModel.count; ++i) {
 						if (tagsListModel.get(i).checked === true) {
@@ -509,9 +508,3 @@ ApplicationWindow
 	}
 }
 
-
-/*##^##
-Designer {
-	D{i:6;anchors_height:16;anchors_width:582}D{i:5;anchors_height:0}
-}
-##^##*/

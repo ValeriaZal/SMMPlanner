@@ -421,10 +421,11 @@ ApplicationWindow
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+				visible: false
 
 				onClicked: {
 					console.log("deletePostButton clicked")
-					// sync with db
+					var res_delete_post = db_manager.
 					editPostWindow.close()
 				}
 			}
@@ -432,6 +433,19 @@ ApplicationWindow
 		}
 	}
 
+	function post_field_is_valid()
+	{
+		if (namePostTextEdit.text.toString() === "") {
+			imageListModel.append({name: "Error: Name is empty"})
+		}
+
+		var post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+		if (post_date <= new Date()) {
+			imageListModel.append({name: "Error: Date in the past"})
+		}
+
+		return (imageListModel.count === 0)
+	}
 
 	Dialog {
 		id: dateTimePickerDialog
@@ -442,14 +456,10 @@ ApplicationWindow
 		standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
 		onAccepted: {
-			console.log("time: " + hoursComboBox.currentIndex + ":" + minutesComboBox.currentIndex)
-			console.log("Selected the date " + datePicker.selectedDate.toLocaleDateString(), "timestamp: ", datePicker.selectedDate.getTime().toString())
-
-			post_date = datePicker.selectedDate.getTime()
-
-			dateTimeText.text = qsTr(datePicker.selectedDate.toLocaleDateString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy")
-									 + " " + hoursComboBox.currentIndex.toString()
-									 + ":" + minutesComboBox.currentIndex.toString())
+			var date_end = datePicker.selectedDate
+			date_end.setHours(hoursComboBox.currentIndex)
+			date_end.setMinutes(minutesComboBox.currentIndex)
+			dateTimeText.text = date_end.toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm")
 		}
 
 		ColumnLayout {

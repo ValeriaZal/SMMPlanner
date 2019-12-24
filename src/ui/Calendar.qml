@@ -13,18 +13,14 @@ Rectangle {
 	width: 1440
 	height: 900
 
-	Component.onCompleted: {
-		//console.log("calendarWindow.onCompleted", applicationWindow.list_posts)
-	}
-
 	function getDayListPosts(sdate) {
 		// --- EXAMPLE ---
-		list_posts = db_manager.get_posts_by_time(1576972801, 1577059199) // 22.12.2019
-		console.log("calendarWindow:", "db_manager.get_posts_by_time():", list_posts)
+		list_posts = db_manager.get_posts_by_time(sdate, sdate + 86400)
+		//console.log("calendarWindow:", "db_manager.get_posts_by_time():", list_posts)
 		// ---------------
 
-		console.log("getDayListPosts: ", sdate)
-		var dayList = []
+		//console.log("getDayListPosts: ", sdate)
+		/*var dayList = []
 		for (var i = 0; i < applicationWindow.list_posts.length; ++i) {
 			var tmp_date;
 			tmp_date = new Date(list_posts[i][3]*1000).setHours(12)
@@ -37,8 +33,8 @@ Rectangle {
 				dayList.push(list_posts[i])
 				console.log(i, "tmp_date:", tmp_date, "list_posts[i]", list_posts[i])
 			}
-		}
-		return dayList
+		}*/
+		return list_posts
 	}
 
 	signal modelUpdate;
@@ -57,9 +53,6 @@ Rectangle {
 				height: 48
 				color: "#f7f7f7"
 
-				/* Горизонтальный разделитель,
-				* который отделяет navigationBar от поля с  числами
-				* */
 				Rectangle {
 					color: "#d7d7d7"
 					height: 1
@@ -67,7 +60,6 @@ Rectangle {
 					anchors.bottom: parent.bottom
 				}
 
-				// Кнопка промотки месяцев назад
 				NewControl.Button {
 					id: previousMonth
 					width: parent.height - 8
@@ -85,13 +77,8 @@ Rectangle {
 					}
 				}
 
-				// Помещаем стилизованный label
 				NewControl.Label {
 					id: dateText
-					/* Забираем данные из title календаря,
-					 * который в данном случае не будет виден
-					 * и будет заменён данным label
-					 */
 					text: styleData.title
 					color:  "black"
 					elide: Text.ElideRight
@@ -104,7 +91,6 @@ Rectangle {
 					anchors.rightMargin: 2
 				}
 
-				// Кнопка промотки месяцев вперёд
 				NewControl.Button {
 					id: nextMonth
 					width: parent.height - 8
@@ -178,6 +164,7 @@ Rectangle {
 								anchors.rightMargin: 6
 								anchors.bottomMargin: 6
 								anchors.topMargin: 6
+								enabled: model.enabled
 
 								width: listView.width
 
@@ -202,18 +189,16 @@ Rectangle {
 						// load_posts (list of post<id, title, color, time, status>)
 						model: ListModel {
 							id: delegateListModel
-							//ListElement { post_id: 1; name: "post test"; color: "grey" }
+							//ListElement { post_id: 1; name: "post test"; color: "grey", enabled: false }
 						}
 
 						Component.onCompleted: {
-							console.log("listView.onCompleted", styleData.date)
-							var dayListPost = getDayListPosts(styleData.date.getTime())
+							//console.log("listView.onCompleted", styleData.date)
+							var dayListPost = getDayListPosts(styleData.date.getTime()/1000)
 							for (var i = 0; i < dayListPost.length; ++i) {
-								var color = "grey"
-								if (dayListPost[i][1] !== "VK post" && dayListPost[i][4] !== "Published") {
-									color = dayListPost[i][2]
-								}
-								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4]})
+								var color = color = dayListPost[i][2]
+								var enabled = (dayListPost[i][1] === "VK post")
+								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4], enabled: enabled})
 							}
 						}
 					}
