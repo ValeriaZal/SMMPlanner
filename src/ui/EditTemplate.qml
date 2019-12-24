@@ -33,6 +33,7 @@ ApplicationWindow
 
 	function updateWindow(template_name) {
 		var res_get_template = db_manager.get_template(template_name)
+		console.log("||| db_manager.get_template:", res_get_template)
 		namePostTextEdit.text = res_get_template[0]
 		templateColorButtonBackground.color = res_get_template[1]
 		textArea.text = res_get_template[3]
@@ -58,8 +59,10 @@ ApplicationWindow
 			for (var i = 0; i < templateListModel.count; ++i) {
 				templateComboBoxModel.append({template: templateListModel.get(i).name})
 			}
+			publishButton.text = qsTr("Закончить создание шаблона")
 		} else {
 			templateComboBoxModel.append({template:template_name})
+			publishButton.text = qsTr("Закончить редактирование шаблона")
 		}
 
 		templateComboBox.currentIndex = 0
@@ -67,7 +70,7 @@ ApplicationWindow
 		for (var k = 0; k < res_get_tags.length; ++k) {
 			tagsListModel.append({tag: res_get_tags[k], checked: false})
 		}
-
+		console.log("Component.onCompleted: updateWindow", template_name)
 		updateWindow(template_name)
 	}
 
@@ -175,6 +178,11 @@ ApplicationWindow
 			model: ListModel {
 				id: templateComboBoxModel
 				//ListElement { template: "Default" }
+			}
+
+			onCurrentIndexChanged: {
+				console.log("onCurrentIndexChanged: updateWindow", templateComboBoxModel.get(templateComboBox.currentIndex).template.toString())
+				updateWindow(templateComboBoxModel.get(templateComboBox.currentIndex).template)
 			}
 		}
 
@@ -388,7 +396,7 @@ ApplicationWindow
 		Button {
 			id: publishButton
 
-			text: qsTr("Закончить создание шаблона")
+			text: qsTr("")
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
