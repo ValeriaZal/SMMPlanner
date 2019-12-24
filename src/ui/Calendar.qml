@@ -10,39 +10,31 @@ import QtQuick.Controls 2.13 as NewControl
 Rectangle {
 	id: calendarWindow
 
+	property var month;
+
 	width: 1440
 	height: 900
 
 	function getDayListPosts(sdate) {
-		// --- EXAMPLE ---
 		list_posts = db_manager.get_posts_by_time(sdate, sdate + 86400)
-		//console.log("calendarWindow:", "db_manager.get_posts_by_time():", list_posts)
-		// ---------------
-
-		//console.log("getDayListPosts: ", sdate)
-		/*var dayList = []
-		for (var i = 0; i < applicationWindow.list_posts.length; ++i) {
-			var tmp_date;
-			tmp_date = new Date(list_posts[i][3]*1000).setHours(12)
-			tmp_date = new Date(tmp_date).setMinutes(0)
-			tmp_date = new Date(tmp_date).setSeconds(0)
-			tmp_date = new Date(tmp_date).setMilliseconds(0)
-
-			if (tmp_date === sdate) {
-				console.log("tmp_date === sdate")
-				dayList.push(list_posts[i])
-				console.log(i, "tmp_date:", tmp_date, "list_posts[i]", list_posts[i])
-			}
-		}*/
 		return list_posts
 	}
 
-	signal modelUpdate;
+
+	signal modelUpdate(var month)
+	onModelUpdate: {
+		console.log("onModelUpdate", month)
+	}
+
 
 	Calendar
 	{
+		id: calendar
+
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.fill: parent
+
+		property ListModel day_model: [];
 
 		style: CalendarStyle
 		{
@@ -72,8 +64,12 @@ Rectangle {
 					onClicked: {
 						console.log("showPreviousMonth")
 						control.showPreviousMonth()
-						modelUpdate()
-						//rectDelegate.update()
+
+						month = month === 0 ? 11 : month - 1
+						calendarWindow.modelUpdate(month)
+						listView.onNeedUpdateModel(month)
+						console.log(month)
+						delegateListModel.clear()
 					}
 				}
 
@@ -102,7 +98,10 @@ Rectangle {
 					onClicked: {
 						console.log("showNextMonth")
 						control.showNextMonth()
-						//
+
+						month = month === 11 ? 0 : month + 1
+						calendar.modelUpdate(month)
+						console.log(month)
 					}
 				}
 			}
@@ -152,10 +151,27 @@ Rectangle {
 						boundsBehavior: Flickable.StopAtBounds
 						snapMode: ListView.SnapToItem
 
+
+
 						delegate: Item {
+							id: itemDelegate
 							x: 0
 							width: listView.width
 							height: 25
+
+							//signal onNeedModelUpdate()
+
+							//onNeedModelUpdate: {
+							//	console.log("onNeedModelUpdate")
+								/*var dayListPost = getDayListPosts(styleData.date.getTime()/1000)
+								for (var i = 0; i < dayListPost.length; ++i) {
+									var color = color = dayListPost[i][2]
+									var enabled = (dayListPost[i][1] === "VK post")
+									delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4], enabled: enabled})
+								}*/
+							//}
+
+
 
 							Button {
 								id: postButton
@@ -192,8 +208,13 @@ Rectangle {
 							//ListElement { post_id: 1; name: "post test"; color: "grey", enabled: false }
 						}
 
+						signal needUpdateModel(var month)
+
+						onNeedUpdateModel: {
+							console.log("onNeedUpdateModel")
+						}
+
 						Component.onCompleted: {
-							//console.log("listView.onCompleted", styleData.date)
 							var dayListPost = getDayListPosts(styleData.date.getTime()/1000)
 							for (var i = 0; i < dayListPost.length; ++i) {
 								var color = color = dayListPost[i][2]
@@ -205,5 +226,11 @@ Rectangle {
 				}
 			}
 		}
+	}
+
+	Connections {
+		target: listView
+
+		function onNeedUpdateModel(month) { console.log("onNeedUpdateModel ", month) }
 	}
 }
