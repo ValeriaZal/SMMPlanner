@@ -20,6 +20,12 @@ Rectangle
 
 	Component.onCompleted: {
 		console.log("templatesWindow: db_manager.get_templates()", db_manager.get_templates());
+
+		var res_get_templates = db_manager.get_templates()
+		for (var i = 0; i < res_get_templates.length; ++i) {
+			var template = db_manager.get_template(res_get_templates[i])
+			templateListModel.append({name: template[0], colorCode: template[1]})
+		}
 	}
 
 	RowLayout {
@@ -80,10 +86,6 @@ Rectangle
 			// example
 			model: ListModel {
 				id: templateListModel
-
-			   ListElement { name: "Default"; colorCode: "grey" }
-			   ListElement { name: "tmp"; colorCode: "white" }
-			   ListElement { name: "tmp2"; colorCode: "black" }
 		   }
 
 			delegate: Component {
@@ -131,10 +133,10 @@ Rectangle
 							Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 							visible: model.name !== "Default"
 							onClicked: {
-								console.log(listItemDelegate.text + " removed from list")
+								console.log(name + " removed from list")
 								templateListModel.remove(index)
 
-								var res_delete_template = db_manager.delete_template(listItemDelegate.text)
+								var res_delete_template = db_manager.delete_template(name)
 								console.log("GeneralPage:", "db_manager.delete_template():", res_delete_template)
 							}
 

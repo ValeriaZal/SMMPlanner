@@ -31,6 +31,19 @@ ApplicationWindow
 		return -1
 	}
 
+	function updateWindow(template_name) {
+		var res_get_template = db_manager.get_template(template_name)
+		namePostTextEdit.text = res_get_template[0]
+		templateColorButtonBackground.color = res_get_template[1]
+		textArea.text = res_get_template[3]
+
+		var template_tags = res_get_template[4]
+		console.log("template_tags:", template_tags)
+		for (var i = 0; i < template_tags.length; ++i) {
+			var tmp_idx = find(tagsListModel, function(ListElement) { return ListElement.tag === template_tags[i].toString() })
+			tagsListModel.get(tmp_idx).checked = true
+		}
+	}
 
 	Component.onCompleted: {
 		console.log("\t\teditTemplateWindow:", templatesWindow)
@@ -41,18 +54,21 @@ ApplicationWindow
 
 		console.log("editTemplateWindow:", template_name, template_idx)
 
-		var i = (template_idx === 0) ? 0 : 1;
-		for (; i < templateListModel.count; ++i) {
-			templateComboBoxModel.append({template: templateListModel.get(i).name})
+		if (template_idx === 0) {
+			for (var i = 0; i < templateListModel.count; ++i) {
+				templateComboBoxModel.append({template: templateListModel.get(i).name})
+			}
+		} else {
+			templateComboBoxModel.append({template:template_name})
 		}
 
-		templateComboBox.currentIndex = template_idx
+		templateComboBox.currentIndex = 0
+		var res_get_tags = db_manager.get_tags()
+		for (var k = 0; k < res_get_tags.length; ++k) {
+			tagsListModel.append({tag: res_get_tags[k], checked: false})
+		}
 
-		// --- EXAMPLE ---
-		//var res_get_template = db_manager.get_template(["Default"])
-		var res_get_template = ["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]]
-		console.log("EditTemplate:", "db_manager.get_template():", res_get_template)
-		// ---------------
+		updateWindow(template_name)
 	}
 
 
@@ -137,6 +153,7 @@ ApplicationWindow
 
 			Image {
 				id: startIcon
+				visible: false
 				anchors.fill: parent
 				source: "../icons/color_picker.jpg"
 				fillMode: Image.Stretch
@@ -178,7 +195,7 @@ ApplicationWindow
 			model: ListModel
 			{
 				id: tagsListModel
-				//ListElement { text: "#music"; checked: false }
+				//ListElement { tag: "#music"; checked: false }
 			}
 
 			onAccepted: {
@@ -271,6 +288,7 @@ ApplicationWindow
 
 			Button {
 				id: imageButton
+				enabled: false
 
 				Layout.preferredHeight: 32
 				Layout.preferredWidth: 32
@@ -304,7 +322,7 @@ ApplicationWindow
 
 				width: 200
 				height: 200
-				color: "#ffffff"
+				color: "#d3d2d2"
 				Layout.preferredHeight: 75
 				Layout.fillHeight: true
 				Layout.preferredWidth: 300
@@ -354,6 +372,7 @@ ApplicationWindow
 								id: delegateItemName
 
 								text: name
+								color: "red"
 								anchors.verticalCenter: parent.verticalCenter
 							}
 						}
@@ -376,27 +395,40 @@ ApplicationWindow
 
 			onClicked: {
 				console.log("publishButton clicked")
+				imageListModel.clear()
 
-				//var res_save_template = db_manager.save_template(["VZ", "#0000ff", "12345678", "TEEEEXT", ["#art"]])
+				var error_msg = post_field_is_valid()
+				console.log(post_field_is_valid)
 
-				var tagList = [];
-				for (var i = 0; i < tagsListModel.count; ++i) {
-					if (tagsListModel.get(i).checked === true) {
-                        tagList.push(tagsListModel.get(i).tag.toString());
+				if (error_msg) {
+					var tagList = [];
+					for (var i = 0; i < tagsListModel.count; ++i) {
+						if (tagsListModel.get(i).checked === true) {
+							tagList.push(tagsListModel.get(i).tag.toString());
+						}
 					}
+					console.log(tagList)
+
+					console.log("EditTemplate: save template: ",
+								namePostTextEdit.text.toString(),
+								templateColorButtonBackground.color.toString(),
+								templateComboBox.currentText.toString(),
+								textArea.text.toString(),
+								tagList)
+
+					var res_save_template = db_manager.save_template(
+								[namePostTextEdit.text.toString(),
+								 templateColorButtonBackground.color.toString(),
+								 templateComboBox.currentText.toString(),
+								 textArea.text.toString(),
+								 tagList])
+					console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
+
+					if (template_idx === 0)
+						templateListModel.append({name: namePostTextEdit.text, colorCode: templateColorButtonBackground.color.toString() })
+
+					editTemplateWindow.close()
 				}
-
-				console.log("EditTemplate: save template: ", namePostTextEdit.text.toString(), templateColorButtonBackground.color.toString(), templateComboBox.currentText.toString(), textArea.text.toString(), tagList)
-				var res_save_template = db_manager.save_template(
-							[namePostTextEdit.text.toString(),
-							 templateColorButtonBackground.color.toString(),
-							 templateComboBox.currentText.toString(),
-							 textArea.text.toString(),
-							 tagList])
-				console.log("EditTemplate:", "db_manager.save_template():", res_save_template)
-
-				templateListModel.append({name: namePostTextEdit.text, colorCode: templateColorButtonBackground.color })
-				editTemplateWindow.close()
 			}
 		}
 	}
@@ -418,7 +450,29 @@ ApplicationWindow
 		}
 	}
 
+	function post_field_is_valid()
+	{
+		if (template_idx !== 0) {
+			return true
+		}
 
+		if (namePostTextEdit.text.toString() === "") {
+			imageListModel.append({name: "Error: Name is empty"})
+		}
+
+		if (find(templateListModel, function(ListElement) { return ListElement.name === namePostTextEdit.text.toString() }) !== -1) {
+			imageListModel.append({name: "Error: Template with this name exists"})
+		}
+
+		if (startIcon.visible === true) {
+			imageListModel.append({name: "Please, chose the template color"})
+		}
+
+		if (find(templateListModel, function(ListElement) { return ListElement.colorCode === templateColorButtonBackground.color.toString() }) !== -1) {
+			imageListModel.append({name: "Template with this color exists"})
+		}
+		return (imageListModel.count === 0)
+	}
 
 	function updateImageListModel(fileUrls, model)
 	{

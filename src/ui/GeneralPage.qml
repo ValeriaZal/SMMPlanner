@@ -182,10 +182,6 @@ ApplicationWindow
 					list_posts = db_manager.load_posts()
 					console.log("calendarWindow:", "db_manager.load_posts():", list_posts)
 					// ---------------
-                    // --- EXAMPLE ---
-                    list_posts = db_manager.get_posts_by_time(1576972801, 1577059199) // 22.12.2019
-                    console.log("calendarWindow:", "db_manager.get_posts_by_time():", list_posts)
-                    // ---------------
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);

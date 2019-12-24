@@ -236,6 +236,7 @@ ApplicationWindow
 
 			Button {
 				id: imageButton
+				enabled: false
 
 				Layout.preferredHeight: 32
 				Layout.preferredWidth: 32
@@ -270,7 +271,7 @@ ApplicationWindow
 
 				width: 200
 				height: 200
-				color: "#ffffff"
+				color: "#d3d2d2"
 
 				Layout.preferredHeight: 75
 				Layout.fillHeight: true

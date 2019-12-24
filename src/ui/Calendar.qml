@@ -5,7 +5,7 @@ import QtQml 2.0
 import QtQuick.Layouts 1.4
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-
+import QtQuick.Controls 2.13 as NewControl
 
 Rectangle {
 	id: calendarWindow
@@ -18,6 +18,11 @@ Rectangle {
 	}
 
 	function getDayListPosts(sdate) {
+		// --- EXAMPLE ---
+		list_posts = db_manager.get_posts_by_time(1576972801, 1577059199) // 22.12.2019
+		console.log("calendarWindow:", "db_manager.get_posts_by_time():", list_posts)
+		// ---------------
+
 		console.log("getDayListPosts: ", sdate)
 		var dayList = []
 		for (var i = 0; i < applicationWindow.list_posts.length; ++i) {
@@ -26,8 +31,7 @@ Rectangle {
 			tmp_date = new Date(tmp_date).setMinutes(0)
 			tmp_date = new Date(tmp_date).setSeconds(0)
 			tmp_date = new Date(tmp_date).setMilliseconds(0)
-			//console.log(i, "tmp_date:", tmp_date, "tmp_date.getHours/Minutes():", tmp_date.getHours(), tmp_date.getMinutes())
-			//console.log(i, "tmp_date: ", tmp_date)
+
 			if (tmp_date === sdate) {
 				console.log("tmp_date === sdate")
 				dayList.push(list_posts[i])
@@ -37,6 +41,7 @@ Rectangle {
 		return dayList
 	}
 
+	signal modelUpdate;
 
 	Calendar
 	{
@@ -45,10 +50,78 @@ Rectangle {
 
 		style: CalendarStyle
 		{
+			id: calendarStyle
 			gridVisible: true
 
-			dayDelegate: Rectangle
-			{
+			navigationBar: Rectangle {
+				height: 48
+				color: "#f7f7f7"
+
+				/* Горизонтальный разделитель,
+				* который отделяет navigationBar от поля с  числами
+				* */
+				Rectangle {
+					color: "#d7d7d7"
+					height: 1
+					width: parent.width
+					anchors.bottom: parent.bottom
+				}
+
+				// Кнопка промотки месяцев назад
+				NewControl.Button {
+					id: previousMonth
+					width: parent.height - 8
+					height: width
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.left: parent.left
+					anchors.leftMargin: 8
+					text: "<"
+
+					onClicked: {
+						console.log("showPreviousMonth")
+						control.showPreviousMonth()
+						modelUpdate()
+						//rectDelegate.update()
+					}
+				}
+
+				// Помещаем стилизованный label
+				NewControl.Label {
+					id: dateText
+					/* Забираем данные из title календаря,
+					 * который в данном случае не будет виден
+					 * и будет заменён данным label
+					 */
+					text: styleData.title
+					color:  "black"
+					elide: Text.ElideRight
+					horizontalAlignment: Text.AlignHCenter
+					font.pixelSize: 16
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.left: previousMonth.right
+					anchors.leftMargin: 2
+					anchors.right: nextMonth.left
+					anchors.rightMargin: 2
+				}
+
+				// Кнопка промотки месяцев вперёд
+				NewControl.Button {
+					id: nextMonth
+					width: parent.height - 8
+					height: width
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.right: parent.right
+					text: ">"
+
+					onClicked: {
+						console.log("showNextMonth")
+						control.showNextMonth()
+						//
+					}
+				}
+			}
+
+			dayDelegate: Rectangle {
 				id: rectDelegate
 				color: styleData.selected
 					   ? "#ffffff"
@@ -58,7 +131,6 @@ Rectangle {
 
 				Label {
 					id: dayText
-
 					color: styleData.visibleMonth && styleData.valid
 						   ? "#000000"
 						   : "light grey"
@@ -143,7 +215,6 @@ Rectangle {
 								}
 								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4]})
 							}
-
 						}
 					}
 				}
