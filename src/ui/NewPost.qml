@@ -431,14 +431,19 @@ ApplicationWindow
 						var timestamp = (post_date.getTime()/1000).toString()
 
 						// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
-						var res_save_post = db_manager.publish_post(
+                        console.log("SavePost: ", namePostTextEdit.text.toString(),
+                                    templateComboBoxModel.get(templateComboBox.currentIndex),
+                                   tagList,
+                                   timestamp,
+                                   textArea.text.toString())
+                        var res_save_post = db_manager.save_post(
 									[namePostTextEdit.text.toString(),
 									 templateComboBoxModel.get(templateComboBox.currentIndex),
 									tagList,
 									timestamp,
 									textArea.text.toString()]
 									)
-						console.log("EditPost:", "db_manager.save_post():", res_save_post)
+                        console.log("NewPost:", "db_manager.save_post():", res_save_post)
 						imageListModel.append({name: "Post saved successfully"})
 					}
 				}
