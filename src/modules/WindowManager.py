@@ -146,7 +146,7 @@ class WindowManager(QtCore.QObject):
         self._authentication._group_id = self.vk_session._curr_group
 
     def on_delete_template(self):
-        self.vk_session.delete_template(self._db_manager._template_name)
+        self.vk_session.delete_template(self._db_manager.template_name)
 
     @property
     def current_page(self):

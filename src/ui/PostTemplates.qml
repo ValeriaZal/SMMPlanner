@@ -133,11 +133,10 @@ Rectangle
 							Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 							visible: model.name !== "Default"
 							onClicked: {
-								console.log(name + " removed from list")
-								templateListModel.remove(index)
-
 								var res_delete_template = db_manager.delete_template(name)
-								console.log("GeneralPage:", "db_manager.delete_template():", res_delete_template)
+                                console.log("PostTemplates:", "db_manager.delete_template():", res_delete_template)
+                                console.log(name + " removed from list")
+                                templateListModel.remove(index)
 							}
 
 						}

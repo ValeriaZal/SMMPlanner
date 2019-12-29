@@ -175,8 +175,8 @@ class DataBaseManager(QtCore.QObject):
 
     # delete_template(template_name) -> True/False
     @QtCore.pyqtSlot(str, result=bool)
-    def delete_template(self, template_name):
-        self._template_name = template_name
+    def delete_template(self, template_name_):
+        self._template_name = template_name_
         self.delete_template_signal.emit()
         return True
 
@@ -221,8 +221,8 @@ class DataBaseManager(QtCore.QObject):
         self._post = post
 
     @template_name.setter
-    def template_name(self, template_name):
-        self._template_name = template_name
+    def template_name(self, template_name_):
+        self._template_name = template_name_
 
     @template.setter
     def template(self, template):

@@ -12,6 +12,7 @@
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
               "modules/FileReader.py",
+              "modules/PostConstructor.py",
 
               "modules/DataBaseManager.py",
               "modules/FileReader.py",
