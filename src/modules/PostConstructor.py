@@ -7,9 +7,9 @@ class PostConstructor:
         tags = ""
         for tag in post[1]:
             tags += f"{tag} "
-        message = f"{post[0]}\n\n{post[3]}\n\n{tags}"
+        message = f"{post[3]}\n\n{tags}"
         publish_date = post[2]
         return message, publish_date
 
     def publish_post(self, group_id, message, publish_date):
-        self._vk_api.wall.post(owner_id=group_id, from_group=1, message=message, publish_date=publish_date, v=self._api_v)
+        self._vk_api.wall.post(owner_id=f"-{group_id}", from_group=1, message=message, publish_date=publish_date, v=self._api_v)
