@@ -34,7 +34,7 @@ ApplicationWindow
 	function updateWindow(template_name) {
 		var res_get_template = db_manager.get_template(template_name)
 		// console.log("||| db_manager.get_template:", res_get_template)
-		// namePostTextEdit.text = res_get_template[0]
+		namePostTextEdit.text = res_get_template[0]
 		templateColorButtonBackground.color = res_get_template[1]
 		textArea.text = res_get_template[3]
 
@@ -100,7 +100,7 @@ ApplicationWindow
 			id: namePostTextEditBackground
 			width: 80
 			height: 20
-			color: "#ffffff"
+			color: "lightgray"
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -108,24 +108,21 @@ ApplicationWindow
 			TextEdit {
 				id: namePostTextEdit
 				height: 40
+				anchors.rightMargin: 6
+				anchors.leftMargin: 6
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.right: parent.right
 				anchors.left: parent.left
+				enabled: false
 
 				font.weight: Font.Bold
 				clip: true
 				horizontalAlignment: Text.AlignLeft
-				cursorVisible: true
 				Layout.fillHeight: false
 				Layout.fillWidth: true
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 				font.pixelSize: 25
 				selectByMouse: true
-
-				/*background: Rectangle {
-					implicitWidth: namePostTextEdit.width
-					implicitHeight: namePostTextEdit.height
-				}*/
 			}
 		}
 	}

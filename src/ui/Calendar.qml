@@ -18,7 +18,7 @@ Rectangle {
 	height: 900
 
 	function getDayListPosts(sdate) {
-		list_posts = db_manager.get_posts_by_time(sdate, sdate + 86400)
+		var list_posts = db_manager.get_posts_by_time(sdate, sdate + 86400)
 		return list_posts
 	}
 
@@ -201,6 +201,7 @@ Rectangle {
 
 									//var edited_post = find(delegateListModel, function(ListElement) { return ListElement.name === model.name })
 									//console.log("Find Post " + edited_post.name + " clicked, status = ", selected_post_status)
+
 
 									var component = Qt.createComponent("EditPost.qml");
 									win = component.createObject(applicationWindow);
