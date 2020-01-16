@@ -241,5 +241,3 @@ class DataBaseManager(QtCore.QObject):
     @groups.setter
     def groups(self, groups):
         self._groups = groups
-
-

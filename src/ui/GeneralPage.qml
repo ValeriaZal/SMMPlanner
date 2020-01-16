@@ -14,8 +14,7 @@ ApplicationWindow
 	color: "#f3f3f4"
 
 	property var access_token: ""
-	property variant win;  // for newButtons
-	property var list_posts: []
+	property variant win;
 
 	onClosing: authentication.close()
 
@@ -123,7 +122,6 @@ ApplicationWindow
 				}
 
 				Component.onCompleted: {
-					console.log("groupComboBox: Component.onCompleted")
 					var res_get_groups = db_manager.get_groups()
 					console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
 
@@ -178,8 +176,6 @@ ApplicationWindow
 				onClicked: {
 					console.log("calendarButton clicked")
 					db_manager.update()
-					//list_posts = db_manager.load_posts()
-					//console.log("calendarWindow:", "db_manager.load_posts():", list_posts)
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
