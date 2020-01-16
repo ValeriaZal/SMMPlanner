@@ -20,8 +20,8 @@ ApplicationWindow
 	color: "#f3f3f4"
 	title: qsTr("SMMPlanner: Редактирование поста")
 
-	//property var post_id: 0 // TODO
-	property var post_date: new Date()
+	property var selected_post;
+	property var post_date;
 
 	function find(model, criteria)
 	{
@@ -35,12 +35,56 @@ ApplicationWindow
 		return -1
 	}
 
+	function updateWindow(template_name) {
+		var res_get_template = db_manager.get_template(template_name)
+		// console.log("||| db_manager.get_template:", res_get_template)
+		//namePostTextEdit.text = res_get_template[0]
+		//textArea.text = res_get_template[3]
+
+		// tagsListModel
+		for (var k = 0; k < tagsListModel.count; ++k) {
+			tagsListModel.get(k).checked = false
+		}
+
+		var template_tags = res_get_template[4]
+		for (var i = 0; i < template_tags.length; ++i) {
+			var tmp_idx = find(tagsListModel, function(ListElement) { return ListElement.tag === template_tags[i].toString() })
+			tmp_idx.checked = true
+		}
+	}
 
 	Component.onCompleted: {
-		console.log("editPostWindow.onCompleted")
+		//console.log("editPostWindow.onCompleted")
 		// get_post(post_id, db) -> ["title","template_name","colour",[<tags>],"date","text"]
-		var res_get_post = db_manager.get_post(selected_post_id, "data")
-		console.log("EditPost:", "db_manager.get_post():", res_get_post)
+		selected_post = db_manager.get_post(calendarWindow.selected_post_id, "data")
+		console.log("EditPost:", "db_manager.get_post():", selected_post)
+
+		namePostTextEdit.text = selected_post[0]
+		textArea.text = selected_post[5]
+
+		post_date = new Date(selected_post[4] * 1000)
+		console.log("EditPost:", "post_date:", post_date, post_date.toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm"))
+		dateTimeText.text = post_date.toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm")
+
+
+		var list_templates = db_manager.get_templates() // [<Names of templates>]
+		for (var i = 0; i < list_templates.length; ++i) {
+			templateComboBoxModel.append({template: list_templates[i]})
+			if (list_templates[i] === selected_post[1]) {
+				templateComboBox.currentIndex = i
+			}
+		}
+
+		var res_get_tags = db_manager.get_tags()
+		for (var k = 0; k < res_get_tags.length; ++k) {
+			tagsListModel.append({tag: res_get_tags[k], checked: false})
+		}
+
+		var template_tags = selected_post[3]
+		for (var i = 0; i < template_tags.length; ++i) {
+			var tmp_idx = find(tagsListModel, function(ListElement) { return ListElement.tag === template_tags[i].toString() })
+			tmp_idx.checked = true
+		}
 
 	}
 
@@ -209,7 +253,7 @@ ApplicationWindow
 			anchors.bottomMargin: -338
 			anchors.fill: parent
 			wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-			textFormat: Text.RichText
+			textFormat: Text.AutoText
 			verticalAlignment: Text.AlignTop
 			placeholderText: "Что у Вас нового?"
 			selectByMouse: true
@@ -242,6 +286,7 @@ ApplicationWindow
 
 			Button {
 				id: imageButton
+				visible: false
 				enabled: false
 
 				Layout.preferredHeight: 32
@@ -393,7 +438,7 @@ ApplicationWindow
 					verticalAlignment: Text.AlignVCenter
 					horizontalAlignment: Text.AlignLeft
 					font.pixelSize: 12
-					text: qsTr(new Date().toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm"))
+					//text: qsTr(new Date().toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm"))
 				}
 			}
 
@@ -413,7 +458,38 @@ ApplicationWindow
 
 						onClicked: {
 							console.log("savePostButton clicked")
-							// sync with db
+
+							imageListModel.clear()
+							var is_valid = post_field_is_valid()
+
+							if (is_valid) {
+								var tagList = [];
+								for (var i = 0; i < tagsListModel.count; ++i) {
+									if (tagsListModel.get(i).checked) {
+										tagList.push(tagsListModel.get(i).tag);
+									}
+								}
+
+								post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+								console.log("savePostButton::post_date=", post_date)
+								var timestamp = (post_date.getTime()/1000).toString()
+
+								// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
+								/*console.log("SavePost: ", namePostTextEdit.text.toString(),
+											templateComboBoxModel.get(templateComboBox.currentIndex).template.toString(),
+										   tagList,
+										   timestamp,
+										   textArea.text.toString())*/
+								var res_save_post = db_manager.save_post(
+											[namePostTextEdit.text.toString(),
+											 templateComboBoxModel.get(templateComboBox.currentIndex).template.toString(),
+											tagList,
+											timestamp,
+											textArea.text.toString()]
+											)
+								console.log("EditPost:", "db_manager.save_post():", res_save_post)
+								imageListModel.append({name: "Post saved successfully"})
+							}
 							editPostWindow.close()
 						}
 					}
@@ -472,7 +548,7 @@ ApplicationWindow
 	Dialog {
 		id: dateTimePickerDialog
 
-		title: qsTr("Выберите дату публикации")
+		title: qsTr("Выберите дату")
 		modal: true
 
 		standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
