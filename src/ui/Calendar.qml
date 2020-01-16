@@ -10,7 +10,7 @@ import QtQuick.Controls 2.13 as NewControl
 Rectangle {
 	id: calendarWindow
 
-	property var edited_post;
+	property var selected_post_status;
 	property var selected_post_id;
 	property variant win;  // for newButtons
 
@@ -192,19 +192,19 @@ Rectangle {
 								anchors.rightMargin: 6
 								anchors.bottomMargin: 6
 								anchors.topMargin: 6
-								enabled: model.enabled
 
 								width: listView.width
 
 								onClicked: {
 									selected_post_id = model.post_id
-									edited_post = find(delegateListModel, function(ListElement) { return ListElement.name === model.name })
-									console.log("Find Post " + edited_post.name + " clicked")
+									selected_post_status = model.status
+
+									//var edited_post = find(delegateListModel, function(ListElement) { return ListElement.name === model.name })
+									//console.log("Find Post " + edited_post.name + " clicked, status = ", selected_post_status)
 
 									var component = Qt.createComponent("EditPost.qml");
 									win = component.createObject(applicationWindow);
 									win.show();
-									// console.log(post)
 								}
 
 								style: ButtonStyle {
@@ -224,7 +224,7 @@ Rectangle {
 						// load_posts (list of post<id, title, color, time, status>)
 						model: ListModel {
 							id: delegateListModel
-							//ListElement { post_id: 1; name: "post test"; color: "grey", enabled: false }
+							//ListElement { post_id: 1; name: "post test"; color: "grey", status: }
 						}
 
 						signal needUpdateModel(var month)
@@ -234,11 +234,10 @@ Rectangle {
 						}
 
 						Component.onCompleted: {
+							// get_posts_by_time(start_time, end_time) -> [<id, title, color, time, status>]
 							var dayListPost = getDayListPosts(styleData.date.getTime()/1000)
 							for (var i = 0; i < dayListPost.length; ++i) {
-								var color = dayListPost[i][2]
-								var enabled = (dayListPost[i][1] !== "VK post")
-								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4], enabled: enabled})
+								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: dayListPost[i][2], status: dayListPost[i][4]})
 							}
 						}
 					}
