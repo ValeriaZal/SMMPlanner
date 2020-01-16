@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>SMM Planner</Name>
-    <Version>1.0.0</Version>
+    <Version>2.6.0</Version>
     <Title>SMM Planner Installer</Title>
     <Publisher>VV</Publisher>
     <ProductUrl>https://github.com/ValeriaZal/SMMPlanner</ProductUrl>
 
     <StartMenuDir>SMM Planner</StartMenuDir>
-    <TargetDir>@ApplicationsDirX86@/SMM_Planner</TargetDir>
+    <TargetDir>C:/SMM_Planner</TargetDir>
 
     <MaintenanceToolName>Uninstaller</MaintenanceToolName>
 </Installer>
