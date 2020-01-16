@@ -438,7 +438,6 @@ ApplicationWindow
 					verticalAlignment: Text.AlignVCenter
 					horizontalAlignment: Text.AlignLeft
 					font.pixelSize: 12
-					//text: qsTr(new Date().toLocaleString(Qt.locale("ru_RU"), "ddd dd.MM.yyyy hh:mm"))
 				}
 			}
 
@@ -463,6 +462,9 @@ ApplicationWindow
 							var is_valid = post_field_is_valid()
 
 							if (is_valid) {
+								var res_delete_post = db_manager.delete_post(calendarWindow.selected_post_id)
+								console.log("EditPost: savePostButton;", "db_manager.delete_post():", res_delete_post)
+
 								var tagList = [];
 								for (var i = 0; i < tagsListModel.count; ++i) {
 									if (tagsListModel.get(i).checked) {
@@ -471,7 +473,6 @@ ApplicationWindow
 								}
 
 								post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
-								console.log("savePostButton::post_date=", post_date)
 								var timestamp = (post_date.getTime()/1000).toString()
 
 								// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
@@ -504,7 +505,11 @@ ApplicationWindow
 
 						onClicked: {
 							console.log("deletePostButton clicked")
-							//var res_delete_post = db_manager.
+
+							var res_delete_post = db_manager.delete_post(calendarWindow.selected_post_id)
+							console.log("EditPost:", "db_manager.delete_post():", res_delete_post)
+							imageListModel.append({name: "Post deleted successfully"})
+
 							editPostWindow.close()
 						}
 					}

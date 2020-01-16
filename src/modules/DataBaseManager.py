@@ -123,7 +123,7 @@ class DataBaseManager(QtCore.QObject):
 
     # delete_post(post_id) -> True/False
     @QtCore.pyqtSlot(int, result=bool)
-    def delete_post(post_id):
+    def delete_post(self, post_id):
         self._post_id = post_id
         self.delete_post_signal.emit()
         return True
