@@ -95,6 +95,7 @@ class VkSession():
 
         def publish_post(self, post):
             message, publish_date = self._post_const.create_post(post)
+            print(f"VK::publish_post::{message}")
             self._post_const.publish_post(self._curr_group, message, publish_date)
             post_id = self._data.get_post_id(publish_date)
             self._data.delete_post(post_id)

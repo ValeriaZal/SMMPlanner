@@ -175,6 +175,7 @@ class DataDatabase:
                     insert_cols = insert_cols[:-1] + ")"
                     sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
+                    print("DataDatabase::insert::data={}".format(data))
                     cur.execute(sql, data)
                     self._conn.commit()
                 else:
@@ -266,7 +267,7 @@ class DataDatabase:
         def post_to_save(self, post):
             cur = self._conn.cursor()
             template_id = 1
-            cur.execute("SELECT * FROM templates WHERE name=?", (post[1],))
+            cur.execute("SELECT * FROM templates WHERE name=?", (str(post[1]),))
             rows = cur.fetchall()
             if(len(rows) > 0):
                 template_id = rows[0][0]

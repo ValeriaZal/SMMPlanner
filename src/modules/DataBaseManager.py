@@ -156,6 +156,7 @@ class DataBaseManager(QtCore.QObject):
     @QtCore.pyqtSlot(list, result=bool)
     def publish_post(self, post):
         self._post = post
+        print(f"DSM:publish_post:{post}")
         self.publish_post_signal.emit()
         return True
 
