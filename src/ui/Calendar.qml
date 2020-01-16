@@ -10,7 +10,9 @@ import QtQuick.Controls 2.13 as NewControl
 Rectangle {
 	id: calendarWindow
 
-	property var month;
+	property var edited_post;
+	property var selected_post_id;
+	property variant win;  // for newButtons
 
 	width: 1440
 	height: 900
@@ -18,6 +20,18 @@ Rectangle {
 	function getDayListPosts(sdate) {
 		list_posts = db_manager.get_posts_by_time(sdate, sdate + 86400)
 		return list_posts
+	}
+
+	function find(model, criteria)
+	{
+		for(var i = 0; i < model.count; ++i)
+		{
+			if (criteria(model.get(i)))
+			{
+				return model.get(i)
+			}
+		}
+		return -1
 	}
 
 
@@ -183,8 +197,14 @@ Rectangle {
 								width: listView.width
 
 								onClicked: {
-									console.log("Post " + model.name + " clicked")
+									selected_post_id = model.post_id
+									edited_post = find(delegateListModel, function(ListElement) { return ListElement.name === model.name })
+									console.log("Find Post " + edited_post.name + " clicked")
 
+									var component = Qt.createComponent("EditPost.qml");
+									win = component.createObject(applicationWindow);
+									win.show();
+									// console.log(post)
 								}
 
 								style: ButtonStyle {
