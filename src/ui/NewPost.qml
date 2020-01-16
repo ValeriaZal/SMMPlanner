@@ -501,7 +501,7 @@ ApplicationWindow
 									timestamp,
 									textArea.text.toString()]
 									)
-						console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
+						console.log("NewPost:", "db_manager.publish_post():", res_publish_post)
 						newPostWindow.close()
 					}
 				}

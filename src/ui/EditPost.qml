@@ -454,7 +454,7 @@ ApplicationWindow
 						Layout.fillHeight: true
 						Layout.fillWidth: true
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-						visible: (postStatus === "postponed")
+						visible: (calendarWindow.selected_post_status === "Saved")
 
 						onClicked: {
 							console.log("savePostButton clicked")
@@ -500,7 +500,7 @@ ApplicationWindow
 						Layout.fillHeight: true
 						Layout.fillWidth: true
 						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-						visible: true
+						visible: (calendarWindow.selected_post_status === "Saved")
 
 						onClicked: {
 							console.log("deletePostButton clicked")
@@ -518,12 +518,37 @@ ApplicationWindow
 					Layout.fillHeight: true
 					Layout.fillWidth: true
 					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-					visible: (postStatus === "postponed")
+					visible: (calendarWindow.selected_post_status === "Saved")
 
 					onClicked: {
 						console.log("publishButton clicked")
-						// sync with db
-						editPostWindow.close()
+
+						imageListModel.clear()
+						var is_valid = post_field_is_valid()
+
+						if (is_valid) {
+							var tagList = [];
+							for (var i = 0; i < tagsListModel.count; ++i) {
+								if (tagsListModel.get(i).checked) {
+									tagList.push(tagsListModel.get(i).tag);
+								}
+							}
+
+							post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+							console.log("publishPostButton::post_date=", post_date)
+							var timestamp = (post_date.getTime()/1000).toString()
+
+							// publish_post(["title",[<tags>],"date","text"]) -> True/False
+							var res_publish_post = db_manager.publish_post(
+										[namePostTextEdit.text.toString(),
+										tagList,
+										timestamp,
+										textArea.text.toString()]
+										)
+							console.log("EditPost:", "db_manager.publish_post():", res_publish_post)
+
+							editPostWindow.close()
+						}
 					}
 				}
 
