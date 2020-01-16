@@ -60,15 +60,14 @@ Rectangle {
 					anchors.left: parent.left
 					anchors.leftMargin: 8
 					text: "<"
+					visible: false
 
 					onClicked: {
 						console.log("showPreviousMonth")
 						control.showPreviousMonth()
-
-						month = month === 0 ? 11 : month - 1
-						calendarWindow.modelUpdate(month)
-						listView.onNeedUpdateModel(month)
-						console.log(month)
+						calendarWindow.modelUpdate(style.VisibleMonth)
+						listView.onNeedUpdateModel(style.VisibleMonth)
+						console.log(style.VisibleMonth)
 						delegateListModel.clear()
 					}
 				}
@@ -94,14 +93,13 @@ Rectangle {
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.right: parent.right
 					text: ">"
+					visible: false
 
 					onClicked: {
 						console.log("showNextMonth")
 						control.showNextMonth()
-
-						month = month === 11 ? 0 : month + 1
-						calendar.modelUpdate(month)
-						console.log(month)
+						calendar.modelUpdate(style.VisibleMonth)
+						console.log(style.VisibleMonth)
 					}
 				}
 			}
@@ -186,6 +184,7 @@ Rectangle {
 
 								onClicked: {
 									console.log("Post " + model.name + " clicked")
+
 								}
 
 								style: ButtonStyle {
@@ -217,8 +216,8 @@ Rectangle {
 						Component.onCompleted: {
 							var dayListPost = getDayListPosts(styleData.date.getTime()/1000)
 							for (var i = 0; i < dayListPost.length; ++i) {
-								var color = color = dayListPost[i][2]
-								var enabled = (dayListPost[i][1] === "VK post")
+								var color = dayListPost[i][2]
+								var enabled = (dayListPost[i][1] !== "VK post")
 								delegateListModel.append({post_id: dayListPost[i][0], name: dayListPost[i][1], color: color, status: dayListPost[i][4], enabled: enabled})
 							}
 						}

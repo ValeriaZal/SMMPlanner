@@ -73,11 +73,11 @@ ApplicationWindow {
 			anchors.fill: parent
 			id: webViewContent
 
-			// Cookies is not permitted for login info
-            profile: WebEngineProfile {
+			/*// Cookies is not permitted for login info
+			profile: WebEngineProfile {
 				httpCacheType: WebEngineProfile.NoCache
 				persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
-            }
+			}*/
 
 			// Get url
 			url: get_first_url(app_id, scope, APIv)

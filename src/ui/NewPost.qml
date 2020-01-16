@@ -69,6 +69,7 @@ ApplicationWindow
 			tagsListModel.append({tag: res_get_tags[k], checked: false})
 		}
 
+		console.log("Component.onCompleted::post_date=", post_date)
 		updateWindow(template_name)
 	}
 
@@ -119,11 +120,6 @@ ApplicationWindow
 				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 				font.pixelSize: 25
 				selectByMouse: true
-
-				/*background: Rectangle {
-					implicitWidth: namePostTextEdit.width
-					implicitHeight: namePostTextEdit.height
-				}*/
 			}
 		}
 	}
@@ -448,18 +444,19 @@ ApplicationWindow
 							}
 						}
 
-						var post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+						post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+						console.log("savePostButton::post_date=", post_date)
 						var timestamp = (post_date.getTime()/1000).toString()
 
 						// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
-						console.log("SavePost: ", namePostTextEdit.text.toString(),
-									templateComboBoxModel.get(templateComboBox.currentIndex).template,
+						/*console.log("SavePost: ", namePostTextEdit.text.toString(),
+									templateComboBoxModel.get(templateComboBox.currentIndex).template.toString(),
 								   tagList,
 								   timestamp,
-								   textArea.text.toString())
+								   textArea.text.toString())*/
 						var res_save_post = db_manager.save_post(
 									[namePostTextEdit.text.toString(),
-									 templateComboBoxModel.get(templateComboBox.currentIndex),
+									 templateComboBoxModel.get(templateComboBox.currentIndex).template.toString(),
 									tagList,
 									timestamp,
 									textArea.text.toString()]
@@ -493,7 +490,8 @@ ApplicationWindow
 							}
 						}
 
-						var post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+						post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
+						console.log("publishPostButton::post_date=", post_date)
 						var timestamp = (post_date.getTime()/1000).toString()
 
 						// publish_post(["title",[<tags>],"date","text"]) -> True/False
@@ -530,7 +528,7 @@ ApplicationWindow
 	Dialog {
 		id: dateTimePickerDialog
 
-		title: qsTr("Выберите дату публикации")
+		title: qsTr("Выберите дату")
 
 		x: (parent.width - width) / 2
 		y: (parent.height - height) / 2
