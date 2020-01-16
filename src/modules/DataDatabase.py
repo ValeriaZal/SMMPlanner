@@ -176,6 +176,7 @@ class DataDatabase:
                     sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
                     print("DataDatabase::insert::data={}".format(data))
+                    print(sql, data)
                     cur.execute(sql, data)
                     self._conn.commit()
                 else:
@@ -272,7 +273,7 @@ class DataDatabase:
             if(len(rows) > 0):
                 template_id = rows[0][0]
             tuple_post = [post[0],0,template_id,"Saved",post[3],post[4]]
-            tags = post[3]
+            tags = post[2] # post[3]
             return tuple_post, tags
 
         def get_post_id(self, date):

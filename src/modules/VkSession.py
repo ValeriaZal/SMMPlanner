@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 import vk
 import sys
 import time
+import traceback
 
 from modules.CacheDatabase import CacheDatabase
 from modules.DataDatabase import DataDatabase
@@ -84,9 +85,13 @@ class VkSession():
             tuple_post[1] = "-"+str(self._curr_group)
             self._data.insert_or_replace("posts", tuple(tuple_post))
             post_id = self._data.get_post_id(post[3])
+            unique_tags = list(set(tags))
             for tag in tags:
                 tag_id = self._data.get_tag_id(tag)
-                self._data.insert("post_tag_list", (post_id, tag_id))
+                try:
+                    self._data.insert("post_tag_list", (post_id, tag_id))
+                except Exception as err:
+                    traceback.print_tb(err.__traceback__)
 
         def update(self):
             posts_info = self._get_posts_info()

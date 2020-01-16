@@ -6,7 +6,8 @@ class PostConstructor:
     def create_post(self, post):
         tags = ""
         print("PostConstructor::create_post::post[1]:{}".format(post[1]))
-        for tag in post[1]:
+        unique_tags = list(set(post[1]))
+        for tag in unique_tags:
             tags += f"{tag} "
         message = f"{post[3]}\n\n{tags}"
         publish_date = post[2]
