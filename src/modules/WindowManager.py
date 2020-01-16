@@ -44,6 +44,7 @@ class WindowManager(QtCore.QObject):
         self._db_manager.add_tag_signal.connect(self.on_add_tag)
         self._db_manager.save_post_signal.connect(self.on_save_post)
         self._db_manager.publish_post_signal.connect(self.on_publish_post)
+        self._db_manager.delete_post_signal.connect(self.on_delete_post)
 
         self._db_manager.get_template_signal.connect(self.on_get_template)
         self._db_manager.save_template_signal.connect(self.on_save_template)
@@ -106,6 +107,10 @@ class WindowManager(QtCore.QObject):
         db = self._db_manager.db
         res = self.vk_session.get_post(post_id, db)
         self._db_manager.res_post = res
+
+    def on_delete_post(self):
+        post_id = self._db_manager.post_id
+        res = self.vk_session.delete_post(post_id)
 
     def on_get_posts_by_time(self):
         start_time = self._db_manager.start_time

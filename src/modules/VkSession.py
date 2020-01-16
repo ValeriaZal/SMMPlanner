@@ -63,6 +63,9 @@ class VkSession():
                 print("Error! Post is not found")
                 return []
 
+        def delete_post(self, post_id):
+            self._data.delete_post(post_id)
+
         def get_posts_by_time(self, start_time, end_time):
             cache_posts = self._cache.get_posts_by_time(self._curr_group, start_time, end_time)
             data_posts = self._data.get_posts_by_time(self._curr_group, start_time, end_time)

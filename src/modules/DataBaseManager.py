@@ -7,6 +7,7 @@ class DataBaseManager(QtCore.QObject):
     get_post_signal = QtCore.pyqtSignal()
     get_posts_by_time_signal = QtCore.pyqtSignal()
     get_tags_signal = QtCore.pyqtSignal()
+    delete_post_signal = QtCore.pyqtSignal()
     get_templates_signal = QtCore.pyqtSignal()
     get_groups_signal = QtCore.pyqtSignal()
     add_tag_signal = QtCore.pyqtSignal()
@@ -119,6 +120,14 @@ class DataBaseManager(QtCore.QObject):
         self._end_time = end_time
         self.get_posts_by_time_signal.emit()
         return self._posts
+
+    # delete_post(post_id) -> True/False
+    @QtCore.pyqtSlot(int, result=bool)
+    def delete_post(post_id):
+        self._post_id = post_id
+        self.delete_post_signal.emit()
+        return True
+
 
     # get_tags() -> [<tags>]
     @QtCore.pyqtSlot(result=list)

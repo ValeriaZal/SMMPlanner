@@ -301,9 +301,12 @@ class DataDatabase:
             return 0
 
         def delete_post(self, post_id):
-            cur = self._conn.cursor()
-            cur.execute("DELETE FROM posts WHERE id=?", (post_id, ))
-            self._conn.commit()
+            try:
+                cur = self._conn.cursor()
+                cur.execute("DELETE FROM posts WHERE id=?", (post_id, ))
+                self._conn.commit()
+            except:
+                print("delete_post(self, post_id) error")
 
         def get_template(self, template_name):
             cur = self._conn.cursor()
