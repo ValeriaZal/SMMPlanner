@@ -13,10 +13,8 @@ location_release = os.path.normpath("../Output")
 location_workpath = os.path.normpath("../supplement")
 location_spec = location_release
 folder_name = "SMM_Planner"
-#pyqt5_qt_folder_name = os.path.normpath("C:\Program Files\Python37\Lib\site-packages\PyQt5\Qt")
 pyqt5_qt_folder_name = os.path.normpath("/PyQt5/Qt")
 
-# to allow the script to be run from anywhere - not just the cwd - store the absolute path to the script file
 script_root = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -109,23 +107,12 @@ def copy_data(location_src):
         os.rmtree(dst_folder)
     shutil.copytree(src_folder, dst_folder, ignore=None)
 
-    #print("\tCopying PyQtWebEngine plugins files:")
-    #src_folder = os.path.normpath(pyqt5_add_folder + "/plugins/")
-    #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/PyQt5/Qt/plugins/")
-    #shutil.copytree(src_folder, dst_folder, ignore=None)
-    
-    #print("Copying modules files:")
-    #dst_folder = os.path.normpath(location_release + "/" + folder_name + "/modules")
-    #if not os.path.exists(dst_folder):
-    #    os.mkdir(dst_folder)
-    #for root, dirs, files in os.walk(os.path.normpath(main_path + "/modules/")):
-    #    for file_ in files:
-    #        print("Copying", file_, "from", root, "to", dst_folder)
-    #        shutil.copy(os.path.join(root, file_), os.path.join(dst_folder, file_))
-
-
-
-
+    print("Copying version file:")
+    src_folder = os.path.normpath(os.path.dirname(os.path.realpath(script_root)) + "/version")
+    dst_folder = os.path.normpath(location_release + "/" + folder_name + "/version")
+    print("src_folder = {}".format(src_folder))
+    print("dst_folder = {}".format(dst_folder))
+    shutil.copy(src_folder, dst_folder)
 
 # argv:
 # [0] script_name,

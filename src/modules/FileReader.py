@@ -13,7 +13,11 @@ class FileReader(QObject):
 
     @pyqtSlot()
     def getVersion(self):
-        dirname=os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-        f=open(os.path.join(dirname, "", "version"), "r")
+        try:
+            dirname=os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+            f=open(os.path.join(dirname, "", "version"), "r")
+        except:
+            dirname=os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+            f=open(os.path.join(dirname, "", "version"), "r")
         text = f.readlines()[0]
         self.version.emit(text)
