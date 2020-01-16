@@ -13,6 +13,7 @@ class DataDatabase:
             self._conn = None
             self._create_connection()
             self._tables = self._create_tables()
+            self.insert_or_ignore("templates", ("Default", "#00d9fb", "", ""))
 
         def _create_dirs(self, user_id):
             current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -56,7 +57,7 @@ class DataDatabase:
                                             name text NOT NULL,
                                             group_id integer NOT NULL,
                                             template_id integer,
-                                            status integer,
+                                            status text,
                                             date integer,
                                             text text,
                                             FOREIGN KEY (template_id) REFERENCES templates (id)
@@ -64,10 +65,10 @@ class DataDatabase:
             sql_create_templates_table = """ CREATE TABLE IF NOT EXISTS templates (
                                             id integer PRIMARY KEY,
                                             name text NOT NULL,
-                                            group_id integer NOT NULL,
                                             colour text,
                                             date integer,
-                                            text text
+                                            text text,
+                                            UNIQUE(name)
                                         ); """
             sql_create_post_attachments_table = """ CREATE TABLE IF NOT EXISTS post_attachments (
                                             id integer PRIMARY KEY,
@@ -83,13 +84,15 @@ class DataDatabase:
 
             sql_create_tags_table = """ CREATE TABLE IF NOT EXISTS tags (
                                             id integer PRIMARY KEY,
-                                            name text NOT NULL
+                                            name text NOT NULL,
+                                            UNIQUE(name)
                                         ); """
 
             sql_create_post_tag_list_table = """ CREATE TABLE IF NOT EXISTS post_tag_list (
                                             id integer PRIMARY KEY,
                                             post_id integer,
                                             tag_id integer,
+                                            UNIQUE(tag_id, post_id),
                                             FOREIGN KEY (tag_id) REFERENCES tags (id),
                                             FOREIGN KEY (post_id) REFERENCES posts (id)
                                         ); """
@@ -98,6 +101,7 @@ class DataDatabase:
                                             id integer PRIMARY KEY,
                                             template_id integer,
                                             tag_id integer,
+                                            UNIQUE(tag_id, template_id),
                                             FOREIGN KEY (tag_id) REFERENCES tags (id),
                                             FOREIGN KEY (template_id) REFERENCES templates (id)
                                         ); """
@@ -111,7 +115,7 @@ class DataDatabase:
                 self._create_table(sql_create_temp_tag_list_table)
 
                 return {"posts":["name","group_id","template_id","status","date","text"],
-                        "templates":["name","group_id","colour","date","text"],
+                        "templates":["name","colour","date","text"],
                         "post_attachments":["post_id"],
                         "template_attachments":["post_id"],
                         "tags":["name"],
@@ -120,6 +124,44 @@ class DataDatabase:
             else:
                 print("Error! cannot create the database connection.")
                 return None
+
+        def insert_or_ignore(self, table, data):
+            if(table in self._tables.keys()):
+                if(len(data) == len(self._tables[table])):
+                    cols = "("
+                    insert_cols = "("
+                    for col in self._tables[table]:
+                        cols += f"{col},"
+                        insert_cols += "?,"
+                    cols = cols[:-1] + ")"
+                    insert_cols = insert_cols[:-1] + ")"
+                    sql = f"INSERT OR IGNORE INTO {table} {cols} VALUES {insert_cols}"
+                    cur = self._conn.cursor()
+                    cur.execute(sql, data)
+                    self._conn.commit()
+                else:
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
+            else:
+                print(f"Error: cannot find table '{table}'")
+
+        def insert_or_replace(self, table, data):
+            if(table in self._tables.keys()):
+                if(len(data) == len(self._tables[table])):
+                    cols = "("
+                    insert_cols = "("
+                    for col in self._tables[table]:
+                        cols += f"{col},"
+                        insert_cols += "?,"
+                    cols = cols[:-1] + ")"
+                    insert_cols = insert_cols[:-1] + ")"
+                    sql = f"INSERT OR REPLACE INTO {table} {cols} VALUES {insert_cols}"
+                    cur = self._conn.cursor()
+                    cur.execute(sql, data)
+                    self._conn.commit()
+                else:
+                    print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
+            else:
+                print(f"Error: cannot find table '{table}'")
 
         def insert(self, table, data):
             if(table in self._tables.keys()):
@@ -133,12 +175,176 @@ class DataDatabase:
                     insert_cols = insert_cols[:-1] + ")"
                     sql = f"INSERT INTO {table} {cols} VALUES {insert_cols}"
                     cur = self._conn.cursor()
+                    print("DataDatabase::insert::data={}".format(data))
+                    print(sql, data)
                     cur.execute(sql, data)
                     self._conn.commit()
                 else:
                     print("Error: invalid data len.\nExpected: {}\nGot: {}".format(len(self._tables[table]), len(data)))
             else:
                 print(f"Error: cannot find table '{table}'")
+
+        def get_posts(self, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE group_id=?", (f"-{group_vk_id}",))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    status = "Saved"
+                    cur.execute("SELECT * FROM templates WHERE id=?", (f"{r[3]}",))
+                    template_rows = cur.fetchall()
+                    colour = "#00d9fb"
+                    if(len(template_rows) > 0):
+                        colour = template_rows[0][2]
+                    res.append([r[0], r[1], colour, r[6], status])
+                return res
+            return []
+
+        def get_posts_by_time(self, group_vk_id, start_time, end_time):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE (group_id=? AND date >= ? AND date <= ?)", (f"-{group_vk_id}",str(start_time), str(end_time)))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    status = "Saved"
+                    cur.execute("SELECT * FROM templates WHERE id=?", (f"{r[3]}",))
+                    template_rows = cur.fetchall()
+                    colour = "#00d9fb"
+                    if(len(template_rows) > 0):
+                        colour = template_rows[0][2]
+                    res.append([r[0], r[1], colour, r[6], status])
+                return res
+            return []
+
+        def get_post(self, post_id, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE id=? AND group_id=?", (post_id, f"-{group_vk_id}"))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                colour = "#00d9fb"
+                template_name = ""
+                cur.execute("SELECT * FROM templates WHERE id=?", (f"{rows[0][3]}",))
+                template_rows = cur.fetchall()
+                if(len(template_rows) > 0):
+                    colour = template_rows[0][2]
+                    template_name = template_rows[0][1]
+                cur.execute("SELECT * FROM post_tag_list WHERE post_id=?", (f"{rows[0][0]}",))
+                tag_list_rows = cur.fetchall()
+                tags = []
+                if(len(tag_list_rows) > 0):
+                    for tag_r in tag_list_rows:
+                        cur.execute("SELECT * FROM tags WHERE id=?", (f"{tag_r[2]}",))
+                        tags_rows = cur.fetchall()
+                        if(len(tags_rows) > 0):
+                            tags.append(tags_rows[0][1])
+                res = [rows[0][1], template_name, colour, tags, rows[0][5], rows[0][6]]
+                return res
+            return []
+
+        def get_tags(self):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM tags")
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    res.append(r[1])
+                return res
+            return []
+
+        def get_templates(self):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM templates")
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    res.append(r[1])
+                return res
+            return []
+
+        def post_to_save(self, post):
+            cur = self._conn.cursor()
+            template_id = 1
+            cur.execute("SELECT * FROM templates WHERE name=?", (str(post[1]),))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                template_id = rows[0][0]
+            tuple_post = [post[0],0,template_id,"Saved",post[3],post[4]]
+            tags = post[2] # post[3]
+            return tuple_post, tags
+
+        def get_post_id(self, date):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE date=?", (date, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
+
+        def get_tag_id(self, tag):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM tags WHERE name=?", (tag, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
+
+        def get_template_id(self, template_name):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM templates WHERE name=?", (template_name, ))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                return rows[0][0]
+            return 0
+
+        def delete_post(self, post_id):
+            try:
+                cur = self._conn.cursor()
+                cur.execute("DELETE FROM posts WHERE id=?", (post_id, ))
+                self._conn.commit()
+            except:
+                print("delete_post(self, post_id) error")
+
+        def get_template(self, template_name):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM templates WHERE name=?", (template_name, ))
+            rows = cur.fetchall()
+            res = []
+            if(len(rows) > 0):
+                res = list(rows[0])[1:]
+                cur.execute("SELECT * FROM temp_tag_list WHERE template_id=?", (f"{rows[0][0]}",))
+                tag_list_rows = cur.fetchall()
+                tags = []
+                if(len(tag_list_rows) > 0):
+                    for tag_r in tag_list_rows:
+                        cur.execute("SELECT * FROM tags WHERE id=?", (f"{tag_r[2]}",))
+                        tags_rows = cur.fetchall()
+                        if(len(tags_rows) > 0):
+                            tags.append(tags_rows[0][1])
+                res.append(tags)
+                return res
+            return []
+
+        def delete_template(self, template_id):
+            cur = self._conn.cursor()
+            cur.execute("DELETE FROM templates WHERE id=?", (template_id, ))
+            self._conn.commit()
+
+        def change_post_templates(self, template_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE template_id=?", (template_id, ))
+            rows = cur.fetchall()
+            res = []
+            if(len(rows) > 0):
+                default_id = self.get_template_id("Default")
+                for r in rows:
+                    cur.execute(f"UPDATE posts SET template_id={default_id} WHERE template_id={template_id} AND id={r[0]}")
+                    self._conn.commit()
+                return True
+            return False
 
     instance = None
     def __init__(self, user_id):

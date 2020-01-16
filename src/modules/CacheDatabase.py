@@ -127,10 +127,6 @@ class CacheDatabase:
         def update(self, group, table, data):
             if(table in self._tables.keys()):
                 cur = self._conn.cursor()
-#                sql = f"DELETE FROM {table} WHERE postponed = 1"
-#
-#
-#                self._conn.commit()
                 if(len(data) == len(self._tables[table])):
                     group_db_id = self.get_group_id(group)
                     cols = "("
@@ -148,13 +144,64 @@ class CacheDatabase:
             else:
                 print(f"Error: cannot find table '{table}'")
 
+        def get_posts(self, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE from_id=?", (f"-{group_vk_id}",))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                colour = "#00d9fb"
+                for r in rows:
+                    status = "Published"
+                    if(r[5] == 1):
+                        status = "Postponed"
+                    res.append([r[1], "VK post", colour, r[6], status])
+                return res
+            return []
+
+        def get_posts_by_time(self, group_vk_id, start_time, end_time):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE (from_id=? AND date >= ? AND date <= ?)", (f"-{group_vk_id}",str(start_time), str(end_time)))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                colour = "#00d9fb"
+                for r in rows:
+                    status = "Published"
+                    if(r[5] == 1):
+                        status = "Postponed"
+                    res.append([r[1], "VK post", colour, r[6], status])
+                return res
+            return []
+
+        def get_groups(self):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM groups")
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                res = []
+                for r in rows:
+                    res.append([r[2], r[1]])
+                return res
+            return []
+
         def get_group_id(self, vk_id):
             cur = self._conn.cursor()
-            cur.execute("SELECT * FROM groups WHERE vk_id=?", (vk_id,))
+            cur.execute("SELECT 1 FROM groups WHERE vk_id=?", (vk_id,))
             rows = cur.fetchall()
             if(len(rows) > 0):
                 return rows[0][0]
             return -1
+
+        def get_post(self, post_id, group_vk_id):
+            cur = self._conn.cursor()
+            cur.execute("SELECT * FROM posts WHERE vk_id=? AND from_id=?", (post_id,f"-{group_vk_id}"))
+            rows = cur.fetchall()
+            if(len(rows) > 0):
+                colour = "#00d9fb"
+                res = ["", "", colour, [], rows[0][6], rows[0][9]]
+                return res
+            return []
 
     instance = None
     def __init__(self, user_id):

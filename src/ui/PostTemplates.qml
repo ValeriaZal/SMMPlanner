@@ -7,11 +7,26 @@ import QtQuick.Layouts 1.3
 
 Rectangle
 {
-	id: postsWindow
+	id: templatesWindow
 
 	width: 1440
 	height: 900
 	color: "#f3f3f4"
+
+	property bool openDialogWindow: false
+	property string template_name: "Default"
+	property var template_idx: 0
+
+
+	Component.onCompleted: {
+		console.log("templatesWindow: db_manager.get_templates()", db_manager.get_templates());
+
+		var res_get_templates = db_manager.get_templates()
+		for (var i = 0; i < res_get_templates.length; ++i) {
+			var template = db_manager.get_template(res_get_templates[i])
+			templateListModel.append({name: template[0], colorCode: template[1]})
+		}
+	}
 
 	RowLayout {
 		id: rowLayout
@@ -30,6 +45,8 @@ Rectangle
 
 			onClicked: {
 				console.log("newTemplateButton clicked")
+				template_name = "Default"
+				template_idx = 0
 				var component = Qt.createComponent("EditTemplate.qml");
 				win = component.createObject(applicationWindow);
 				win.show();
@@ -59,7 +76,7 @@ Rectangle
 		color: "transparent"
 
 		ListView {
-			id: list
+			id: templateListView
 			snapMode: ListView.SnapToItem
 			keyNavigationWraps: true
 			clip: true
@@ -68,56 +85,82 @@ Rectangle
 
 			// example
 			model: ListModel {
-			   ListElement {
-				   name: "Default"
-				   colorCode: "grey"
-			   }
-
-			   ListElement {
-				   name: "News"
-				   colorCode: "red"
-			   }
-
-			   ListElement {
-				   name: "Music"
-				   colorCode: "blue"
-			   }
-
-			   ListElement {
-				   name: "Art"
-				   colorCode: "green"
-			   }
+				id: templateListModel
 		   }
 
-		   delegate: Component {
-			   id: listItemDelegate
+			delegate: Component {
+				id: listItemDelegate
 
-			   Item {
-				   width: listViewRectangle.width;
-				   height: 40
+				Rectangle {
+					width: listViewRectangle.width;
+					height: 40
+					color: "transparent"
+					radius: 1
+					border.color: "#d3d2d2"
 
-				   Row {
-					   spacing: 20
+					RowLayout {
+						id: rowLayoutItemDelegate
+						Layout.fillWidth: listViewRectangle.width
+						spacing: 20
 
-					   Rectangle {
-						   width: 40
-						   height: 40
-						   color: colorCode
-						   radius: 5
-					   }
+						Row {
+							id: rowItemDelegate
+							Layout.preferredWidth: 350
+							Layout.fillWidth: true
+							spacing: 20
 
-					   Text {
-						   text: name
-						   anchors.verticalCenter: parent.verticalCenter
-						   font.bold: true
-					   }
-				   }
-				   MouseArea {
-					   anchors.fill: parent
-					   onClicked: list.currentIndex = index
-				   }
-			   }
-		   }
+							Rectangle {
+								width: 40
+								height: 40
+								color: colorCode
+								radius: 5
+							}
+
+							Text {
+								text: name
+								anchors.verticalCenter: parent.verticalCenter
+								font.bold: true
+							}
+						}
+
+						Button {
+							id: deleteTemplateButton
+							x: 350
+							text: qsTr("x")
+							clip: true
+							Layout.preferredWidth: 20
+							Layout.preferredHeight: 20
+							Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+							visible: model.name !== "Default"
+							onClicked: {
+								var res_delete_template = db_manager.delete_template(name)
+                                console.log("PostTemplates:", "db_manager.delete_template():", res_delete_template)
+                                console.log(name + " removed from list")
+                                templateListModel.remove(index)
+							}
+
+						}
+
+						MouseArea {
+							anchors.fill: rowItemDelegate
+							onClicked: {
+								templateListView.currentIndex = index
+							}
+
+							onDoubleClicked: {
+								console.log("openDialogWindow ", templateListModel.get(templateListView.currentIndex).name + ' template selected')
+								template_name = templateListModel.get(templateListView.currentIndex).name
+								template_idx = templateListView.currentIndex
+								openDialogWindow = true;
+
+								var component = Qt.createComponent("EditTemplate.qml");
+								win = component.createObject(applicationWindow);
+								win.show();
+							}
+						}
+					}
+				}
+			}
 
 		   highlight: Rectangle {
 			   color: "lightsteelblue";
@@ -125,14 +168,9 @@ Rectangle
 		   }
 
 		   onCurrentItemChanged: {
-			   console.log(model.get(list.currentIndex).name + ' template selected')
+			   console.log(templateListModel.get(templateListView.currentIndex).name + ' template selected')
 		   }
 	   }
 	}
 }
 
-/*##^##
-Designer {
-	D{i:1;anchors_y:60}D{i:4;anchors_height:60}
-}
-##^##*/

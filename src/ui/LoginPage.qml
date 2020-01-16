@@ -27,16 +27,16 @@ ApplicationWindow {
 		Text {
 			id: versionText
 
-			x: 1317
 			width: 123
-            text: qsTr("Version 1.10")
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
-			verticalAlignment: Text.AlignVCenter
+			verticalAlignment: Text.AlignTop
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.right: parent.right
 			font.pixelSize: 15
+
+			Component.onCompleted: fileReader.getVersion();
 		}
 	}
 
@@ -74,20 +74,20 @@ ApplicationWindow {
 			id: webViewContent
 
 			// Cookies is not permitted for login info
-            profile: WebEngineProfile {
+			profile: WebEngineProfile {
 				httpCacheType: WebEngineProfile.NoCache
 				persistentCookiesPolicy: WebEngineProfile.NoPersistentCookies
-            }
+			}
 
 			// Get url
-            url: get_first_url(app_id, scope, APIv)
+			url: get_first_url(app_id, scope, APIv)
 
 			// Create initial url
 			function get_first_url(app_idt, scopet, APIvt) {
 				console.log("get_first_url(", app_idt, ", ", scopet, ", ", APIvt, ")")
 				var res = "https://oauth.vk.com/authorize?client_id="
 						+ app_idt + "&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope="
-                        + scopet + "&response_type=token&v=" + APIvt + "&state=123456";
+						+ scopet + "&response_type=token&v=" + APIvt + "&state=123456";
 				return res;
 			}
 
@@ -136,16 +136,19 @@ ApplicationWindow {
 				// Case: user is hacker
 				else {
 					if (vk_lost(loadRequest.url.toString())) {
-                        webViewContent.url = get_first_url(app_id, scope, APIv)
+						webViewContent.url = get_first_url(app_id, scope, APIv)
 					}
 				}
 			}
 		}
 	}
+
+	Connections {
+		target: fileReader
+
+		onVersion: {
+			versionText.text = qsTr("Version " + version)
+		}
+	}
 }
 
-/*##^##
-Designer {
-	D{i:3;anchors_height:91;anchors_width:632;anchors_x:404;anchors_y:161}
-}
-##^##*/

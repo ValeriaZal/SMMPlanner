@@ -14,9 +14,18 @@ ApplicationWindow
 	color: "#f3f3f4"
 
 	property var access_token: ""
-	property variant win;  // for newButtons
+	property variant win;
 
-    onClosing: authentication.close()
+	onClosing: authentication.close()
+
+	Component.onCompleted: {
+		console.log("ApplicationWindow onCompleted")
+
+		loader.path = "Posts.qml"
+		componentCache.trim();
+		loader.setSource(loader.path);
+	}
+
 
 	Loader {
 		id: loader
@@ -43,15 +52,17 @@ ApplicationWindow
 		Text {
 			id: versionText
 			x: 1317
+
 			width: 123
-            text: qsTr("Version 1.10") // load from version file
 			anchors.rightMargin: 10
 			horizontalAlignment: Text.AlignRight
-			verticalAlignment: Text.AlignVCenter
+			verticalAlignment: Text.AlignTop
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.right: parent.right
 			font.pixelSize: 15
+
+			Component.onCompleted: fileReader.getVersion();
 		}
 	}
 
@@ -71,8 +82,8 @@ ApplicationWindow
 		RowLayout {
 			id: userRowLayout
 
-			x: 1025
-			width: 415
+			x: 946
+			width: 494
 			anchors.bottom: parent.bottom
 			anchors.top: parent.top
 			anchors.right: parent.right
@@ -87,30 +98,46 @@ ApplicationWindow
 
 			ComboBox {
 				id: comboBox
-				width: 200
-				displayText: "Selected Group"
-                textRole: "key"
-                model: ListModel {
-                    ListElement { key: "First group"; value: 123 }
-                    ListElement { key: "Second group"; value: 456 }
-                    ListElement { key: "Third group"; value: 789 }
-                }
 
-                MouseArea {
-                        anchors.fill: parent
-                        onWheel: {
-                            // do nothing
-                        }
-                        onReleased: {
-                            console.log("Selected Group clicked")
-                            db_manager.choose_group("124653069") // test group id
-                        }
-                    }
-                }
+				width: 500
+				currentIndex: 0
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+
+				textRole: "group_name"
+				model: ListModel {
+					id: groupListModel
+				}
+
+				onCurrentIndexChanged: {
+					console.log("groupComboBox: onCurrentIndexChanged: ", currentIndex, "\t", groupListModel.get(currentIndex).value)
+					db_manager.choose_group(groupListModel.get(currentIndex).value)
+
+					if (loader.path !== "PostTemplates.qml") {
+						console.log("reload loaded component")
+						componentCache.trim();
+						loader.setSource(loader.path);
+					}
+
+				}
+
+				Component.onCompleted: {
+					var res_get_groups = db_manager.get_groups()
+					console.log("GeneralPage:", "db_manager.get_groups():", res_get_groups)
+
+					if (groupListModel.count === 0) {
+						for (var i = 0; i < res_get_groups.length; ++i)
+						{
+							console.log("[i]:", i, "res_get_groups[i][0]:", res_get_groups[i][0], "res_get_groups[i][1]:", res_get_groups[i][1])
+							groupListModel.append({group_name: res_get_groups[i][0], value:res_get_groups[i][1] })
+						}
+					}
+				}
+			}
 
 			Button {
 				id: logOutButton
-                text: qsTr("Выйти")
+				text: qsTr("Выйти")
 				Layout.rightMargin: 6
 				Layout.bottomMargin: 6
 				Layout.leftMargin: 6
@@ -148,7 +175,7 @@ ApplicationWindow
 
 				onClicked: {
 					console.log("calendarButton clicked")
-                    db_manager.update()
+					db_manager.update()
 					loader.path = "Calendar.qml"
 					componentCache.trim();
 					loader.setSource(loader.path);
@@ -198,7 +225,7 @@ ApplicationWindow
 					onClicked: {
 						console.log("newPostButton clicked")
 
-						var component = Qt.createComponent("EditPost.qml");
+						var component = Qt.createComponent("NewPost.qml");
 						win = component.createObject(applicationWindow);
 						win.show();
 					}
@@ -232,28 +259,36 @@ ApplicationWindow
 						}
 					}
 
-                    RoundButton {
-                        id: newTemplateButton
+					RoundButton {
+						id: newTemplateButton
 
-                        width: 12
-                        height: 32
-                        text: "+"
-                        Layout.preferredHeight: 32
-                        Layout.preferredWidth: 32
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillHeight: false
-                        Layout.fillWidth: false
+						width: 12
+						height: 32
+						text: "+"
+						Layout.preferredHeight: 32
+						Layout.preferredWidth: 32
+						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+						Layout.fillHeight: false
+						Layout.fillWidth: false
+						visible: false
+						onClicked: {
+							console.log("newTemplateButton clicked")
 
-                        onClicked: {
-                            console.log("newTemplateButton clicked")
-
-                            var component = Qt.createComponent("EditTemplate.qml");
-                            win = component.createObject(applicationWindow);
-                            win.show();
-                        }
-                    }
+							var component = Qt.createComponent("EditTemplate.qml");
+							win = component.createObject(applicationWindow);
+							win.show();
+						}
+					}
 				}
 			}
+		}
+	}
+
+	Connections {
+		target: fileReader
+
+		onVersion: {
+			versionText.text = qsTr("Version " + version)
 		}
 	}
 }

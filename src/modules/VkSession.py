@@ -4,9 +4,11 @@ from PyQt5 import QtWidgets, QtCore
 import vk
 import sys
 import time
+import traceback
 
 from modules.CacheDatabase import CacheDatabase
 from modules.DataDatabase import DataDatabase
+from modules.PostConstructor import PostConstructor
 
 non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 
@@ -22,6 +24,7 @@ class VkSession():
             self._cache = CacheDatabase(self._user_id)
             self._data = DataDatabase(self._user_id)
             self.load_cache_groups()
+            self._post_const = PostConstructor(self._vk_api, self._api_v)
 
         def close(self):
             self._cache.close()
@@ -41,13 +44,90 @@ class VkSession():
             for item in posts_info:
                 self._cache.insert("posts", item)
 
+        def load_posts(self):
+            cache_posts = self._cache.get_posts(self._curr_group)
+            data_posts = self._data.get_posts(self._curr_group)
+            return cache_posts + data_posts
+
         def set_group(self, group):
             self._curr_group = group
+
+        def get_post(self, post_id, db):
+            if(db == "cache"):
+                res = self._cache.get_post(post_id, self._curr_group)
+                return res
+            elif(db == "data"):
+                res = self._data.get_post(post_id, self._curr_group)
+                return res
+            else:
+                print("Error! Post is not found")
+                return []
+
+        def delete_post(self, post_id):
+            self._data.delete_post(post_id)
+
+        def get_posts_by_time(self, start_time, end_time):
+            cache_posts = self._cache.get_posts_by_time(self._curr_group, start_time, end_time)
+            data_posts = self._data.get_posts_by_time(self._curr_group, start_time, end_time)
+            return cache_posts + data_posts
+
+        def get_tags(self):
+            return self._data.get_tags()
+
+        def get_templates(self):
+            return self._data.get_templates()
+
+        def get_groups(self):
+            return self._cache.get_groups()
+
+        def add_tag(self, tag_name):
+            self._data.insert_or_ignore("tags", (tag_name,))
+
+        def save_post(self, post):
+            tuple_post, tags = self._data.post_to_save(post)
+            tuple_post[1] = "-"+str(self._curr_group)
+            self._data.insert_or_replace("posts", tuple(tuple_post))
+            post_id = self._data.get_post_id(post[3])
+            unique_tags = list(set(tags))
+            for tag in tags:
+                tag_id = self._data.get_tag_id(tag)
+                try:
+                    self._data.insert("post_tag_list", (post_id, tag_id))
+                except Exception as err:
+                    traceback.print_tb(err.__traceback__)
 
         def update(self):
             posts_info = self._get_posts_info()
             for item in posts_info:
                 self._cache.update(self._curr_group, "posts", item)
+
+        def publish_post(self, post):
+            message, publish_date = self._post_const.create_post(post)
+            print(f"VK::publish_post::{message}")
+            self._post_const.publish_post(self._curr_group, message, publish_date)
+            post_id = self._data.get_post_id(publish_date)
+            self._data.delete_post(post_id)
+
+        def get_template(self, template_name):
+            res = self._data.get_template(template_name)
+            return res
+
+        def save_template(self, template):
+            self._data.insert_or_replace("templates", (template[0], template[1], template[2], template[3],))
+            template_id = self._data.get_template_id(template[0])
+            #template_id = self._data.get_template_id(template[1])
+            for tag in template[-1]:
+                tag_id = self._data.get_tag_id(tag)
+                if (tag_id == 0):
+                    self._data.insert("tags", (tag))
+                tag_id = self._data.get_tag_id(tag)
+                self._data.insert_or_ignore("temp_tag_list", (template_id, tag_id))
+
+        def delete_template(self, template_name):
+            template_id = self._data.get_template_id(template_name)
+            if (template_id > 0):
+                self._data.change_post_templates(template_id)
+                self._data.delete_template(template_id)
 
         def _get_groups_info(self):
             groups = self._vk_api.groups.get(filter='admin', v=self._api_v)

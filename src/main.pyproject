@@ -5,17 +5,24 @@
               "ui/GeneralPage.qml",
               "ui/PostTemplates.qml",
               "ui/EditPost.qml",
+              "ui/NewPost.qml",
               "ui/Calendar.qml",
 
               "modules/ComponentCacheManager.py",
               "modules/WindowManager.py",
               "modules/AuthenticationManager.py",
+              "modules/FileReader.py",
+              "modules/PostConstructor.py",
+
               "modules/DataBaseManager.py",
+              "modules/FileReader.py",
 
               "modules/CacheDatabase.py",
               "modules/DataDatabase.py",
 
               "modules/VkSession.py",
+
+              "modules/functions.js",
 
               "main.py"]
 }
