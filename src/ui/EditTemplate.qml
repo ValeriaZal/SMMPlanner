@@ -96,23 +96,36 @@ ApplicationWindow
 			font.pixelSize: 18
 		}
 
-		TextField {
-			id: namePostTextEdit
-
+		Rectangle {
+			id: namePostTextEditBackground
 			width: 80
 			height: 20
-			font.weight: Font.Bold
-			clip: true
-			horizontalAlignment: Text.AlignLeft
-			cursorVisible: false
-			Layout.fillHeight: false
+			color: "#ffffff"
+			Layout.fillHeight: true
 			Layout.fillWidth: true
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-			font.pixelSize: 25
+			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-			background: Rectangle {
-				implicitWidth: namePostTextEdit.width
-				implicitHeight: namePostTextEdit.height
+			TextEdit {
+				id: namePostTextEdit
+				height: 40
+				anchors.verticalCenter: parent.verticalCenter
+				anchors.right: parent.right
+				anchors.left: parent.left
+
+				font.weight: Font.Bold
+				clip: true
+				horizontalAlignment: Text.AlignLeft
+				cursorVisible: true
+				Layout.fillHeight: false
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+				font.pixelSize: 25
+				selectByMouse: true
+
+				/*background: Rectangle {
+					implicitWidth: namePostTextEdit.width
+					implicitHeight: namePostTextEdit.height
+				}*/
 			}
 		}
 	}
@@ -509,3 +522,9 @@ ApplicationWindow
 	}
 }
 
+
+/*##^##
+Designer {
+	D{i:4;anchors_height:20;anchors_width:80}
+}
+##^##*/
