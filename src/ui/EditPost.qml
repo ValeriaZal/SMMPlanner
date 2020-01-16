@@ -145,6 +145,7 @@ ApplicationWindow
 					tagsListModel.append({tag: editTextTmp, checked: true})
 					db_manager.add_tag(editTextTmp)
 				}
+				tagComboBox.editText = ""
 			}
 
 			delegate: Item
@@ -331,40 +332,6 @@ ApplicationWindow
 		ColumnLayout {
 			id: saveButtonsColumnLayout
 
-			RowLayout {
-				id: savePublishRowLayout
-				width: 100
-				height: 100
-
-
-				Button {
-					id: savePostButton
-					text: qsTr("Сохранить")
-					visible: (postStatus === "postponed")
-
-					onClicked: {
-						console.log("savePostButton clicked")
-						// sync with db
-						editPostWindow.close()
-					}
-				}
-
-				Button {
-					id: publishButton
-
-					text: qsTr("Опубликовать")
-					Layout.fillHeight: true
-					Layout.fillWidth: true
-					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-					visible: (postStatus === "postponed")
-
-					onClicked: {
-						console.log("publishButton clicked")
-						// sync with db
-						editPostWindow.close()
-					}
-				}
-			}
 
 			RowLayout {
 				id: dateTimeRowLayout
@@ -415,21 +382,61 @@ ApplicationWindow
 				}
 			}
 
-			Button {
-				id: deletePostButton
-				text: qsTr("Удалить пост")
-				Layout.fillHeight: true
-				Layout.fillWidth: true
-				Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-				visible: false
+			RowLayout {
+				id: savePublishRowLayout
+				width: 100
+				height: 100
 
-				onClicked: {
-					console.log("deletePostButton clicked")
-					var res_delete_post = db_manager.
-					editPostWindow.close()
+				ColumnLayout {
+					Button {
+						id: savePostButton
+						text: qsTr("Сохранить")
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+						visible: (postStatus === "postponed")
+
+						onClicked: {
+							console.log("savePostButton clicked")
+							// sync with db
+							editPostWindow.close()
+						}
+					}
+
+					Button {
+						id: deletePostButton
+						text: qsTr("Удалить пост")
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+						visible: true
+
+						onClicked: {
+							console.log("deletePostButton clicked")
+							//var res_delete_post = db_manager.
+							editPostWindow.close()
+						}
+					}
 				}
-			}
 
+
+				Button {
+					id: publishButton
+
+					text: qsTr("Опубликовать")
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+					visible: (postStatus === "postponed")
+
+					onClicked: {
+						console.log("publishButton clicked")
+						// sync with db
+						editPostWindow.close()
+					}
+				}
+
+			}
 		}
 	}
 

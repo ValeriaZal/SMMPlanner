@@ -36,15 +36,19 @@ ApplicationWindow
 
 	function updateWindow(template_name) {
 		var res_get_template = db_manager.get_template(template_name)
-		console.log("||| db_manager.get_template:", res_get_template)
+		// console.log("||| db_manager.get_template:", res_get_template)
 		//namePostTextEdit.text = res_get_template[0]
 		textArea.text = res_get_template[3]
 
+		// tagsListModel
+		for (var k = 0; k < tagsListModel.count; ++k) {
+			tagsListModel.get(k).checked = false
+		}
+
 		var template_tags = res_get_template[4]
-		console.log("template_tags:", template_tags)
 		for (var i = 0; i < template_tags.length; ++i) {
 			var tmp_idx = find(tagsListModel, function(ListElement) { return ListElement.tag === template_tags[i].toString() })
-			tagsListModel.get(tmp_idx).checked = true
+			tmp_idx.checked = true
 		}
 	}
 
@@ -169,13 +173,14 @@ ApplicationWindow
 				if (editTextTmp.charAt(0) !== '#') {
 					editTextTmp = "#" + editTextTmp;
 				}
-				console.log(tagsListModel, editTextTmp)
+				// console.log(tagsListModel, editTextTmp)
 
 				if (find(tagsListModel, function(ListElement) { return ListElement.tag === editTextTmp }) === -1)
 				{
 					tagsListModel.append({tag: editTextTmp, checked: true})
 					db_manager.add_tag(editTextTmp)
 				}
+				tagComboBox.editText = ""
 			}
 
 			delegate: Item
@@ -256,6 +261,7 @@ ApplicationWindow
 			Button {
 				id: imageButton
 				enabled: false
+				visible: false
 
 				Layout.preferredHeight: 32
 				Layout.preferredWidth: 32
@@ -422,8 +428,8 @@ ApplicationWindow
 					if (is_valid) {
 						var tagList = [];
 						for (var i = 0; i < tagsListModel.count; ++i) {
-							if (tagsListModel.get(i).checked === true) {
-								tagList.push(tagsListModel.get(i).tag.toString());
+							if (tagsListModel.get(i).checked) {
+								tagList.push(tagsListModel.get(i).tag);
 							}
 						}
 
@@ -431,19 +437,19 @@ ApplicationWindow
 						var timestamp = (post_date.getTime()/1000).toString()
 
 						// save_post(["title","template_name",[<tags>],"date","text"]) -> True/False
-                        console.log("SavePost: ", namePostTextEdit.text.toString(),
-                                    templateComboBoxModel.get(templateComboBox.currentIndex),
-                                   tagList,
-                                   timestamp,
-                                   textArea.text.toString())
-                        var res_save_post = db_manager.save_post(
+						console.log("SavePost: ", namePostTextEdit.text.toString(),
+									templateComboBoxModel.get(templateComboBox.currentIndex).template,
+								   tagList,
+								   timestamp,
+								   textArea.text.toString())
+						var res_save_post = db_manager.save_post(
 									[namePostTextEdit.text.toString(),
 									 templateComboBoxModel.get(templateComboBox.currentIndex),
 									tagList,
 									timestamp,
 									textArea.text.toString()]
 									)
-                        console.log("NewPost:", "db_manager.save_post():", res_save_post)
+						console.log("NewPost:", "db_manager.save_post():", res_save_post)
 						imageListModel.append({name: "Post saved successfully"})
 					}
 				}
@@ -467,14 +473,13 @@ ApplicationWindow
 					if (is_valid) {
 						var tagList = [];
 						for (var i = 0; i < tagsListModel.count; ++i) {
-							if (tagsListModel.get(i).checked === true) {
-								tagList.push(tagsListModel.get(i).text);
+							if (tagsListModel.get(i).checked) {
+								tagList.push(tagsListModel.get(i).tag);
 							}
 						}
 
 						var post_date = Date.fromLocaleString(Qt.locale("ru_RU"), dateTimeText.text, "ddd dd.MM.yyyy hh:mm")
 						var timestamp = (post_date.getTime()/1000).toString()
-
 
 						// publish_post(["title",[<tags>],"date","text"]) -> True/False
 						var res_publish_post = db_manager.publish_post(
@@ -547,7 +552,7 @@ ApplicationWindow
 				ComboBox {
 					id: hoursComboBox
 					model: 24
-					currentIndex: new Date().getHours()
+					currentIndex: (new Date().getHours() + 1) % 24
 				}
 
 				Text {
