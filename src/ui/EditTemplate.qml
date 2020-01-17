@@ -100,7 +100,7 @@ ApplicationWindow
 			id: namePostTextEditBackground
 			width: 80
 			height: 20
-			color: "lightgray"
+			color: template_name === "Default" ? "lightgray" : "white"
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -113,7 +113,7 @@ ApplicationWindow
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.right: parent.right
 				anchors.left: parent.left
-				enabled: false
+				// enabled: template_name !== "Default"
 
 				font.weight: Font.Bold
 				clip: true

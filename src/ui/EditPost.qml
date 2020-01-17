@@ -56,7 +56,10 @@ ApplicationWindow
 	Component.onCompleted: {
 		//console.log("editPostWindow.onCompleted")
 		// get_post(post_id, db) -> ["title","template_name","colour",[<tags>],"date","text"]
-		selected_post = db_manager.get_post(calendarWindow.selected_post_id, "cache")
+		if (calendarWindow.selected_post_status === "Published")
+			selected_post = db_manager.get_post(calendarWindow.selected_post_id, "cache")
+		else
+			selected_post = db_manager.get_post(calendarWindow.selected_post_id, "data")
 		console.log("EditPost:", "db_manager.get_post():", selected_post)
 
 		namePostTextEdit.text = selected_post[0]
